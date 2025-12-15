@@ -19,6 +19,15 @@
         .smooth-scroll {
             scroll-behavior: smooth;
         }
+        /* Animação para o botão do WhatsApp */
+        @keyframes pulse-custom {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        .whatsapp-btn {
+            animation: pulse-custom 2s infinite;
+        }
     </style>
 </head>
 <body class="font-sans text-gray-700 antialiased smooth-scroll">
@@ -66,7 +75,7 @@
                 Seu Software Exclusivo e Sob Medida
             </h1>
             <p class="text-xl text-gray-200 mb-8">
-                Desenvolvemos o sistema exato que sua empresa precisa em tempo recorde. Condomínios, Lojas, Advocacia e muito mais.
+                Desenvolvemos o sistema exato que você precisa em tempo recorde. Para empresas e também para controle financeiro pessoal.
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
                 <a href="#solucoes" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg transition shadow-lg">
@@ -83,13 +92,13 @@
     <section id="solucoes" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Soluções Prontas para seu Setor</h2>
-                <p class="text-gray-600 max-w-2xl mx-auto">Temos bases sólidas para diversos nichos, prontas para serem adaptadas à sua realidade.</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Soluções para Todos os Tamanhos e Perfis</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto text-lg">Do controle financeiro doméstico à gestão completa de pequenas, médias e grandes empresas. Nossos sistemas são flexíveis e escaláveis para atender exatamente o tamanho da sua necessidade.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
                 <!-- Card 1: Condomínios -->
-                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1">
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full">
                     <div class="text-blue-600 mb-4">
                         <i class="fa-solid fa-building fa-3x"></i>
                     </div>
@@ -98,7 +107,7 @@
                 </div>
 
                 <!-- Card 2: Automóveis -->
-                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1">
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full">
                     <div class="text-blue-600 mb-4">
                         <i class="fa-solid fa-car fa-3x"></i>
                     </div>
@@ -106,8 +115,17 @@
                     <p class="text-gray-600">Gestão de estoque, controle de vendas, emissão de notas fiscais e integração com portais de venda.</p>
                 </div>
 
+                 <!-- Card: Lava Rápido (Novo) -->
+                 <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fa-solid fa-soap fa-3x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Lava Rápido</h3>
+                    <p class="text-gray-600">Controle de entrada e saída de veículos, comissões de lavadores, pacotes de estética automotiva e caixa diário.</p>
+                </div>
+
                 <!-- Card 3: Advocacia -->
-                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1">
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full">
                     <div class="text-blue-600 mb-4">
                         <i class="fa-solid fa-scale-balanced fa-3x"></i>
                     </div>
@@ -115,19 +133,56 @@
                     <p class="text-gray-600">Acompanhamento de processos, agenda inteligente, controle de prazos e gestão financeira do escritório.</p>
                 </div>
 
+                 <!-- Card: Saúde (Novo) -->
+                 <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fa-solid fa-user-doctor fa-3x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Consultórios (Médico/Odonto)</h3>
+                    <p class="text-gray-600">Agenda de consultas, prontuário eletrônico do paciente, controle de tratamentos e fluxo de caixa.</p>
+                </div>
+
+                 <!-- Card: PetShop (Novo) -->
+                 <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fa-solid fa-paw fa-3x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Pet Shops e Veterinárias</h3>
+                    <p class="text-gray-600">Agendamento de banho e tosa, histórico de vacinas, venda de produtos e controle de estoque.</p>
+                </div>
+
+                 <!-- Card: Estética (Novo) -->
+                 <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fa-solid fa-spa fa-3x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Clínicas de Estética</h3>
+                    <p class="text-gray-600">Gestão de pacotes de sessões, comissão de profissionais, agenda de procedimentos e estoque de materiais.</p>
+                </div>
+
                 <!-- Card 4: Alimentação -->
-                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1">
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full">
                     <div class="text-blue-600 mb-4">
                         <i class="fa-solid fa-utensils fa-3x"></i>
                     </div>
                     <h3 class="text-xl font-bold mb-3">Bares e Restaurantes</h3>
                     <p class="text-gray-600">Ideal para padarias e pizzarias. Controle de mesas, delivery, estoque de ingredientes e fluxo de caixa.</p>
                 </div>
+
+                <!-- Card 5: Gestão Residencial -->
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 border-2 border-blue-100 w-full relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-bl-lg">Popular</div>
+                    <div class="text-blue-600 mb-4">
+                        <i class="fa-solid fa-house-user fa-3x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Controle Pessoal e Residencial</h3>
+                    <p class="text-gray-600">Abandone as planilhas complexas. Controle gastos da casa, planeje o orçamento familiar e saiba exatamente para onde vai seu dinheiro.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- NOVA SEÇÃO: Desenvolvimento Sob Medida -->
+    <!-- Seção: Desenvolvimento Sob Medida -->
     <section id="personalizado" class="py-20 bg-blue-900 text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-12">
@@ -143,7 +198,7 @@
                         1
                     </div>
                     <h3 class="text-xl font-bold mb-3">Você Descreve</h3>
-                    <p class="text-blue-100">Atendimento personalizado. Você nos conta suas dificuldades, suas rotinas e exatamente como deseja que o programa funcione.</p>
+                    <p class="text-blue-100">Atendimento personalizado. Você nos conta suas dificuldades, sua rotina e exatamente como deseja que o programa funcione.</p>
                 </div>
 
                 <!-- Passo 2 -->
@@ -177,10 +232,10 @@
     <section id="beneficios" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex flex-col lg:flex-row items-start gap-12">
-                <!-- LADO ESQUERDO: Simulação de Tela de Sistema MAIOR E MAIS COMPLETA -->
+                <!-- LADO ESQUERDO: Simulação de Tela de Sistema -->
                 <div class="lg:w-3/5 w-full">
                     <div class="rounded-xl shadow-2xl overflow-hidden border border-gray-300 bg-gray-50">
-                        <!-- Barra de Título da Janela -->
+                        <!-- Barra de Título -->
                         <div class="bg-gray-800 text-white px-4 py-3 flex items-center justify-between">
                            <div class="flex items-center space-x-2">
                                <div class="flex space-x-1.5 mr-4">
@@ -194,8 +249,8 @@
                         </div>
                         
                         <!-- Corpo da Janela -->
-                        <div class="flex flex-col md:flex-row h-[550px]"> <!-- Altura aumentada -->
-                           <!-- Menu Lateral (Sidebar) COMPLETO -->
+                        <div class="flex flex-col md:flex-row h-[550px]">
+                           <!-- Sidebar -->
                            <div class="w-full md:w-64 bg-slate-900 text-gray-300 flex-shrink-0 hidden md:block">
                               <div class="p-4 border-b border-slate-700 mb-2">
                                   <div class="flex items-center gap-3">
@@ -208,32 +263,32 @@
                               </div>
                               <nav class="space-y-1 p-2 text-sm">
                                    <div class="flex items-center text-white bg-blue-600 p-3 rounded-lg cursor-pointer font-bold shadow-lg">
-                                       <i class="fa-solid fa-chart-pie w-6"></i> Visão Geral
+                                        <i class="fa-solid fa-chart-pie w-6"></i> Visão Geral
                                    </div>
                                    <div class="flex items-center hover:bg-slate-800 hover:text-white p-3 rounded-lg cursor-pointer transition">
-                                       <i class="fa-solid fa-cash-register w-6"></i> PDV / Caixa
+                                        <i class="fa-solid fa-cash-register w-6"></i> PDV / Caixa
                                    </div>
                                    <div class="flex items-center hover:bg-slate-800 hover:text-white p-3 rounded-lg cursor-pointer transition">
-                                       <i class="fa-solid fa-users w-6"></i> Cadastros
+                                        <i class="fa-solid fa-users w-6"></i> Cadastros
                                    </div>
                                    <div class="flex items-center hover:bg-slate-800 hover:text-white p-3 rounded-lg cursor-pointer transition">
-                                       <i class="fa-solid fa-boxes-stacked w-6"></i> Estoque Completo
+                                        <i class="fa-solid fa-boxes-stacked w-6"></i> Estoque Completo
                                    </div>
                                    <div class="flex items-center hover:bg-slate-800 hover:text-white p-3 rounded-lg cursor-pointer transition">
-                                       <i class="fa-solid fa-file-invoice-dollar w-6"></i> Notas Fiscais (NFe)
+                                        <i class="fa-solid fa-file-invoice-dollar w-6"></i> Notas Fiscais (NFe)
                                    </div>
                                    <div class="flex items-center hover:bg-slate-800 hover:text-white p-3 rounded-lg cursor-pointer transition">
-                                       <i class="fa-solid fa-truck-fast w-6"></i> Entregas / Delivery
+                                        <i class="fa-solid fa-truck-fast w-6"></i> Entregas / Delivery
                                    </div>
                                    <div class="mt-4 pt-4 border-t border-slate-700">
-                                       <div class="flex items-center hover:bg-slate-800 hover:text-white p-3 rounded-lg cursor-pointer transition">
-                                           <i class="fa-solid fa-gear w-6"></i> Configurações
-                                       </div>
+                                        <div class="flex items-center hover:bg-slate-800 hover:text-white p-3 rounded-lg cursor-pointer transition">
+                                            <i class="fa-solid fa-gear w-6"></i> Configurações
+                                        </div>
                                    </div>
                               </nav>
                            </div>
 
-                           <!-- Conteúdo Principal da Simulação -->
+                           <!-- Conteúdo Principal -->
                            <div class="flex-1 bg-gray-100 p-6 overflow-hidden flex flex-col">
                                <div class="flex justify-between items-center mb-6">
                                    <h3 class="font-bold text-gray-800 text-xl">Dashboard Financeiro</h3>
@@ -242,7 +297,7 @@
                                    </button>
                                </div>
                                
-                               <!-- Cards de Resumo COLORIDOS -->
+                               <!-- Cards de Resumo -->
                                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                                   <div class="bg-white p-4 rounded-lg shadow-sm border-t-4 border-green-500">
                                      <div class="text-xs text-gray-500 uppercase font-bold mb-1">Faturamento</div>
@@ -283,7 +338,7 @@
                                            <div class="w-full bg-indigo-500 h-full rounded-t relative group"><div class="hidden group-hover:block absolute -top-6 left-0 bg-black text-white text-[10px] p-1 rounded">Sab</div></div>
                                        </div>
                                    </div>
-                                   <!-- Gráfico de Pizza (Simulado) -->
+                                   <!-- Gráfico de Pizza -->
                                    <div class="bg-white p-4 rounded-lg shadow-sm border flex flex-col items-center justify-center relative">
                                         <div class="text-xs font-bold text-gray-500 absolute top-4 left-4">MEIOS PAGTO.</div>
                                         <div class="w-24 h-24 rounded-full border-8 border-green-500 border-r-blue-500 border-b-yellow-400 rotate-45"></div>
@@ -296,7 +351,7 @@
                                    </div>
                                </div>
 
-                               <!-- Tabela de Dados (Novidade) -->
+                               <!-- Tabela de Dados -->
                                <div class="bg-white rounded-lg shadow-sm border flex-1 overflow-hidden flex flex-col">
                                    <div class="bg-gray-50 px-4 py-2 border-b text-xs font-bold text-gray-500 flex justify-between">
                                        <span>ÚLTIMOS PEDIDOS</span>
@@ -339,7 +394,6 @@
                            </div>
                         </div>
                     </div>
-                    <!-- Fim da Simulação -->
                     <p class="text-center text-sm text-gray-400 mt-3 italic"><i class="fa-solid fa-check-circle text-green-500 mr-1"></i> Interface completa: Controle Financeiro, Estoque, Vendas e Relatórios em uma única tela.</p>
                 </div>
 
@@ -407,6 +461,18 @@
                 <div class="bg-blue-600 p-6 text-center">
                     <h2 class="text-2xl font-bold text-white">Solicite seu Orçamento</h2>
                     <p class="text-blue-100 mt-2">Preencha o formulário para iniciarmos seu projeto personalizado.</p>
+                    
+                    <!-- Adicionado: Contatos diretos -->
+                    <div class="mt-6 pt-6 border-t border-blue-500 flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 text-blue-50">
+                        <a href="https://wa.me/5511932186193" target="_blank" class="flex items-center hover:text-white transition">
+                            <i class="fa-brands fa-whatsapp fa-lg mr-2"></i> 
+                            <span class="font-medium">(11) 93218-6193</span>
+                        </a>
+                        <a href="mailto:comercial.softgestao@gmail.com" class="flex items-center hover:text-white transition">
+                            <i class="fa-solid fa-envelope fa-lg mr-2"></i> 
+                            <span class="font-medium">comercial.softgestao@gmail.com</span>
+                        </a>
+                    </div>
                 </div>
                 <div class="p-8">
                     <form onsubmit="handleSubmit(event)" class="space-y-6">
@@ -431,9 +497,12 @@
                             <select class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition">
                                 <option>Selecione uma opção...</option>
                                 <option>Condomínio / Administradora</option>
-                                <option>Loja de Veículos</option>
+                                <option>Loja de Veículos / Lava Rápido</option>
                                 <option>Advocacia</option>
+                                <option>Saúde / Consultório</option>
+                                <option>Estética / Pet Shop</option>
                                 <option>Restaurante / Padaria / Pizzaria</option>
+                                <option>Controle Residencial / Pessoal</option>
                                 <option>Projeto Personalizado (Outros)</option>
                             </select>
                         </div>
@@ -442,6 +511,8 @@
                             <label class="block text-sm font-medium text-gray-700 mb-1">Descreva o que você precisa (Opcional)</label>
                             <textarea rows="4" placeholder="Ex: Preciso de um sistema para controlar estoque de peças e vendas no balcão..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"></textarea>
                         </div>
+
+                        <div id="form-feedback-area"></div>
 
                         <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition transform active:scale-95">
                             Enviar Solicitação
@@ -484,11 +555,17 @@
         </div>
     </footer>
 
+    <!-- Botão Flutuante do WhatsApp -->
+    <a href="https://wa.me/5511932186193" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition z-50 flex items-center justify-center w-16 h-16 whatsapp-btn">
+        <i class="fa-brands fa-whatsapp fa-2x"></i>
+    </a>
+
     <script>
         // Função para simular o envio do formulário
         function handleSubmit(event) {
             event.preventDefault();
-            const btn = event.target.querySelector('button');
+            const btn = event.target.querySelector('button[type="submit"]');
+            const feedbackArea = document.getElementById('form-feedback-area');
             const originalText = btn.innerText;
             
             btn.innerText = 'Enviando...';
@@ -497,7 +574,13 @@
 
             // Simulação de tempo de envio
             setTimeout(() => {
-                alert('Obrigado! Recebemos sua solicitação de projeto. Entraremos em contato em breve.');
+                // Cria uma mensagem de sucesso visual em vez de alert
+                const successMsg = document.createElement('div');
+                successMsg.className = 'bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4 text-center';
+                successMsg.innerHTML = '<strong class="font-bold">Sucesso!</strong> <span class="block sm:inline">Recebemos sua solicitação. Entraremos em contato em breve.</span>';
+                
+                feedbackArea.appendChild(successMsg);
+
                 event.target.reset();
                 btn.innerText = 'Mensagem Enviada!';
                 btn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
@@ -508,6 +591,10 @@
                     btn.disabled = false;
                     btn.classList.remove('opacity-75', 'bg-green-600', 'hover:bg-green-700');
                     btn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                    // Remove a mensagem após alguns segundos
+                    setTimeout(() => {
+                        if(successMsg.parentNode) successMsg.remove();
+                    }, 2000);
                 }, 3000);
             }, 1500);
         }
