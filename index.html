@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,14 +9,17 @@
     <!-- FontAwesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Estilos personalizados */
         .hero-bg {
-            background: linear-gradient(rgba(17, 24, 39, 0.85), rgba(30, 58, 138, 0.75)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            /* Imagem tecnológica e profissional */
+            background: linear-gradient(rgba(17, 24, 39, 0.9), rgba(30, 58, 138, 0.8)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
         }
         .smooth-scroll {
             scroll-behavior: smooth;
         }
+        /* Animação para o botão do WhatsApp */
         @keyframes pulse-custom {
             0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
             70% { box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); }
@@ -34,164 +37,252 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
                 <div class="flex-shrink-0 flex items-center">
-                    <div class="bg-blue-900 text-white p-2 rounded-lg mr-2 shadow-inner">
+                    <!-- Logo Simbólico -->
+                    <div class="bg-blue-900 text-white p-2 rounded-lg mr-2">
                         <i class="fa-solid fa-layer-group fa-lg"></i>
                     </div>
-                    <span class="font-bold text-2xl text-blue-900 tracking-tight">SoftGestão</span>
+                    <span class="font-bold text-2xl text-blue-900">SoftGestão</span>
                 </div>
                 <div class="hidden md:flex space-x-8">
-                    <a href="#inicio" class="text-gray-600 hover:text-blue-900 px-3 py-2 font-medium transition">Início</a>
-                    <a href="#solucoes" class="text-gray-600 hover:text-blue-900 px-3 py-2 font-medium transition">Soluções</a>
-                    <a href="#personalizado" class="text-blue-600 hover:text-blue-900 px-3 py-2 font-bold transition">Sob Medida</a>
-                    <a href="#beneficios" class="text-gray-600 hover:text-blue-900 px-3 py-2 font-medium transition">Benefícios</a>
-                    <a href="#contato" class="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition shadow-md">Fale Connosco</a>
+                    <a href="#inicio" class="text-gray-600 hover:text-blue-900 px-3 py-2 font-medium">Início</a>
+                    <a href="#solucoes" class="text-gray-600 hover:text-blue-900 px-3 py-2 font-medium">Soluções</a>
+                    <a href="#personalizado" class="text-blue-600 hover:text-blue-900 px-3 py-2 font-bold">Sob Medida</a>
+                    <a href="#beneficios" class="text-gray-600 hover:text-blue-900 px-3 py-2 font-medium">Benefícios</a>
+                    <a href="#contato" class="bg-blue-600 text-white px-5 py-2 rounded-full hover:bg-blue-700 transition">Fale Conosco</a>
                 </div>
+                <!-- Botão Menu Mobile -->
                 <div class="md:hidden flex items-center">
-                    <button onclick="toggleMenu()" class="text-gray-600 hover:text-blue-900 focus:outline-none transition">
+                    <button onclick="toggleMenu()" class="text-gray-600 hover:text-blue-900 focus:outline-none">
                         <i class="fa-solid fa-bars fa-2x"></i>
                     </button>
                 </div>
             </div>
         </div>
         <!-- Menu Mobile -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t shadow-inner">
-            <a href="#inicio" onclick="toggleMenu()" class="block py-4 px-6 text-base hover:bg-gray-50 border-b">Início</a>
-            <a href="#solucoes" onclick="toggleMenu()" class="block py-4 px-6 text-base hover:bg-gray-50 border-b">Soluções</a>
-            <a href="#personalizado" onclick="toggleMenu()" class="block py-4 px-6 text-base hover:bg-gray-50 border-b font-bold text-blue-600">Sob Medida</a>
-            <a href="#beneficios" onclick="toggleMenu()" class="block py-4 px-6 text-base hover:bg-gray-50 border-b">Benefícios</a>
-            <a href="#contato" onclick="toggleMenu()" class="block py-4 px-6 text-base hover:bg-gray-50 font-bold text-blue-600">Fale Connosco</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <a href="#inicio" class="block py-2 px-4 text-sm hover:bg-gray-100">Início</a>
+            <a href="#solucoes" class="block py-2 px-4 text-sm hover:bg-gray-100">Soluções</a>
+            <a href="#personalizado" class="block py-2 px-4 text-sm hover:bg-gray-100 font-bold text-blue-600">Sob Medida</a>
+            <a href="#beneficios" class="block py-2 px-4 text-sm hover:bg-gray-100">Benefícios</a>
+            <a href="#contato" class="block py-2 px-4 text-sm hover:bg-gray-100 font-bold text-blue-600">Fale Conosco</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="inicio" class="hero-bg h-screen flex items-center justify-center pt-20 px-4">
-        <div class="text-center max-w-4xl mx-auto">
-            <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 leading-tight">
-                Sistemas e Web Sites <span class="text-blue-400">Exclusivos</span>
+    <!-- Seção Hero -->
+    <section id="inicio" class="hero-bg h-screen flex items-center justify-center pt-20">
+        <div class="text-center px-4 max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                Sistemas e Web Sites Exclusivos
             </h1>
-            <p class="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p class="text-xl text-gray-200 mb-8">
                 Do software de gestão mais complexo ao web site institucional de alta performance. Desenvolvemos a presença digital que o seu negócio merece.
             </p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#solucoes" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 px-10 rounded-xl text-lg transition-all shadow-xl hover:scale-105">
+                <a href="#solucoes" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-lg text-lg transition shadow-lg">
                     Conhecer Soluções
                 </a>
-                <a href="#contato" class="bg-white/10 backdrop-blur-md border-2 border-white/50 hover:bg-white hover:text-blue-900 text-white font-bold py-4 px-10 rounded-xl text-lg transition-all">
+                <a href="#contato" class="bg-transparent border-2 border-white hover:bg-white hover:text-blue-900 text-white font-bold py-3 px-8 rounded-lg text-lg transition">
                     Solicitar Orçamento
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Soluções -->
-    <section id="solucoes" class="py-24 bg-gray-50">
+    <!-- Seção de Soluções -->
+    <section id="solucoes" class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Soluções Digitais Completas</h2>
-                <div class="w-20 h-1.5 bg-blue-600 mx-auto rounded-full mb-6"></div>
-                <p class="text-gray-600 max-w-3xl mx-auto text-lg leading-relaxed">Especialistas na construção de ferramentas que impulsionam o seu negócio.</p>
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Soluções Digitais Completas</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto text-lg">Seja para organizar os processos internos da sua empresa ou para captar novos clientes na internet, temos a solução técnica ideal.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Cards -->
-                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all border border-gray-100 group">
-                    <div class="text-blue-600 mb-6 group-hover:scale-110 transition-transform"><i class="fa-solid fa-globe fa-3x"></i></div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+                <!-- Card: Web Sites -->
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full border-b-4 border-blue-600 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase">Novidade</div>
+                    <div class="text-blue-600 mb-4">
+                        <i class="fa-solid fa-globe fa-3x"></i>
+                    </div>
                     <h3 class="text-xl font-bold mb-3">Criação de Web Sites</h3>
-                    <p class="text-gray-600">Sites institucionais e lojas online otimizados para converter visitantes em clientes.</p>
+                    <p class="text-gray-600">Sites institucionais, landing pages de alta conversão e lojas online com design moderno e otimizados para o Google.</p>
                 </div>
-                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all border border-gray-100 group">
-                    <div class="text-blue-600 mb-6 group-hover:scale-110 transition-transform"><i class="fa-solid fa-building fa-3x"></i></div>
+
+                <!-- Card 1: Condomínios -->
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full border-b-4 border-transparent hover:border-blue-500">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fa-solid fa-building fa-3x"></i>
+                    </div>
                     <h3 class="text-xl font-bold mb-3">Gestão de Condomínios</h3>
-                    <p class="text-gray-600">Controlo financeiro e comunicação direta entre condóminos e administração.</p>
+                    <p class="text-gray-600">Controle financeiro, emissão de boletos, reservas de áreas comuns e comunicação direta com condôminos.</p>
                 </div>
-                <div class="bg-white p-8 rounded-2xl shadow-sm hover:shadow-xl transition-all border border-gray-100 group">
-                    <div class="text-blue-600 mb-6 group-hover:scale-110 transition-transform"><i class="fa-solid fa-car fa-3x"></i></div>
+
+                <!-- Card 2: Automóveis -->
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full border-b-4 border-transparent hover:border-blue-500">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fa-solid fa-car fa-3x"></i>
+                    </div>
                     <h3 class="text-xl font-bold mb-3">Stands de Automóveis</h3>
-                    <p class="text-gray-600">Gestão de stock e integração com os principais portais de venda automóvel.</p>
+                    <p class="text-gray-600">Gestão de estoque, controle de vendas, emissão de notas fiscais e integração com portais de venda.</p>
+                </div>
+
+                 <!-- Card: Lava Rápido -->
+                 <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full border-b-4 border-transparent hover:border-blue-500">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fa-solid fa-soap fa-3x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Lava Rápido</h3>
+                    <p class="text-gray-600">Controle de entrada e saída de veículos, comissões de lavadores e gestão de caixa diário.</p>
+                </div>
+
+                <!-- Card 3: Advocacia -->
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full border-b-4 border-transparent hover:border-blue-500">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fa-solid fa-scale-balanced fa-3x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Escritórios de Advogados</h3>
+                    <p class="text-gray-600">Acompanhamento de processos, agenda inteligente, controle de prazos e gestão financeira.</p>
+                </div>
+
+                 <!-- Card: Saúde -->
+                 <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full border-b-4 border-transparent hover:border-blue-500">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fa-solid fa-user-doctor fa-3x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Clínicas e Consultórios</h3>
+                    <p class="text-gray-600">Agenda de consultas, prontuário eletrônico, controle de tratamentos e fluxo de caixa.</p>
+                </div>
+
+                 <!-- Card: PetShop -->
+                 <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full border-b-4 border-transparent hover:border-blue-500">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fa-solid fa-paw fa-3x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Pet Shops e Veterinários</h3>
+                    <p class="text-gray-600">Agendamento de banhos/tosas, histórico de vacinas e controle de estoque de produtos.</p>
+                </div>
+
+                <!-- Card 4: Alimentação -->
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 w-full border-b-4 border-transparent hover:border-blue-500">
+                    <div class="text-blue-600 mb-4">
+                        <i class="fa-solid fa-utensils fa-3x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Bares e Restaurantes</h3>
+                    <p class="text-gray-600">Controle de mesas, delivery, gestão de estoque e integração com sistemas de faturamento.</p>
+                </div>
+
+                <!-- Card 5: Gestão Financeira -->
+                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 border-2 border-blue-100 w-full relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-bl-lg">Popular</div>
+                    <div class="text-blue-600 mb-4">
+                        <i class="fa-solid fa-house-user fa-3x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Controle Financeiro</h3>
+                    <p class="text-gray-600">Abandone as planilhas. Controle gastos domésticos e planeje seu orçamento familiar com facilidade.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Desenvolvimento Sob Medida -->
-    <section id="personalizado" class="py-24 bg-blue-900 text-white overflow-hidden">
+    <!-- Seção: Desenvolvimento Sob Medida -->
+    <section id="personalizado" class="py-20 bg-blue-900 text-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <span class="bg-blue-700 text-blue-100 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest">Diferencial</span>
-                <h2 class="text-3xl md:text-5xl font-bold mt-6 mb-4">Desenvolvimento Sob Medida</h2>
-                <p class="text-blue-200 text-lg max-w-2xl mx-auto">Adaptamos a tecnologia ao seu fluxo de trabalho, e não o contrário.</p>
+            <div class="text-center mb-12">
+                <span class="bg-blue-700 text-blue-100 text-sm font-bold px-3 py-1 rounded-full uppercase tracking-wide">Diferencial Exclusivo</span>
+                <h2 class="text-3xl md:text-4xl font-bold mt-4 mb-4">Desenvolvimento Sob Medida</h2>
+                <p class="text-blue-200 text-lg max-w-3xl mx-auto">Seu negócio é único. Não se adapte ao sistema, nós adaptamos o software ou o web site à sua realidade.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-                <div class="bg-white/5 backdrop-blur-sm p-8 rounded-3xl border border-white/10 hover:bg-white/10 transition">
-                    <div class="bg-blue-600 w-12 h-12 rounded-2xl flex items-center justify-center mb-6 text-xl font-bold shadow-lg">1</div>
-                    <h3 class="text-xl font-bold mb-3">Briefing</h3>
-                    <p class="text-blue-100/80">Entendemos cada detalhe do seu negócio para criar a solução perfeita.</p>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <!-- Passo 1 -->
+                <div class="bg-blue-800 p-8 rounded-xl border border-blue-700 hover:bg-blue-700 transition relative">
+                    <div class="bg-white text-blue-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold shadow-lg">1</div>
+                    <h3 class="text-xl font-bold mb-3">Reunião de Briefing</h3>
+                    <p class="text-blue-100">Entendemos seus objetivos, seu público-alvo e os problemas que o software ou site deve resolver.</p>
                 </div>
-                <div class="bg-white/5 backdrop-blur-sm p-8 rounded-3xl border border-white/10 hover:bg-white/10 transition">
-                    <div class="bg-blue-600 w-12 h-12 rounded-2xl flex items-center justify-center mb-6 text-xl font-bold shadow-lg">2</div>
-                    <h3 class="text-xl font-bold mb-3">Construção</h3>
-                    <p class="text-blue-100/80">Código limpo e design intuitivo focado na melhor experiência possível.</p>
+
+                <!-- Passo 2 -->
+                <div class="bg-blue-800 p-8 rounded-xl border border-blue-700 hover:bg-blue-700 transition relative">
+                    <div class="bg-white text-blue-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold shadow-lg">2</div>
+                    <h3 class="text-xl font-bold mb-3">Nós Construímos</h3>
+                    <p class="text-blue-100">Transformamos as ideias em código funcional e design apelativo, focado na experiência do usuário.</p>
                 </div>
-                <div class="bg-white/5 backdrop-blur-sm p-8 rounded-3xl border border-white/10 hover:bg-white/10 transition">
-                    <div class="bg-blue-400 w-12 h-12 rounded-2xl flex items-center justify-center mb-6 text-xl font-bold shadow-lg text-blue-900"><i class="fa-solid fa-bolt"></i></div>
+
+                <!-- Passo 3 -->
+                <div class="bg-blue-800 p-8 rounded-xl border border-blue-700 hover:bg-blue-700 transition relative">
+                    <div class="bg-white text-blue-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold shadow-lg">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
                     <h3 class="text-xl font-bold mb-3">Pronto em alguns dias</h3>
-                    <p class="text-blue-100/80">Agilidade e eficiência de ponta. Em poucos dias terá o seu projeto online, com qualidade total.</p>
+                    <p class="text-blue-100 font-medium">Agilidade e eficiência de ponta. Em poucos dias terá seu projeto online ou pronto para ser instalado, com a máxima qualidade garantida.</p>
                 </div>
+            </div>
+            
+            <div class="mt-12 text-center">
+                <a href="#contato" class="inline-block bg-white text-blue-900 font-bold py-4 px-10 rounded-full hover:bg-gray-100 transition shadow-lg text-lg transform hover:scale-105">
+                    Quero meu Projeto Personalizado
+                </a>
             </div>
         </div>
     </section>
 
-    <!-- Benefícios / Simulator -->
-    <section id="beneficios" class="py-24 bg-white">
+    <!-- Seção de Benefícios (Demo Visual) -->
+    <section id="beneficios" class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col lg:flex-row items-center gap-16">
+            <div class="flex flex-col lg:flex-row items-center gap-12">
+                <!-- Simulador de Criação / Profissional Criando -->
                 <div class="lg:w-3/5 w-full">
-                    <!-- Simulador Estático, Direito e Profissional -->
-                    <div class="relative">
-                        <!-- Glow effect behind -->
-                        <div class="absolute -inset-1.5 bg-gradient-to-r from-blue-600/10 to-blue-400/10 rounded-[2rem] blur-xl opacity-40"></div>
+                    <div class="rounded-3xl shadow-2xl overflow-hidden border border-gray-200 bg-white">
+                        <!-- Topo da Janela (Simulador) -->
+                        <div class="bg-gray-100 px-5 py-4 flex items-center gap-4 border-b border-gray-200">
+                           <div class="flex gap-2">
+                               <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                               <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
+                               <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                           </div>
+                           <div class="flex-1 bg-white rounded-lg border border-gray-200 py-1.5 px-4 text-[11px] text-gray-400">
+                               softgestao.com.br/criando-seu-sucesso
+                           </div>
+                        </div>
                         
-                        <div class="relative rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.15)] overflow-hidden border border-gray-100 bg-white">
-                            <!-- Browser Header -->
-                            <div class="bg-gray-50/90 backdrop-blur-sm px-5 py-4 flex items-center gap-6 border-b border-gray-100">
-                               <div class="flex gap-2">
-                                   <div class="w-3 h-3 rounded-full bg-red-400/80"></div>
-                                   <div class="w-3 h-3 rounded-full bg-yellow-400/80"></div>
-                                   <div class="w-3 h-3 rounded-full bg-green-400/80"></div>
-                               </div>
-                               <div class="flex-1 bg-white/60 rounded-xl border border-gray-100/50 py-2 px-5 text-[12px] text-gray-400 flex justify-between items-center shadow-inner">
-                                   <span class="flex items-center gap-3">
-                                       <i class="fa-solid fa-lock text-[11px] text-green-500 opacity-70"></i>
-                                       <span class="opacity-60">softgestao.pt/workflow-criativo</span>
-                                   </span>
-                                   <i class="fa-solid fa-rotate-right opacity-40"></i>
-                               </div>
-                            </div>
-                            <!-- Browser Body com Pessoa Criando no Computador -->
-                            <div class="min-h-[420px] md:min-h-[540px] bg-white relative overflow-hidden">
-                                <div class="absolute inset-0">
-                                    <!-- Imagem de um profissional desenvolvendo/criando ativamente -->
-                                    <img src="https://images.unsplash.com/photo-1542744094-3a31f272c490?q=80&w=2070&auto=format&fit=crop" alt="Pessoa a criar sistema no computador" class="w-full h-full object-cover">
-                                </div>
-                                <!-- Overlay sutil para dar acabamento -->
-                                <div class="absolute inset-0 bg-blue-900/5"></div>
-                            </div>
+                        <!-- Corpo da Janela com Profissional Criando -->
+                        <div class="min-h-[400px] md:min-h-[500px] bg-white relative overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1542744094-3a31f272c490?q=80&w=2070&auto=format&fit=crop" alt="Profissional criando software no computador" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-blue-900/10"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="lg:w-2/5">
-                    <h2 class="text-4xl font-bold text-gray-900 mb-6 leading-tight">Presença Digital de <span class="text-blue-600">Impacto</span></h2>
-                    <p class="text-lg text-gray-600 mb-8 leading-relaxed">Combinamos talento humano e tecnologia de ponta para construir soluções que realmente funcionam.</p>
+                    <h2 class="text-4xl font-bold text-gray-900 mb-6">Presença Digital de Impacto</h2>
+                    <p class="text-lg text-gray-600 mb-8">Não entregamos apenas "sites", entregamos ferramentas de vendas automatizadas criadas por especialistas.</p>
+                    
                     <ul class="space-y-6">
-                        <li class="flex gap-4">
-                            <div class="bg-blue-100 text-blue-600 p-3 rounded-xl h-fit shadow-sm"><i class="fa-solid fa-code"></i></div>
-                            <div><h4 class="font-bold text-gray-900">Desenvolvimento Ativo</h4><p class="text-gray-600 text-sm">Criamos cada linha de código focada nos seus objetivos.</p></div>
+                        <li class="flex items-start">
+                            <div class="bg-blue-100 text-blue-600 p-2 rounded-lg mr-4">
+                                <i class="fa-solid fa-bolt fa-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Sites Ultra-Rápidos</h4>
+                                <p class="text-gray-600">Otimização máxima para carregamento instantâneo em qualquer dispositivo.</p>
+                            </div>
                         </li>
-                        <li class="flex gap-4">
-                            <div class="bg-blue-100 text-blue-600 p-3 rounded-xl h-fit shadow-sm"><i class="fa-solid fa-palette"></i></div>
-                            <div><h4 class="font-bold text-gray-900">Design Exclusivo</h4><p class="text-gray-600 text-sm">Interfaces pensadas para proporcionar a melhor experiência.</p></div>
+                        <li class="flex items-start">
+                            <div class="bg-blue-100 text-blue-600 p-2 rounded-lg mr-4">
+                                <i class="fa-solid fa-magnifying-glass-chart fa-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">Focado em SEO</h4>
+                                <p class="text-gray-600">Estrutura preparada para que seu negócio seja encontrado no Google.</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start">
+                            <div class="bg-blue-100 text-blue-600 p-2 rounded-lg mr-4">
+                                <i class="fa-solid fa-mobile-screen-button fa-lg"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold">100% Responsivo</h4>
+                                <p class="text-gray-600">Visual perfeito em smartphones, tablets e desktops.</p>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -199,33 +290,36 @@
         </div>
     </section>
 
-    <!-- Contacto -->
-    <section id="contato" class="py-24 bg-gray-50">
+    <!-- Seção de Contato -->
+    <section id="contato" class="py-20 bg-gray-50">
         <div class="max-w-3xl mx-auto px-4">
-            <div class="bg-white rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
-                <div class="bg-blue-600 p-10 text-center text-white">
-                    <h2 class="text-3xl font-bold">Inicie o seu Projeto</h2>
-                    <p class="mt-3 text-blue-100 opacity-90">Receba uma proposta personalizada em menos de 24 horas.</p>
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
+                <div class="bg-blue-600 p-8 text-center text-white">
+                    <h2 class="text-3xl font-bold">Solicite seu Orçamento</h2>
+                    <p class="mt-2 text-blue-100">Diga-nos o que precisa e receba uma proposta em 24h.</p>
                 </div>
-                <div class="p-10">
-                    <form onsubmit="handleSubmit(event)" class="space-y-5">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-                            <input type="text" placeholder="Nome" required class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition shadow-sm">
-                            <input type="tel" placeholder="Telemóvel" required class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition shadow-sm">
+                <div class="p-8">
+                    <form onsubmit="handleSubmit(event)" class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <input type="text" placeholder="Nome Completo" required class="w-full px-4 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                            <input type="tel" placeholder="Celular / WhatsApp" required class="w-full px-4 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
                         </div>
-                        <input type="email" placeholder="E-mail" required class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition shadow-sm">
-                        <select class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition text-gray-500 shadow-sm">
-                            <option value="">Que solução procura?</option>
-                            <option>Web Site Institucional</option>
-                            <option>Loja Online</option>
-                            <option>Sistema de Gestão Sob Medida</option>
+                        <input type="email" placeholder="E-mail" required class="w-full px-4 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                        <select class="w-full px-4 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500">
+                            <option>Selecione o serviço pretendido...</option>
+                            <option>Web Site / Landing Page</option>
+                            <option>Loja Online (E-commerce)</option>
+                            <option>Sistema de Gestão (Condomínios, Stands, etc.)</option>
+                            <option>Consultório / Clínica</option>
+                            <option>Restaurante / Delivery</option>
+                            <option>Projeto Especial Sob Medida</option>
                         </select>
-                        <textarea rows="4" placeholder="Conte-nos um pouco sobre o seu projeto..." class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-blue-500 transition shadow-sm"></textarea>
+                        <textarea rows="4" placeholder="Descreva brevemente sua ideia ou seu negócio..." class="w-full px-4 py-3 border rounded-lg outline-none focus:ring-2 focus:ring-blue-500"></textarea>
                         
                         <div id="feedback-container"></div>
                         
-                        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-5 rounded-xl hover:bg-blue-700 transition shadow-lg text-lg transform hover:-translate-y-1">
-                            Enviar Mensagem
+                        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-4 rounded-lg hover:bg-blue-700 transition">
+                            Enviar Pedido de Orçamento
                         </button>
                     </form>
                 </div>
@@ -234,26 +328,26 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-white py-16">
+    <footer class="bg-gray-900 text-white py-12 border-t border-gray-800">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <div class="flex items-center justify-center mb-8">
-                <i class="fa-solid fa-layer-group text-blue-400 mr-3 text-3xl"></i>
-                <span class="font-bold text-3xl tracking-tight">SoftGestão</span>
+            <div class="flex items-center justify-center mb-6">
+                <i class="fa-solid fa-layer-group text-blue-400 mr-2 text-2xl"></i>
+                <span class="font-bold text-2xl">SoftGestão</span>
             </div>
-            <p class="text-gray-400 mb-10 max-w-sm mx-auto leading-relaxed">Sistemas de Gestão e Desenvolvimento Web de Alto Impacto para empresas modernas.</p>
-            <div class="flex justify-center space-x-8 mb-12">
-                <a href="mailto:comercial.softgestao@gmail.com" class="text-gray-400 hover:text-white transition transform hover:scale-110"><i class="fa-solid fa-envelope fa-2x"></i></a>
-                <a href="https://wa.me/5511932186193" class="text-gray-400 hover:text-green-500 transition transform hover:scale-110"><i class="fa-brands fa-whatsapp fa-2x"></i></a>
+            <p class="text-gray-400 mb-8 max-w-md mx-auto">Especialistas em Sistemas de Gestão e Desenvolvimento Web de Alto Impacto.</p>
+            <div class="flex justify-center space-x-6 mb-8 text-gray-400">
+                <a href="mailto:comercial.softgestao@gmail.com" class="hover:text-blue-400 transition"><i class="fa-solid fa-envelope fa-xl"></i></a>
+                <a href="https://wa.me/5511932186193" class="hover:text-green-400 transition"><i class="fa-brands fa-whatsapp fa-xl"></i></a>
             </div>
-            <div class="pt-10 border-t border-gray-800 text-gray-500 text-sm">
+            <div class="border-t border-gray-800 pt-8 text-gray-500 text-sm">
                 &copy; 2025 SoftGestão. Todos os direitos reservados.
             </div>
         </div>
     </footer>
 
-    <!-- WhatsApp Floating -->
-    <a href="https://wa.me/5511932186193" target="_blank" class="fixed bottom-8 right-8 bg-green-500 text-white p-5 rounded-full shadow-2xl hover:bg-green-600 transition-all z-50 whatsapp-btn flex items-center justify-center w-20 h-20">
-        <i class="fa-brands fa-whatsapp fa-3x"></i>
+    <!-- Botão Flutuante do WhatsApp -->
+    <a href="https://wa.me/5511932186193" target="_blank" class="fixed bottom-6 right-6 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition z-50 flex items-center justify-center w-16 h-16 whatsapp-btn">
+        <i class="fa-brands fa-whatsapp fa-2x"></i>
     </a>
 
     <script>
@@ -267,22 +361,22 @@
             const btn = event.target.querySelector('button');
             const feedback = document.getElementById('feedback-container');
             
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i> A enviar...';
+            btn.innerText = 'Enviando...';
             btn.disabled = true;
 
             setTimeout(() => {
-                feedback.innerHTML = '<div class="bg-green-100 text-green-700 p-4 rounded-xl mb-6 text-sm font-bold shadow-sm flex items-center gap-3 animate-bounce"><i class="fa-solid fa-check-circle"></i> Mensagem enviada! Entraremos em contacto brevemente.</div>';
+                feedback.innerHTML = '<div class="bg-green-100 text-green-700 p-3 rounded mb-4 text-sm font-bold">Mensagem enviada com sucesso! Entraremos em contato em breve.</div>';
                 event.target.reset();
-                btn.innerText = 'Enviado com Sucesso!';
+                btn.innerText = 'Enviado!';
                 btn.classList.replace('bg-blue-600', 'bg-green-600');
                 
                 setTimeout(() => {
                     feedback.innerHTML = '';
-                    btn.innerText = 'Enviar Mensagem';
+                    btn.innerText = 'Enviar Pedido de Orçamento';
                     btn.disabled = false;
                     btn.classList.replace('bg-green-600', 'bg-blue-600');
-                }, 5000);
-            }, 1800);
+                }, 4000);
+            }, 1500);
         }
     </script>
 </body>
