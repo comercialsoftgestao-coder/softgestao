@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SoftGestão - Soluções em Software e Web Design</title>
+    <title>SoftGestão - Sistemas Sob Medida e Alta Performance</title>
     <!-- Tailwind CSS para estilização rápida e moderna -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome para ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Estilos personalizados */
+        /* Estilos personalizados para Alta Conversão */
         .hero-bg {
-            background: linear-gradient(rgba(17, 24, 39, 0.9), rgba(30, 58, 138, 0.8)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
+            background: linear-gradient(rgba(10, 20, 50, 0.85), rgba(30, 58, 138, 0.8)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
         }
         .smooth-scroll {
             scroll-behavior: smooth;
         }
-        /* Animação para o botão do WhatsApp */
         @keyframes pulse-custom {
             0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
             70% { box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); }
@@ -27,331 +26,339 @@
         .whatsapp-btn {
             animation: pulse-custom 2s infinite;
         }
-        /* Transições suaves para os cards */
         .card-hover {
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .card-hover:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+        /* Estilo para FAQ interativo */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 200px;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
         }
     </style>
 </head>
-<body class="font-sans text-gray-700 antialiased smooth-scroll bg-white">
+<body class="font-sans text-gray-800 antialiased smooth-scroll bg-slate-50">
 
-    <!-- Navegação -->
-    <nav class="bg-white/90 backdrop-blur-md shadow-sm fixed w-full z-50">
+    <!-- Navegação Otimizada -->
+    <nav class="bg-white/95 backdrop-blur-md shadow-sm fixed w-full z-50 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
-                <div class="flex-shrink-0 flex items-center">
-                    <div class="bg-blue-900 text-white p-2 rounded-lg mr-2">
+                <div class="flex-shrink-0 flex items-center group cursor-pointer">
+                    <div class="bg-blue-600 group-hover:bg-blue-700 text-white p-2 rounded-xl mr-3 transition-colors shadow-lg shadow-blue-200">
                         <i class="fa-solid fa-layer-group fa-lg"></i>
                     </div>
-                    <span class="font-bold text-2xl text-blue-900 tracking-tight">SoftGestão</span>
+                    <span class="font-black text-2xl text-blue-900 tracking-tighter uppercase">SoftGestão</span>
                 </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#inicio" class="text-gray-600 hover:text-blue-900 px-1 py-2 font-medium transition">Início</a>
-                    <a href="#solucoes" class="text-gray-600 hover:text-blue-900 px-1 py-2 font-medium transition">Soluções</a>
-                    <a href="#personalizado" class="text-blue-600 hover:text-blue-900 px-1 py-2 font-bold transition">Sob Medida</a>
-                    <a href="#beneficios" class="text-gray-600 hover:text-blue-900 px-1 py-2 font-medium transition">Benefícios</a>
-                    <a href="#contato" class="bg-blue-600 text-white px-6 py-2.5 rounded-full hover:bg-blue-700 transition shadow-md">Fale Conosco</a>
+                <div class="hidden md:flex items-center space-x-10">
+                    <a href="#inicio" class="text-slate-600 hover:text-blue-600 font-semibold transition">Início</a>
+                    <a href="#solucoes" class="text-slate-600 hover:text-blue-600 font-semibold transition">Soluções</a>
+                    <a href="#personalizado" class="text-blue-600 hover:text-blue-800 font-bold transition">Sob Medida</a>
+                    <a href="#contato" class="bg-blue-600 text-white px-7 py-3 rounded-full font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200 active:scale-95">Fale Conosco</a>
                 </div>
-                <!-- Botão Menu Mobile -->
                 <div class="md:hidden flex items-center">
-                    <button onclick="toggleMenu()" class="text-gray-600 hover:text-blue-900 focus:outline-none">
-                        <i class="fa-solid fa-bars fa-2x"></i>
+                    <button onclick="toggleMenu()" class="text-blue-900 focus:outline-none">
+                        <i class="fa-solid fa-bars-staggered fa-2x"></i>
                     </button>
                 </div>
             </div>
         </div>
         <!-- Menu Mobile -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100">
-            <a href="#inicio" onclick="toggleMenu()" class="block py-4 px-6 text-base hover:bg-gray-50 transition">Início</a>
-            <a href="#solucoes" onclick="toggleMenu()" class="block py-4 px-6 text-base hover:bg-gray-50 transition">Soluções</a>
-            <a href="#personalizado" onclick="toggleMenu()" class="block py-4 px-6 text-base hover:bg-gray-50 font-bold text-blue-600 transition">Sob Medida</a>
-            <a href="#beneficios" onclick="toggleMenu()" class="block py-4 px-6 text-base hover:bg-gray-50 transition">Benefícios</a>
-            <a href="#contato" onclick="toggleMenu()" class="block py-4 px-6 text-base hover:bg-gray-50 font-bold text-blue-600 transition">Fale Conosco</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 animate-in slide-in-from-top">
+            <a href="#inicio" onclick="toggleMenu()" class="block py-4 px-6 font-semibold hover:bg-slate-50 transition border-b">Início</a>
+            <a href="#solucoes" onclick="toggleMenu()" class="block py-4 px-6 font-semibold hover:bg-slate-50 transition border-b">Soluções</a>
+            <a href="#personalizado" onclick="toggleMenu()" class="block py-4 px-6 font-bold text-blue-600 hover:bg-slate-50 transition border-b">Sob Medida</a>
+            <a href="#contato" onclick="toggleMenu()" class="block py-4 px-6 font-bold text-blue-600 hover:bg-slate-50 transition">Fale Conosco</a>
         </div>
     </nav>
 
-    <!-- Seção Hero -->
-    <section id="inicio" class="hero-bg h-screen flex items-center justify-center pt-20 px-4">
-        <div class="text-center max-w-4xl mx-auto">
-            <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold text-white mb-6 tracking-tight">
-                Sistemas e Web Sites <span class="text-blue-400">Exclusivos</span>
+    <!-- Seção Hero - Focada em Conversão -->
+    <section id="inicio" class="hero-bg min-h-screen flex items-center justify-center pt-20 px-4">
+        <div class="text-center max-w-5xl mx-auto">
+            <div class="inline-block bg-blue-500/20 backdrop-blur-sm border border-blue-400/30 text-blue-300 px-4 py-1.5 rounded-full text-sm font-bold mb-8 animate-pulse uppercase tracking-widest">
+                🔥 Vagas limitadas para projetos este mês
+            </div>
+            <h1 class="text-4xl md:text-7xl font-black text-white mb-6 leading-[1.1] tracking-tight">
+                Sistemas que Transformam <br> <span class="text-blue-400">Tempo em Lucro.</span>
             </h1>
-            <p class="text-xl text-gray-200 mb-10 max-w-2xl mx-auto leading-relaxed">
-                Do software de gestão mais complexo ao web site institucional de alta performance. Desenvolvemos a presença digital que o seu negócio merece.
+            <p class="text-lg md:text-2xl text-slate-200 mb-12 max-w-3xl mx-auto leading-relaxed font-medium">
+                Do software de gestão inteligente ao site que vende sozinho. Criamos a infraestrutura digital que coloca sua empresa à frente da concorrência.
             </p>
-            <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a href="#solucoes" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-10 rounded-xl text-lg transition shadow-xl hover:scale-105 active:scale-95">
-                    Conhecer Soluções
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <a href="#contato" class="bg-blue-600 hover:bg-blue-700 text-white font-black py-5 px-12 rounded-2xl text-xl transition shadow-2xl hover:scale-105 active:scale-95 shadow-blue-500/40">
+                    Garantir Consultoria Gratuita
                 </a>
-                <a href="#contato" class="bg-white/10 backdrop-blur-md border-2 border-white/30 hover:bg-white hover:text-blue-900 text-white font-bold py-4 px-10 rounded-xl text-lg transition">
-                    Solicitar Orçamento
+                <a href="#solucoes" class="bg-white/10 backdrop-blur-md border-2 border-white/40 hover:bg-white hover:text-blue-900 text-white font-bold py-5 px-12 rounded-2xl text-xl transition">
+                    Ver Soluções
                 </a>
             </div>
+            <p class="text-slate-400 mt-6 text-sm font-semibold italic">Resposta garantida em menos de 24 horas.</p>
         </div>
     </section>
 
-    <!-- Seção de Números -->
-    <div class="bg-white py-12 border-b border-gray-100">
+    <!-- Seção de Números de Impacto -->
+    <div class="bg-white py-16 border-b border-slate-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                <div>
-                    <p class="text-4xl font-extrabold text-blue-600">+150</p>
-                    <p class="text-gray-500 font-medium uppercase text-xs tracking-widest mt-1">Projetos Entregues</p>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+                <div class="space-y-2">
+                    <p class="text-5xl font-black text-blue-600 tracking-tighter">+150</p>
+                    <p class="text-slate-500 font-bold uppercase text-xs tracking-widest">Projetos Ativos</p>
                 </div>
-                <div>
-                    <p class="text-4xl font-extrabold text-blue-600">100%</p>
-                    <p class="text-gray-500 font-medium uppercase text-xs tracking-widest mt-1">Satisfeitos</p>
+                <div class="space-y-2">
+                    <p class="text-5xl font-black text-blue-600 tracking-tighter">100%</p>
+                    <p class="text-slate-500 font-bold uppercase text-xs tracking-widest">Código Próprio</p>
                 </div>
-                <div>
-                    <p class="text-4xl font-extrabold text-blue-600">24/7</p>
-                    <p class="text-gray-500 font-medium uppercase text-xs tracking-widest mt-1">Suporte Técnico</p>
+                <div class="space-y-2">
+                    <p class="text-5xl font-black text-blue-600 tracking-tighter">24/7</p>
+                    <p class="text-slate-500 font-bold uppercase text-xs tracking-widest">Suporte Dedicado</p>
                 </div>
-                <div>
-                    <p class="text-4xl font-extrabold text-blue-600">72h</p>
-                    <p class="text-gray-500 font-medium uppercase text-xs tracking-widest mt-1">Prazo Médio</p>
+                <div class="space-y-2">
+                    <p class="text-5xl font-black text-blue-600 tracking-tighter">72h</p>
+                    <p class="text-slate-500 font-bold uppercase text-xs tracking-widest">Setup Inicial</p>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Seção de Soluções -->
-    <section id="solucoes" class="py-24 bg-gray-50">
+    <!-- Seção de Soluções - Todas as 12 categorias -->
+    <section id="solucoes" class="py-28 bg-slate-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-20">
-                <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-6">Soluções Digitais Completas</h2>
-                <div class="w-20 h-1.5 bg-blue-600 mx-auto rounded-full mb-6"></div>
-                <p class="text-gray-600 max-w-3xl mx-auto text-lg leading-relaxed">Seja para organizar os processos internos da sua empresa ou para captar novos clientes na internet, temos a solução técnica ideal.</p>
+            <div class="text-center mb-24">
+                <h2 class="text-4xl md:text-6xl font-black text-blue-900 mb-6 tracking-tight">Soluções que Escalão Negócios</h2>
+                <div class="w-24 h-2 bg-blue-600 mx-auto rounded-full mb-8"></div>
+                <p class="text-slate-600 max-w-3xl mx-auto text-xl leading-relaxed font-medium">Não importa o tamanho da sua empresa, nós temos o motor digital certo para acelerar seu crescimento.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
                 <!-- Card: Web Sites -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] font-bold px-3 py-1 rounded-bl-lg uppercase tracking-tighter">Novidade</div>
-                    <div class="text-blue-600 mb-4 bg-blue-50 w-14 h-14 flex items-center justify-center rounded-xl">
-                        <i class="fa-solid fa-globe fa-xl"></i>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover relative group">
+                    <div class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] font-black px-4 py-1 rounded-bl-2xl uppercase tracking-widest">Foco em Vendas</div>
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 shadow-inner">
+                        <i class="fa-solid fa-globe fa-2x"></i>
                     </div>
-                    <h3 class="text-lg font-bold mb-2">Criação de Web Sites</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">Sites institucionais e lojas online modernos e otimizados para o Google.</p>
+                    <h3 class="text-xl font-bold mb-3 text-blue-900">Criação de Web Sites</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Landing pages de alta conversão e lojas online otimizadas para o topo do Google.</p>
                 </div>
 
                 <!-- Card: Condomínios -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
-                    <div class="text-blue-600 mb-4 bg-blue-50 w-14 h-14 flex items-center justify-center rounded-xl">
-                        <i class="fa-solid fa-building fa-xl"></i>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover group">
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-building fa-2x"></i>
                     </div>
-                    <h3 class="text-lg font-bold mb-2">Gestão de Condomínios</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">Controle financeiro, emissão de boletos e comunicação direta com condôminos.</p>
+                    <h3 class="text-xl font-bold mb-3 text-blue-900">Gestão de Condomínios</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Controle financeiro automatizado, emissão de boletos e comunicação digital ativa.</p>
                 </div>
 
                 <!-- Card: Automóveis -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
-                    <div class="text-blue-600 mb-4 bg-blue-50 w-14 h-14 flex items-center justify-center rounded-xl">
-                        <i class="fa-solid fa-car fa-xl"></i>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover group">
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-car fa-2x"></i>
                     </div>
-                    <h3 class="text-lg font-bold mb-2">Stands de Automóveis</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">Gestão de estoque, controle de vendas e emissão de notas fiscais.</p>
+                    <h3 class="text-xl font-bold mb-3 text-blue-900">Stands de Automóveis</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Gestão de estoque inteligente, CRM de vendas e integração com portais parceiros.</p>
                 </div>
 
                 <!-- Card: Estacionamentos -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
-                    <div class="text-blue-600 mb-4 bg-blue-50 w-14 h-14 flex items-center justify-center rounded-xl">
-                        <i class="fa-solid fa-square-parking fa-xl"></i>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover group">
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-square-parking fa-2x"></i>
                     </div>
-                    <h3 class="text-lg font-bold mb-2">Estacionamentos</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">Controle de entrada/saída, tarifação inteligente e mensalistas.</p>
+                    <h3 class="text-xl font-bold mb-3 text-blue-900">Estacionamentos</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Controle de entradas/saídas por placa, tarifação dinâmica e mensalistas.</p>
                 </div>
 
                  <!-- Card: Lava Rápido -->
-                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
-                    <div class="text-blue-600 mb-4 bg-blue-50 w-14 h-14 flex items-center justify-center rounded-xl">
-                        <i class="fa-solid fa-soap fa-xl"></i>
+                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover group">
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-soap fa-2x"></i>
                     </div>
-                    <h3 class="text-lg font-bold mb-2">Lava Rápido</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">Controle de veículos, comissões de lavadores e gestão de caixa diário.</p>
+                    <h3 class="text-xl font-bold mb-3 text-blue-900">Lava Rápido</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Fila de lavagem em tempo real, comissões de equipe e fechamento de caixa.</p>
                 </div>
 
                 <!-- Card: Imobiliárias -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
-                    <div class="text-blue-600 mb-4 bg-blue-50 w-14 h-14 flex items-center justify-center rounded-xl">
-                        <i class="fa-solid fa-house-chimney fa-xl"></i>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover group">
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-house-chimney fa-2x"></i>
                     </div>
-                    <h3 class="text-lg font-bold mb-2">Imobiliárias</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">Catálogo digital de imóveis, controle de locação e gestão de leads.</p>
+                    <h3 class="text-xl font-bold mb-3 text-blue-900">Imobiliárias</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Catálogo digital de alta performance, gestão de contratos e controle de locação.</p>
                 </div>
 
                 <!-- Card: Advocacia -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
-                    <div class="text-blue-600 mb-4 bg-blue-50 w-14 h-14 flex items-center justify-center rounded-xl">
-                        <i class="fa-solid fa-scale-balanced fa-xl"></i>
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover group">
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-scale-balanced fa-2x"></i>
                     </div>
-                    <h3 class="text-lg font-bold mb-2">Escritórios de Advogados</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">Acompanhamento de processos, agenda inteligente e controle de prazos.</p>
+                    <h3 class="text-xl font-bold mb-3 text-blue-900">Advocacia</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Acompanhamento de processos, agenda inteligente e controle financeiro de honorários.</p>
                 </div>
 
                  <!-- Card: Saúde -->
-                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
-                    <div class="text-blue-600 mb-4 bg-blue-50 w-14 h-14 flex items-center justify-center rounded-xl">
-                        <i class="fa-solid fa-user-doctor fa-xl"></i>
+                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover group">
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-user-doctor fa-2x"></i>
                     </div>
-                    <h3 class="text-lg font-bold mb-2">Clínicas e Consultórios</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">Agenda de consultas, prontuário eletrônico e controle de tratamentos.</p>
+                    <h3 class="text-xl font-bold mb-3 text-blue-900">Saúde e Clínicas</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Prontuário eletrônico seguro, agendamento online e faturamento de convênios.</p>
                 </div>
 
                  <!-- Card: Salões e Estética -->
-                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
-                    <div class="text-blue-600 mb-4 bg-blue-50 w-14 h-14 flex items-center justify-center rounded-xl">
-                        <i class="fa-solid fa-spa fa-xl"></i>
+                 <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover group">
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-spa fa-2x"></i>
                     </div>
-                    <h3 class="text-lg font-bold mb-2">Salões e Estética</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">Agendamento online, controle de profissionais e gestão de comissões.</p>
+                    <h3 class="text-xl font-bold mb-3 text-blue-900">Salões e Estética</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Agendamentos via WhatsApp, controle de pacotes e comissões de profissionais.</p>
                 </div>
 
-                <!-- Card: PetShop (RESTAURADO) -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
-                    <div class="text-blue-600 mb-4 bg-blue-50 w-14 h-14 flex items-center justify-center rounded-xl">
-                        <i class="fa-solid fa-paw fa-xl"></i>
+                <!-- Card: PetShop -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover group">
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-paw fa-2x"></i>
                     </div>
-                    <h3 class="text-lg font-bold mb-2">Pet Shops</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">Agendamento de banhos, histórico de vacinas e controle de estoque.</p>
+                    <h3 class="text-xl font-bold mb-3 text-blue-900">Pet Shops</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Histórico clínico animal, agendamento de banho/tosa e controle de estoque pet.</p>
                 </div>
 
-                <!-- Card: Alimentação (RESTAURADO) -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 card-hover">
-                    <div class="text-blue-600 mb-4 bg-blue-50 w-14 h-14 flex items-center justify-center rounded-xl">
-                        <i class="fa-solid fa-utensils fa-xl"></i>
+                <!-- Card: Alimentação -->
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover group">
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-utensils fa-2x"></i>
                     </div>
-                    <h3 class="text-lg font-bold mb-2">Bares e Restaurantes</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">Controle de mesas, delivery e integração com sistemas de faturamento.</p>
+                    <h3 class="text-xl font-bold mb-3 text-blue-900">Alimentação</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed">Controle de mesas, PDV ágil, delivery integrado e gestão de insumos.</p>
                 </div>
 
-                <!-- Card: Controle Financeiro (RESTAURADO) -->
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-blue-100 card-hover bg-blue-50/30">
-                    <div class="text-blue-600 mb-4 bg-blue-100 w-14 h-14 flex items-center justify-center rounded-xl">
-                        <i class="fa-solid fa-house-user fa-xl"></i>
+                <!-- Card: Controle Financeiro -->
+                <div class="bg-blue-600 p-8 rounded-3xl shadow-xl border border-blue-400 card-hover group">
+                    <div class="text-white mb-6 bg-blue-500 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-white group-hover:text-blue-600 transition-all duration-300">
+                        <i class="fa-solid fa-house-user fa-2x"></i>
                     </div>
-                    <h3 class="text-lg font-bold mb-2">Controle Financeiro</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">Gestão de gastos domésticos e planejamento de orçamento familiar.</p>
+                    <h3 class="text-xl font-bold mb-3 text-white">Controle Pessoal</h3>
+                    <p class="text-blue-100 text-sm leading-relaxed">Gestão de gastos familiares e planejamento financeiro doméstico simplificado.</p>
                 </div>
             </div>
             
-            <div class="mt-16 text-center">
-                <p class="text-gray-500 italic">E muito mais... Desenvolvemos para qualquer tipo de negócio.</p>
+            <div class="mt-20 text-center">
+                <p class="text-slate-500 italic font-medium">Sua necessidade não está aqui? Nós criamos uma solução do zero para você.</p>
             </div>
         </div>
     </section>
 
-    <!-- Seção: Desenvolvimento Sob Medida -->
-    <section id="personalizado" class="py-24 bg-blue-900 text-white relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
-            <svg width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M0 100 Q 250 50 500 100 T 1000 100" stroke="white" stroke-width="2"/>
-                <path d="M0 150 Q 250 100 500 150 T 1000 150" stroke="white" stroke-width="2"/>
+    <!-- Diferencial Sob Medida com Gatilhos de Conversão -->
+    <section id="personalizado" class="py-28 bg-blue-900 text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5 pointer-events-none">
+            <svg width="100%" height="100%" fill="none" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="200" cy="200" r="100" stroke="white" stroke-width="2"/>
+                <circle cx="200" cy="200" r="150" stroke="white" stroke-width="2"/>
             </svg>
         </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div class="text-center mb-20">
-                <span class="bg-blue-700 text-blue-100 text-xs font-bold px-4 py-1.5 rounded-full uppercase tracking-widest border border-blue-600">Diferencial Exclusivo</span>
-                <h2 class="text-3xl md:text-5xl font-bold mt-6 mb-4 leading-tight">O Software que se adapta a você</h2>
-                <p class="text-blue-200 text-lg max-w-2xl mx-auto">Não mude sua forma de trabalhar. Nós traduzimos seus processos em tecnologia eficiente.</p>
+            <div class="text-center mb-24">
+                <span class="bg-blue-600 text-white text-xs font-black px-5 py-2 rounded-full uppercase tracking-widest border border-blue-500 shadow-lg">Metodologia Ágil</span>
+                <h2 class="text-4xl md:text-6xl font-black mt-8 mb-6 leading-tight tracking-tighter">Software de Verdade, <br>Sem Complicação.</h2>
+                <p class="text-blue-200 text-xl max-w-2xl mx-auto leading-relaxed">Desenvolvemos o sistema que sua empresa realmente precisa, sem módulos inúteis ou taxas escondidas.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
                 <!-- Passo 1 -->
-                <div class="bg-white/5 backdrop-blur-sm p-10 rounded-3xl border border-white/10 hover:bg-white/10 transition group">
-                    <div class="bg-white text-blue-900 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 text-2xl font-bold shadow-lg group-hover:scale-110 transition">1</div>
-                    <h3 class="text-2xl font-bold mb-4">Briefing</h3>
-                    <p class="text-blue-100/80 leading-relaxed">Entendemos seus objetivos, seu público e as dores reais do seu dia a dia operacional.</p>
+                <div class="bg-white/5 backdrop-blur-md p-10 rounded-[2.5rem] border border-white/10 hover:bg-white/10 transition group">
+                    <div class="bg-white text-blue-900 w-16 h-16 rounded-2xl flex items-center justify-center mb-8 text-3xl font-black shadow-xl group-hover:scale-110 transition duration-300">1</div>
+                    <h3 class="text-2xl font-bold mb-4">Análise Estratégica</h3>
+                    <p class="text-blue-100/70 leading-relaxed font-medium">Mapeamos seus gargalos operacionais e desenhamos a solução para eliminá-los de vez.</p>
                 </div>
 
                 <!-- Passo 2 -->
-                <div class="bg-white/5 backdrop-blur-sm p-10 rounded-3xl border border-white/10 hover:bg-white/10 transition group">
-                    <div class="bg-white text-blue-900 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 text-2xl font-bold shadow-lg group-hover:scale-110 transition">2</div>
-                    <h3 class="text-2xl font-bold mb-4">Criação</h3>
-                    <p class="text-blue-100/80 leading-relaxed">Nossos especialistas transformam ideias em código limpo, rápido e interfaces intuitivas.</p>
+                <div class="bg-white/5 backdrop-blur-md p-10 rounded-[2.5rem] border border-white/10 hover:bg-white/10 transition group text-left">
+                    <div class="bg-white text-blue-900 w-16 h-16 rounded-2xl flex items-center justify-center mb-8 text-3xl font-black shadow-xl group-hover:scale-110 transition duration-300">2</div>
+                    <h3 class="text-2xl font-bold mb-4">Arquitetura UI/UX</h3>
+                    <p class="text-blue-100/70 leading-relaxed font-medium">Criamos interfaces tão intuitivas que sua equipe não precisará de manuais complexos.</p>
                 </div>
 
                 <!-- Passo 3 -->
-                <div class="bg-blue-600 p-10 rounded-3xl border border-blue-400 shadow-2xl transition group relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-white/10 p-4 rounded-bl-3xl">
-                        <i class="fa-solid fa-bolt fa-2x"></i>
-                    </div>
-                    <div class="bg-white text-blue-900 w-14 h-14 rounded-2xl flex items-center justify-center mb-6 text-2xl font-bold shadow-lg group-hover:scale-110 transition">3</div>
-                    <h3 class="text-2xl font-bold mb-4 text-white">Entrega Agilizada</h3>
-                    <p class="text-white font-medium leading-relaxed">Seu projeto online em poucos dias, testado e pronto para gerar resultados imediatos.</p>
+                <div class="bg-blue-600 p-10 rounded-[2.5rem] border border-blue-400 shadow-[0_20px_50px_rgba(37,99,235,0.4)] transition group relative">
+                    <div class="absolute -top-4 -right-4 bg-yellow-400 text-blue-900 font-black px-4 py-1 rounded-lg text-xs uppercase shadow-lg">Mais Vendido</div>
+                    <div class="bg-white text-blue-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-8 text-3xl font-black shadow-xl group-hover:scale-110 transition duration-300">3</div>
+                    <h3 class="text-2xl font-bold mb-4 text-white">Deploy em Dias</h3>
+                    <p class="text-white leading-relaxed font-bold">Lançamento agilizado para que você comece a colher os lucros do novo sistema imediatamente.</p>
                 </div>
             </div>
             
-            <div class="mt-16 text-center">
-                <a href="#contato" class="inline-block bg-white text-blue-900 font-bold py-5 px-12 rounded-2xl hover:bg-gray-100 transition shadow-2xl text-lg transform hover:-translate-y-1 active:scale-95">
-                    Quero meu Projeto Personalizado
+            <div class="mt-20 text-center">
+                <a href="#contato" class="inline-block bg-white text-blue-900 font-black py-6 px-16 rounded-3xl hover:bg-slate-100 transition shadow-2xl text-xl transform hover:-translate-y-1 active:scale-95 shadow-white/10">
+                    QUERO MEU SISTEMA EXCLUSIVO AGORA
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- Seção de Benefícios (Demo Visual) -->
-    <section id="beneficios" class="py-24 bg-white">
+    <!-- Prova Social e Benefícios Visuais -->
+    <section id="beneficios" class="py-28 bg-white overflow-hidden">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col lg:flex-row items-center gap-16">
-                <!-- Simulador de Criação -->
-                <div class="lg:w-1/2 w-full">
-                    <div class="relative">
-                        <div class="absolute -inset-4 bg-blue-100/50 rounded-[3rem] blur-2xl"></div>
-                        <div class="relative rounded-[2rem] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.2)] overflow-hidden border border-gray-200 bg-white">
-                            <!-- Topo da Janela -->
-                            <div class="bg-gray-50 px-6 py-4 flex items-center gap-4 border-b border-gray-200">
-                               <div class="flex gap-2">
-                                   <div class="w-3 h-3 rounded-full bg-red-400"></div>
-                                   <div class="w-3 h-3 rounded-full bg-yellow-400"></div>
-                                   <div class="w-3 h-3 rounded-full bg-green-400"></div>
-                               </div>
-                               <div class="flex-1 bg-white rounded-lg border border-gray-200 py-1 px-4 text-[10px] text-gray-400 font-mono tracking-tighter">
-                                   softgestao.com.br/desenvolvimento-ativo
-                               </div>
-                            </div>
-                            
-                            <div class="min-h-[400px] md:min-h-[500px] bg-white relative">
-                                <img src="https://images.unsplash.com/photo-1542744094-3a31f272c490?q=80&w=2070&auto=format&fit=crop" alt="Especialista criando software" class="w-full h-full object-cover">
-                                <div class="absolute inset-0 bg-blue-900/5"></div>
-                            </div>
+            <div class="flex flex-col lg:flex-row items-center gap-20">
+                <!-- Simulador Visual Realista -->
+                <div class="lg:w-1/2 w-full relative">
+                    <div class="absolute -inset-10 bg-blue-600/10 rounded-full blur-[100px]"></div>
+                    <div class="relative rounded-[2.5rem] shadow-[0_60px_100px_-20px_rgba(0,0,0,0.25)] overflow-hidden border border-slate-200 bg-white">
+                        <div class="bg-slate-100 px-8 py-5 flex items-center gap-5 border-b border-slate-200">
+                           <div class="flex gap-2">
+                               <div class="w-3.5 h-3.5 rounded-full bg-red-400"></div>
+                               <div class="w-3.5 h-3.5 rounded-full bg-yellow-400"></div>
+                               <div class="w-3.5 h-3.5 rounded-full bg-green-400"></div>
+                           </div>
+                           <div class="flex-1 bg-white rounded-xl border border-slate-200 py-2 px-5 text-[11px] text-slate-400 font-mono tracking-tight flex justify-between items-center">
+                               <span>softgestao.com.br/painel-administrativo</span>
+                               <i class="fa-solid fa-lock text-green-500 opacity-60"></i>
+                           </div>
+                        </div>
+                        <div class="min-h-[450px] md:min-h-[550px] bg-white relative">
+                            <!-- [Imagem de Profissional criando software no computador] -->
+                            <img src="https://images.unsplash.com/photo-1542744094-3a31f272c490?q=80&w=2070&auto=format&fit=crop" alt="Desenvolvimento Ativo" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-blue-900/10"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="lg:w-1/2">
-                    <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-8 leading-tight">Presença Digital de <span class="text-blue-600">Impacto</span></h2>
-                    <p class="text-xl text-gray-600 mb-10 leading-relaxed font-light">Não entregamos apenas "sites". Entregamos ferramentas poderosas que automatizam suas vendas e processos.</p>
+                    <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-8 leading-tight tracking-tight">Presença Digital <br>que <span class="text-blue-600">Converte</span></h2>
+                    <p class="text-xl text-slate-600 mb-12 leading-relaxed font-medium">Unimos a inteligência do código à psicologia do design para criar máquinas de vendas automáticas.</p>
                     
-                    <div class="space-y-8">
-                        <div class="flex items-start gap-6 group">
-                            <div class="bg-blue-600 text-white p-4 rounded-2xl shadow-lg group-hover:bg-blue-700 transition">
-                                <i class="fa-solid fa-bolt-lightning text-xl"></i>
+                    <div class="space-y-10">
+                        <div class="flex items-start gap-6 group cursor-default">
+                            <div class="bg-blue-600 text-white p-5 rounded-[1.25rem] shadow-xl shadow-blue-200 group-hover:rotate-6 transition duration-300">
+                                <i class="fa-solid fa-bolt-lightning text-2xl"></i>
                             </div>
                             <div>
-                                <h4 class="text-xl font-bold text-gray-900 mb-2">Velocidade Extrema</h4>
-                                <p class="text-gray-600 leading-relaxed">Sites que carregam instantaneamente, garantindo que você não perca nenhum cliente pela espera.</p>
+                                <h4 class="text-xl font-bold text-slate-900 mb-2">Velocidade Crítica</h4>
+                                <p class="text-slate-500 leading-relaxed">Sites otimizados abaixo de 1 segundo. Cada milissegundo a mais custa dinheiro para sua empresa.</p>
                             </div>
                         </div>
-                        <div class="flex items-start gap-6 group text-left">
-                            <div class="bg-blue-600 text-white p-4 rounded-2xl shadow-lg group-hover:bg-blue-700 transition">
-                                <i class="fa-solid fa-chart-line text-xl"></i>
+                        <div class="flex items-start gap-6 group cursor-default text-left">
+                            <div class="bg-green-600 text-white p-5 rounded-[1.25rem] shadow-xl shadow-green-200 group-hover:rotate-6 transition duration-300">
+                                <i class="fa-solid fa-chart-line text-2xl"></i>
                             </div>
                             <div>
-                                <h4 class="text-xl font-bold text-gray-900 mb-2">SEO de Alta Performance</h4>
-                                <p class="text-gray-600 leading-relaxed">Sua empresa no topo do Google. Construímos sites seguindo as melhores práticas de ranqueamento.</p>
+                                <h4 class="text-xl font-bold text-slate-900 mb-2">SEO Dominante</h4>
+                                <p class="text-slate-500 leading-relaxed">Não basta ter um site, você precisa ser visto. Apareça nas primeiras posições quando seu cliente pesquisar.</p>
                             </div>
                         </div>
-                        <div class="flex items-start gap-6 group text-left">
-                            <div class="bg-blue-600 text-white p-4 rounded-2xl shadow-lg group-hover:bg-blue-700 transition">
-                                <i class="fa-solid fa-shield-halved text-xl"></i>
+                        <div class="flex items-start gap-6 group cursor-default text-left">
+                            <div class="bg-slate-900 text-white p-5 rounded-[1.25rem] shadow-xl shadow-slate-300 group-hover:rotate-6 transition duration-300">
+                                <i class="fa-solid fa-shield-halved text-2xl"></i>
                             </div>
                             <div>
-                                <h4 class="text-xl font-bold text-gray-900 mb-2">Segurança Robusta</h4>
-                                <p class="text-gray-600 leading-relaxed">Seus dados e os dados de seus clientes protegidos com as tecnologias mais recentes do mercado.</p>
+                                <h4 class="text-xl font-bold text-slate-900 mb-2">Segurança de Grado Bancário</h4>
+                                <p class="text-slate-500 leading-relaxed">Proteção total para seus dados e transações. Sites blindados contra invasões e sequestro de dados.</p>
                             </div>
                         </div>
                     </div>
@@ -360,50 +367,51 @@
         </div>
     </section>
 
-    <!-- Seção de Depoimentos -->
-    <section class="py-24 bg-gray-50 border-y border-gray-100">
+    <!-- Seção de Depoimentos Reais -->
+    <section class="py-28 bg-slate-50 border-y border-slate-200/60">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl md:text-5xl font-bold text-gray-900 mb-4 tracking-tight">O que dizem nossos clientes</h2>
-                <p class="text-gray-500 text-lg">A confiança de quem já transformou seu negócio com a SoftGestão.</p>
+            <div class="text-center mb-20">
+                <h2 class="text-4xl font-black text-slate-900 mb-4 tracking-tighter">O que dizem sobre nós</h2>
+                <p class="text-slate-500 text-xl font-medium tracking-tight">O sucesso dos nossos clientes é nossa maior propaganda.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col">
-                    <div class="flex text-yellow-400 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+                <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-200/60 flex flex-col hover:shadow-xl transition-shadow">
+                    <div class="flex text-yellow-400 mb-6 text-xl">
                         <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
                     </div>
-                    <p class="text-gray-600 italic mb-6 flex-1">"O sistema de gestão para meu pet shop superou as expectativas. Hoje consigo controlar as vacinas e agendamentos em segundos."</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold uppercase">RM</div>
+                    <p class="text-slate-600 italic mb-10 flex-1 leading-relaxed">"O sistema para meu Pet Shop mudou tudo. Hoje controlo estoque e banhos de forma 100% digital, sem erro humano."</p>
+                    <div class="flex items-center gap-5 border-t border-slate-50 pt-8">
+                        <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-black text-xl">RM</div>
                         <div>
-                            <p class="font-bold text-gray-900 text-sm">Ricardo Mendes</p>
-                            <p class="text-gray-500 text-xs uppercase tracking-tighter">Dono de Pet Shop</p>
+                            <p class="font-black text-slate-900">Ricardo Mendes</p>
+                            <p class="text-slate-500 text-xs font-black uppercase tracking-widest">Dono de Pet Shop</p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col scale-105 border-blue-200 z-10">
-                    <div class="flex text-yellow-400 mb-4">
+                <div class="bg-white p-10 rounded-[2.5rem] shadow-xl border-2 border-blue-500 flex flex-col scale-105 z-10 relative">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] font-black px-6 py-1 rounded-full uppercase tracking-[0.2em]">Destaque</div>
+                    <div class="flex text-yellow-400 mb-6 text-xl">
                         <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
                     </div>
-                    <p class="text-gray-600 italic mb-6 flex-1">"Eu precisava de um site rápido para minha imobiliária e em menos de uma semana já estava no ar e recebendo leads reais pelo WhatsApp."</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold uppercase">AL</div>
+                    <p class="text-slate-700 italic mb-10 flex-1 leading-relaxed font-medium">"Precisava de um site imobiliário que fosse rápido. Em 5 dias estava no ar e o número de contatos dobrou."</p>
+                    <div class="flex items-center gap-5 border-t border-slate-50 pt-8">
+                        <div class="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center text-white font-black text-xl shadow-lg">AL</div>
                         <div>
-                            <p class="font-bold text-gray-900 text-sm">Ana Lúcia</p>
-                            <p class="text-gray-500 text-xs uppercase tracking-tighter">Corretora Autônoma</p>
+                            <p class="font-black text-slate-900 text-lg">Ana Lúcia</p>
+                            <p class="text-slate-500 text-xs font-black uppercase tracking-widest">Corretora Autônoma</p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col">
-                    <div class="flex text-yellow-400 mb-4">
+                <div class="bg-white p-10 rounded-[2.5rem] shadow-sm border border-slate-200/60 flex flex-col hover:shadow-xl transition-shadow">
+                    <div class="flex text-yellow-400 mb-6 text-xl">
                         <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
                     </div>
-                    <p class="text-gray-600 italic mb-6 flex-1">"O controle financeiro para condomínios simplificou minha vida como síndico. Os relatórios são claros e os moradores adoraram o sistema."</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold uppercase">FC</div>
+                    <p class="text-slate-600 italic mb-10 flex-1 leading-relaxed">"O controle de condomínios da SoftGestão é fantástico. Tudo transparente para os moradores e fácil para o síndico."</p>
+                    <div class="flex items-center gap-5 border-t border-slate-50 pt-8">
+                        <div class="w-14 h-14 bg-slate-900 rounded-full flex items-center justify-center text-white font-black text-xl">FC</div>
                         <div>
-                            <p class="font-bold text-gray-900 text-sm">Felipe Castro</p>
-                            <p class="text-gray-500 text-xs uppercase tracking-tighter">Síndico Profissional</p>
+                            <p class="font-black text-slate-900">Felipe Castro</p>
+                            <p class="text-slate-500 text-xs font-black uppercase tracking-widest">Síndico Profissional</p>
                         </div>
                     </div>
                 </div>
@@ -411,75 +419,99 @@
         </div>
     </section>
 
-    <!-- Seção FAQ -->
-    <section class="py-24 bg-white">
+    <!-- FAQ Interativo para Alta Conversão -->
+    <section class="py-28 bg-white">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
-                <h2 class="text-3xl font-bold text-gray-900 mb-4">Dúvidas Frequentes</h2>
-                <p class="text-gray-500">Tudo o que você precisa saber para começar.</p>
+            <div class="text-center mb-20">
+                <h2 class="text-4xl font-black text-slate-900 mb-4 tracking-tighter">Perguntas Frequentes</h2>
+                <p class="text-slate-500 text-lg font-medium">Esclareça suas dúvidas agora mesmo.</p>
             </div>
-            <div class="space-y-4">
-                <div class="border border-gray-100 rounded-2xl p-6 hover:bg-gray-50 transition cursor-help">
-                    <h4 class="font-bold text-gray-900 mb-2">Quanto tempo demora para meu site ficar pronto?</h4>
-                    <p class="text-gray-600 text-sm">A maioria dos nossos projetos de landing pages e sites institucionais é entregue em alguns dias, variando de 3 a 7 dias úteis.</p>
+            <div class="space-y-6">
+                <!-- FAQ Item 1 -->
+                <div class="faq-item border border-slate-200 rounded-3xl p-8 hover:bg-slate-50 transition cursor-pointer group" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-lg font-black text-slate-900 group-hover:text-blue-600 transition">Quanto tempo demora para meu site ficar pronto?</h4>
+                        <div class="faq-icon transition-transform duration-300 text-blue-600">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer text-slate-600 mt-4 leading-relaxed font-medium">
+                        A maioria das nossas Landing Pages e sites institucionais é entregue entre 3 a 7 dias úteis após o briefing aprovado. Sistemas complexos possuem prazos sob medida.
+                    </div>
                 </div>
-                <div class="border border-gray-100 rounded-2xl p-6 hover:bg-gray-50 transition cursor-help">
-                    <h4 class="font-bold text-gray-900 mb-2">O software é personalizável no futuro?</h4>
-                    <p class="text-gray-600 text-sm">Sim! Nossas soluções são escaláveis. Conforme seu negócio cresce, podemos adicionar novas funcionalidades e integrações.</p>
+                <!-- FAQ Item 2 -->
+                <div class="faq-item border border-slate-200 rounded-3xl p-8 hover:bg-slate-50 transition cursor-pointer group" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-lg font-black text-slate-900 group-hover:text-blue-600 transition">O software é personalizável no futuro?</h4>
+                        <div class="faq-icon transition-transform duration-300 text-blue-600">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer text-slate-600 mt-4 leading-relaxed font-medium">
+                        Sim! Nossas soluções são modulares e escaláveis. Conforme sua empresa cresce, podemos acoplar novas ferramentas e integrações de forma transparente.
+                    </div>
                 </div>
-                <div class="border border-gray-100 rounded-2xl p-6 hover:bg-gray-50 transition cursor-help">
-                    <h4 class="font-bold text-gray-900 mb-2">Vocês oferecem suporte após a entrega?</h4>
-                    <p class="text-gray-600 text-sm">Com certeza. Oferecemos suporte técnico contínuo para garantir que sua ferramenta funcione perfeitamente 24 horas por dia.</p>
+                <!-- FAQ Item 3 -->
+                <div class="faq-item border border-slate-200 rounded-3xl p-8 hover:bg-slate-50 transition cursor-pointer group" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-center">
+                        <h4 class="text-lg font-black text-slate-900 group-hover:text-blue-600 transition">Como funciona o suporte técnico?</h4>
+                        <div class="faq-icon transition-transform duration-300 text-blue-600">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </div>
+                    </div>
+                    <div class="faq-answer text-slate-600 mt-4 leading-relaxed font-medium">
+                        Oferecemos suporte humano 24/7 para emergências críticas e atendimento em horário comercial para dúvidas comuns, via WhatsApp, e-mail e telefone.
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Seção de Contato -->
-    <section id="contato" class="py-24 bg-gray-50">
-        <div class="max-w-3xl mx-auto px-4">
-            <div class="bg-white rounded-[2.5rem] shadow-2xl overflow-hidden border border-gray-200">
-                <div class="bg-blue-600 p-12 text-center text-white relative">
-                    <h2 class="text-4xl font-bold mb-4">Inicie seu Sucesso Digital</h2>
-                    <p class="text-blue-100 opacity-90">Preencha o formulário e receba um orçamento personalizado em até 24 horas.</p>
+    <!-- Seção de Contato - Foco Total em Lead -->
+    <section id="contato" class="py-28 bg-slate-900">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="bg-white rounded-[3rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] overflow-hidden relative border border-white/10">
+                <div class="bg-blue-600 p-16 text-center text-white relative">
+                    <div class="absolute -top-10 -left-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+                    <h2 class="text-4xl md:text-5xl font-black mb-6 tracking-tight leading-tight">Inicie Sua Nova Fase Digital</h2>
+                    <p class="text-blue-100 text-xl opacity-90 font-medium">Preencha o formulário para receber uma proposta personalizada em poucas horas.</p>
                 </div>
-                <div class="p-12">
-                    <form onsubmit="handleSubmit(event)" class="space-y-6">
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-1">
-                                <label class="text-xs font-bold uppercase text-gray-400 ml-1">Nome Completo</label>
-                                <input type="text" placeholder="Ex: João Silva" required class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition">
+                <div class="p-16">
+                    <form onsubmit="handleSubmit(event)" class="space-y-8">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-2">
+                                <label class="text-xs font-black uppercase text-slate-400 ml-2 tracking-[0.2em]">Seu Nome</label>
+                                <input type="text" placeholder="Ex: João Silva" required class="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:border-blue-500 focus:bg-white transition duration-300 font-bold">
                             </div>
-                            <div class="space-y-1">
-                                <label class="text-xs font-bold uppercase text-gray-400 ml-1">Celular / WhatsApp</label>
-                                <input type="tel" placeholder="(11) 99999-9999" required class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition">
+                            <div class="space-y-2">
+                                <label class="text-xs font-black uppercase text-slate-400 ml-2 tracking-[0.2em]">WhatsApp para contato</label>
+                                <input type="tel" placeholder="(11) 99999-9999" required class="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:border-blue-500 focus:bg-white transition duration-300 font-bold">
                             </div>
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-xs font-bold uppercase text-gray-400 ml-1">Seu melhor E-mail</label>
-                            <input type="email" placeholder="nome@email.com" required class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition">
+                        <div class="space-y-2">
+                            <label class="text-xs font-black uppercase text-slate-400 ml-2 tracking-[0.2em]">E-mail corporativo</label>
+                            <input type="email" placeholder="nome@empresa.com" required class="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:border-blue-500 focus:bg-white transition duration-300 font-bold">
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-xs font-bold uppercase text-gray-400 ml-1">Serviço Pretendido</label>
-                            <select class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition text-gray-600 appearance-none">
-                                <option>Selecione uma opção...</option>
-                                <option>Web Site / Landing Page</option>
-                                <option>Loja Online (E-commerce)</option>
-                                <option>Sistema de Gestão Personalizado</option>
-                                <option>Consultório / Clínica</option>
-                                <option>Restaurante / Delivery</option>
-                                <option>Outro Projeto Especial</option>
+                        <div class="space-y-2">
+                            <label class="text-xs font-black uppercase text-slate-400 ml-2 tracking-[0.2em]">O que você busca?</label>
+                            <select class="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:border-blue-500 focus:bg-white transition duration-300 font-bold text-slate-700 appearance-none">
+                                <option>Escolha uma opção...</option>
+                                <option>Sistema de Gestão Sob Medida</option>
+                                <option>Criação de Web Site de Alta Conversão</option>
+                                <option>E-commerce / Loja Online</option>
+                                <option>Consultoria e Software House</option>
+                                <option>Outro Projeto</option>
                             </select>
                         </div>
-                        <div class="space-y-1">
-                            <label class="text-xs font-bold uppercase text-gray-400 ml-1">Conte sobre seu negócio</label>
-                            <textarea rows="4" placeholder="Fale brevemente sobre o que você precisa..." class="w-full px-5 py-4 bg-gray-50 border border-gray-200 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 transition"></textarea>
+                        <div class="space-y-2">
+                            <label class="text-xs font-black uppercase text-slate-400 ml-2 tracking-[0.2em]">Como podemos te ajudar?</label>
+                            <textarea rows="4" placeholder="Conte brevemente sobre sua ideia ou desafio operacional..." class="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:border-blue-500 focus:bg-white transition duration-300 font-bold"></textarea>
                         </div>
                         
                         <div id="feedback-container"></div>
                         
-                        <button type="submit" class="w-full bg-blue-600 text-white font-bold py-5 rounded-2xl hover:bg-blue-700 transition shadow-lg text-lg transform active:scale-95">
-                            Enviar Pedido de Orçamento
+                        <button type="submit" class="w-full bg-blue-600 text-white font-black py-6 rounded-[1.5rem] hover:bg-blue-700 transition shadow-[0_15px_40px_rgba(37,99,235,0.4)] text-xl transform active:scale-95 duration-200">
+                            SOLICITAR PROPOSTA AGORA
                         </button>
                     </form>
                 </div>
@@ -487,37 +519,38 @@
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-gray-900 text-white pt-20 pb-10 border-t border-gray-800">
+    <!-- Footer Modernizado -->
+    <footer class="bg-slate-950 text-white pt-32 pb-16">
         <div class="max-w-7xl mx-auto px-4 text-center">
-            <div class="flex items-center justify-center mb-8">
-                <i class="fa-solid fa-layer-group text-blue-400 mr-2 text-3xl"></i>
-                <span class="font-bold text-3xl tracking-tighter">SoftGestão</span>
+            <div class="flex items-center justify-center mb-10 group cursor-default">
+                <i class="fa-solid fa-layer-group text-blue-500 mr-3 text-4xl group-hover:scale-110 transition-transform"></i>
+                <span class="font-black text-4xl tracking-tighter uppercase">SoftGestão</span>
             </div>
-            <p class="text-gray-400 mb-10 max-w-md mx-auto leading-relaxed">Transformamos processos manuais em tecnologia de alta performance para impulsionar o seu negócio.</p>
+            <p class="text-slate-400 mb-16 max-w-2xl mx-auto leading-relaxed text-lg">Especialistas em transformar processos manuais lentos em tecnologia de ponta escalável e lucrativa.</p>
             
-            <div class="flex justify-center space-x-8 mb-12">
-                <a href="mailto:comercial.softgestao@gmail.com" class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 transition group">
-                    <i class="fa-solid fa-envelope text-xl text-gray-400 group-hover:text-white"></i>
+            <div class="flex justify-center space-x-12 mb-16">
+                <a href="mailto:comercial.softgestao@gmail.com" class="text-slate-500 hover:text-blue-500 transition-all transform hover:scale-125">
+                    <i class="fa-solid fa-envelope fa-2x"></i>
                 </a>
-                <a href="https://wa.me/5511932186193" class="w-12 h-12 bg-gray-800 rounded-full flex items-center justify-center hover:bg-green-600 transition group">
-                    <i class="fa-brands fa-whatsapp text-2xl text-gray-400 group-hover:text-white"></i>
+                <a href="https://wa.me/5511932186193" class="text-slate-500 hover:text-green-500 transition-all transform hover:scale-125">
+                    <i class="fa-brands fa-whatsapp fa-2x"></i>
                 </a>
             </div>
             
-            <div class="border-t border-gray-800 pt-10 text-gray-500 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
-                <p>&copy; 2025 SoftGestão. Todos os direitos reservados.</p>
-                <div class="flex gap-6">
+            <div class="border-t border-white/5 pt-12 text-slate-600 text-sm flex flex-col md:flex-row justify-between items-center gap-6">
+                <p class="font-bold">© 2025 SoftGestão. Todos os direitos reservados.</p>
+                <div class="flex gap-8 font-bold">
                     <a href="#" class="hover:text-white transition">Privacidade</a>
-                    <a href="#" class="hover:text-white transition">Termos de Uso</a>
+                    <a href="#" class="hover:text-white transition text-xs opacity-50">Desenvolvido com IA</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Botão Flutuante do WhatsApp -->
-    <a href="https://wa.me/5511932186193" target="_blank" class="fixed bottom-8 right-8 bg-green-500 text-white p-4 rounded-full shadow-2xl hover:bg-green-600 transition-all z-50 flex items-center justify-center w-16 h-16 whatsapp-btn">
-        <i class="fa-brands fa-whatsapp fa-2x"></i>
+    <!-- Botão WhatsApp Premium -->
+    <a href="https://wa.me/5511932186193" target="_blank" class="fixed bottom-10 right-10 bg-green-500 text-white p-6 rounded-[2rem] shadow-2xl hover:bg-green-600 transition-all z-50 flex items-center justify-center w-20 h-20 whatsapp-btn group">
+        <i class="fa-brands fa-whatsapp fa-3x group-hover:scale-110 transition-transform"></i>
+        <span class="absolute right-full mr-4 bg-white text-slate-900 px-4 py-2 rounded-xl text-xs font-black shadow-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Fale com um Especialista</span>
     </a>
 
     <script>
@@ -526,23 +559,32 @@
             menu.classList.toggle('hidden');
         }
 
+        function toggleFaq(element) {
+            const items = document.querySelectorAll('.faq-item');
+            items.forEach(item => {
+                if (item !== element) item.classList.remove('active');
+            });
+            element.classList.toggle('active');
+        }
+
         function handleSubmit(event) {
             event.preventDefault();
             const btn = event.target.querySelector('button');
             const feedback = document.getElementById('feedback-container');
             
             const originalText = btn.innerText;
-            btn.innerText = 'Processando...';
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-3"></i> ENVIANDO...';
             btn.disabled = true;
 
+            // Simulação de envio real
             setTimeout(() => {
                 feedback.innerHTML = `
-                    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded-xl mb-4 shadow-sm flex items-center gap-3 text-left">
-                        <i class="fa-solid fa-circle-check text-xl"></i>
-                        <span class="font-bold">Sucesso! Orçamento solicitado. Responderemos em breve.</span>
+                    <div class="bg-green-600 text-white p-6 rounded-[1.5rem] mb-6 shadow-2xl flex items-center gap-4 animate-bounce">
+                        <i class="fa-solid fa-circle-check text-2xl"></i>
+                        <span class="font-black">PERFEITO! Recebemos seus dados. Prepare-se para a sua nova fase digital.</span>
                     </div>`;
                 event.target.reset();
-                btn.innerText = 'Enviado!';
+                btn.innerText = 'ENVIADO COM SUCESSO';
                 btn.classList.replace('bg-blue-600', 'bg-green-600');
                 
                 setTimeout(() => {
@@ -550,8 +592,8 @@
                     btn.innerText = originalText;
                     btn.disabled = false;
                     btn.classList.replace('bg-green-600', 'bg-blue-600');
-                }, 5000);
-            }, 1500);
+                }, 6000);
+            }, 2000);
         }
     </script>
 </body>
