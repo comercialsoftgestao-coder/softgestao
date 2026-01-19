@@ -3,1065 +3,746 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PERSONAL MASTER - Gestão Fitness</title>
-    
-    <!-- PWA Meta Tags -->
-    <meta name="theme-color" content="#ea580c">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Personal Master">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2936/2936886.png">
-
-    <!-- Tailwind CSS -->
+    <title>SoftGestão Personal - Sistemas Inteligentes para Personal Trainers e Consultorias</title>
+    <!-- Tailwind CSS para estilização rápida e moderna -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- React & ReactDOM -->
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
-    <!-- Babel para compilar JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    
-    <!-- Chart.js para gráficos -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Phosphor Icons -->
-    <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- PWA: Manifest Implementation -->
-    <script>
-        {
-            const manifestData = {
-                "name": "PERSONAL MASTER - Gestão Fitness",
-                "short_name": "PersonalMaster",
-                "start_url": ".",
-                "display": "standalone",
-                "background_color": "#f8fafc",
-                "theme_color": "#ea580c",
-                "description": "Sistema completo para personal trainers e consultoria fitness.",
-                "icons": [
-                    {
-                        "src": "https://cdn-icons-png.flaticon.com/512/2936/2936886.png",
-                        "sizes": "512x512",
-                        "type": "image/png",
-                        "purpose": "any maskable"
-                    }
-                ]
-            };
-            const stringManifest = JSON.stringify(manifestData);
-            const blob = new Blob([stringManifest], {type: 'application/json'});
-            const manifestURL = URL.createObjectURL(blob);
-            const link = document.createElement('link');
-            link.rel = 'manifest';
-            link.href = manifestURL;
-            document.head.appendChild(link);
-        }
-    </script>
-
-    <!-- PWA: Service Worker Registration -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => { console.log('SW registrado'); })
-                    .catch(err => { console.log('Modo Online ativo.'); });
-            });
-        }
-    </script>
-
-    <!-- Firebase Implementation -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "AIzaSyAIwocJSueMJgzCAEchcChAoOxtiYs93ao",
-            authDomain: "obras-telma-7dd64.firebaseapp.com",
-            projectId: "obras-telma-7dd64",
-            storageBucket: "obras-telma-7dd64.firebasestorage.app",
-            messagingSenderId: "388512826170",
-            appId: "1:388512826170:web:e71762e00146b66ce64603"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const auth = getAuth(app);
-
-        window.db = db;
-        window.auth = auth;
-        window.signInAnonymously = signInAnonymously;
-        window.signInWithCustomToken = signInWithCustomToken;
-        window.onAuthStateChanged = onAuthStateChanged;
-        
-        window.fbCollection = collection;
-        window.fbAddDoc = addDoc;
-        window.fbUpdateDoc = updateDoc;
-        window.fbDeleteDoc = deleteDoc;
-        window.fbDoc = doc;
-        window.fbGetDoc = getDoc;
-        window.fbSetDoc = setDoc;
-        window.fbOnSnapshot = onSnapshot;
-    </script>
-
+    <!-- FontAwesome para ícones -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { font-family: 'Nunito', sans-serif; background-color: #f8fafc; user-select: none; }
-        .bg-pattern-fitness { background-color: #f8fafc; background-image: radial-gradient(#e2e8f0 1px, transparent 1px); background-size: 24px 24px; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #ea580c; } 
-        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-        .card-hover { transition: all 0.2s ease; }
-        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.1); }
-        
-        .print-area { font-family: 'Arial', sans-serif; color: #000; }
-        .assessment-card { border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; background: #fff; }
-
-        @media print { 
-            body * { visibility: hidden; } 
-            #print-area-container, #print-area-container * { visibility: visible; } 
-            #print-area-container { position: absolute; left: 0; top: 0; width: 100%; padding: 2cm; background: white; } 
-            .no-print { display: none !important; } 
-            .report-page { border: none !important; box-shadow: none !important; }
+        /* Estilos personalizados para Alta Conversão */
+        .hero-bg {
+            background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(30, 58, 138, 0.8)), url('https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+        .smooth-scroll {
+            scroll-behavior: smooth;
+        }
+        @keyframes pulse-custom {
+            0% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(249, 115, 22, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(249, 115, 22, 0); }
+        }
+        /* Alerta piscante para a promoção */
+        @keyframes flash-promo {
+            0%, 100% { background-color: #2563eb; }
+            50% { background-color: #1d4ed8; }
+        }
+        .animate-flash {
+            animation: flash-promo 2s infinite ease-in-out;
+        }
+        .whatsapp-btn {
+            animation: pulse-custom 2s infinite;
+        }
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .card-hover:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 25px 50px -12px rgba(37, 99, 235, 0.15);
+        }
+        /* FAQ interativo */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 250px;
+            padding-top: 1rem;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+        /* Notificação de Prova Social */
+        @keyframes slide-in-up {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .social-proof-toast {
+            animation: slide-in-up 0.5s ease-out forwards;
+        }
+        /* Modal de Saída */
+        #exit-popup {
+            display: none;
+        }
+        /* Botão de Filtro Ativo */
+        .filter-btn.active {
+            background-color: #2563eb;
+            color: white;
+            border-color: #2563eb;
         }
     </style>
 </head>
-<body class="bg-pattern-fitness text-slate-700">
-    <div id="root"></div>
+<body class="font-sans text-gray-800 antialiased smooth-scroll bg-slate-50">
 
-    <script type="text/babel">
-        const { useState, useEffect, useMemo, useRef } = React;
+    <!-- Alerta de Promoção Mensal com Cronômetro -->
+    <div class="animate-flash text-white text-center py-2.5 px-4 text-xs md:text-sm font-black uppercase tracking-widest sticky top-0 z-[60] shadow-lg flex flex-col md:flex-row items-center justify-center gap-2 md:gap-4 text-center">
+        <span><i class="fa-solid fa-gift mr-2 animate-bounce"></i> 🔥 Oferta Especial: Ao contratar o sistema este mês, o Site de Vendas da sua Consultoria é por nossa conta!</span>
+        <div class="bg-white/20 px-3 py-1 rounded-lg border border-white/30 font-mono text-sm" id="promo-timer">
+            Expira em: 00:00:00:00
+        </div>
+    </div>
 
-        const Security = {
-            encrypt: (data) => {
-                if (typeof data !== 'object') return data;
-                try {
-                    const str = JSON.stringify(data);
-                    return btoa(unescape(encodeURIComponent(str)));
-                } catch (e) { return data; }
-            },
-            decrypt: (encryptedData) => {
-                try {
-                    if (typeof encryptedData !== 'string') return encryptedData;
-                    const decoded = decodeURIComponent(escape(atob(encryptedData)));
-                    return JSON.parse(decoded);
-                } catch (e) { return encryptedData; }
-            }
-        };
+    <!-- Notificação de Leads Recentes -->
+    <div id="social-proof" class="fixed bottom-24 left-6 z-[100] hidden md:flex bg-white p-4 rounded-2xl shadow-2xl border border-slate-100 items-center gap-4 max-w-xs transition-all duration-500 opacity-0 transform translate-y-10">
+        <div class="bg-blue-100 p-3 rounded-full text-blue-600">
+            <i class="fa-solid fa-dumbbell"></i>
+        </div>
+        <div class="text-xs">
+            <p class="font-black text-slate-900" id="sp-text">Novo Personal digitalizado!</p>
+            <p class="text-slate-500" id="sp-time">há 2 minutos em São Paulo/SP</p>
+        </div>
+    </div>
 
-        const Toast = ({ message, type, show, onClose }) => {
-            if (!show) return null;
-            const bgClass = type === 'error' ? 'bg-red-500' : (type === 'success' ? 'bg-orange-600' : 'bg-slate-800');
-            return (
-                <div className={`fixed top-4 right-4 ${bgClass} text-white px-6 py-4 rounded-2xl shadow-xl z-[150] flex items-center gap-3 animate-fade-in border-2 border-white/20`}>
-                    <i className={type === 'error' ? "ph ph-warning-circle text-2xl" : "ph ph-check-circle text-2xl"}></i>
-                    <span className="font-bold">{message}</span>
-                    <button onClick={onClose} className="ml-4"><i className="ph ph-x text-lg"></i></button>
-                </div>
-            );
-        };
-
-        const ChartComponent = ({ type, data, options }) => {
-            const chartRef = useRef(null);
-            const canvasRef = useRef(null);
-            useEffect(() => {
-                if (canvasRef.current) {
-                    if (chartRef.current) chartRef.current.destroy();
-                    chartRef.current = new Chart(canvasRef.current, { type, data, options: { responsive: true, maintainAspectRatio: false, ...options } });
+    <!-- Navegação Otimizada -->
+    <nav class="bg-white/95 backdrop-blur-md shadow-sm fixed w-full z-50 transition-all duration-300 top-0">
+        <script>
+            window.addEventListener('scroll', () => {
+                const nav = document.querySelector('nav');
+                const promo = document.querySelector('.animate-flash');
+                if (window.scrollY > promo.offsetHeight) {
+                    nav.style.top = '0';
+                } else {
+                    nav.style.top = promo.offsetHeight + 'px';
                 }
-                return () => { if (chartRef.current) chartRef.current.destroy(); };
-            }, [data, type, options]);
-            return <div className="relative h-full w-full"><canvas ref={canvasRef}></canvas></div>;
-        };
-
-        const BrandLogo = ({ className = "" }) => (
-            <div className={`flex items-center gap-3 ${className}`}>
-                <div className="w-10 h-10 bg-orange-600 rounded-xl flex items-center justify-center text-white shadow-lg rotate-3">
-                    <i className="ph-fill ph-lightning text-2xl"></i>
+            });
+            document.addEventListener('DOMContentLoaded', () => {
+                const nav = document.querySelector('nav');
+                const promo = document.querySelector('.animate-flash');
+                nav.style.top = promo.offsetHeight + 'px';
+            });
+        </script>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex-shrink-0 flex items-center group cursor-pointer mr-12">
+                    <div class="bg-blue-600 group-hover:bg-blue-700 text-white p-2 rounded-xl mr-3 transition-colors shadow-lg shadow-blue-200 transform -skew-x-12">
+                        <i class="fa-solid fa-bolt fa-lg transform skew-x-12"></i>
+                    </div>
+                    <span class="font-black text-2xl text-slate-900 tracking-tighter uppercase italic">SoftGestão <span class="text-blue-600">Personal</span></span>
                 </div>
-                <div>
-                    <h1 className="text-xl font-black tracking-tight text-white leading-none uppercase">PERSONAL<span className="text-amber-500"> MASTER</span></h1>
-                    <p className="text-[9px] text-white/60 font-bold uppercase tracking-widest mt-0.5">Performance & Saúde</p>
+                <div class="hidden md:flex items-center space-x-10">
+                    <a href="#inicio" class="text-slate-600 hover:text-blue-600 font-semibold transition">Início</a>
+                    <a href="#solucoes" class="text-slate-600 hover:text-blue-600 font-semibold transition">Módulos</a>
+                    <a href="#personalizado" class="text-blue-600 hover:text-blue-800 font-bold transition">Sistema PT</a>
+                    <a href="#contato" class="bg-orange-600 text-white px-7 py-3 rounded-full font-bold hover:bg-orange-700 transition shadow-lg shadow-orange-200 active:scale-95 text-center">Consultoria de Escala</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMenu()" class="text-slate-900 focus:outline-none">
+                        <i class="fa-solid fa-bars-staggered fa-2x"></i>
+                    </button>
                 </div>
             </div>
-        );
+        </div>
+        <!-- Menu Mobile -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 animate-in slide-in-from-top text-center">
+            <a href="#inicio" onclick="toggleMenu()" class="block py-4 px-6 font-semibold hover:bg-slate-50 transition border-b">Início</a>
+            <a href="#solucoes" onclick="toggleMenu()" class="block py-4 px-6 font-semibold hover:bg-slate-50 transition border-b">Módulos</a>
+            <a href="#personalizado" onclick="toggleMenu()" class="block py-4 px-6 font-bold text-blue-600 hover:bg-slate-50 transition border-b">Sistema PT</a>
+            <a href="#contato" onclick="toggleMenu()" class="block py-4 px-6 font-bold text-orange-600 hover:bg-slate-50 transition">Consultoria de Escala</a>
+        </div>
+    </nav>
 
-        const Icon = ({ name, size = 20, className = "", weight = "regular" }) => 
-            <i className={`ph ph-${name} ${className}`} style={{ fontSize: size }}></i>;
+    <!-- Seção Hero -->
+    <section id="inicio" class="hero-bg min-h-screen flex items-center justify-center pt-32 px-4 text-center">
+        <div class="text-center max-w-5xl mx-auto">
+            <div class="inline-block bg-blue-500/20 backdrop-blur-sm border border-blue-400/30 text-blue-300 px-4 py-1.5 rounded-full text-sm font-bold mb-8 animate-pulse uppercase tracking-widest text-center">
+                🏋️‍♂️ Escale sua consultoria fitness com tecnologia de elite
+            </div>
+            <h1 class="text-4xl md:text-7xl font-black text-white mb-6 leading-[1.1] tracking-tight text-center">
+                Gestão de Treinos que <br> <span class="text-orange-400">Dobra seus Alunos.</span> <br>
+                <div class="text-2xl md:text-4xl mt-4 opacity-90 font-bold text-slate-100">Prescreva 10x mais rápido e <span class="text-blue-400">automatize 90%</span> <br> do faturamento e renovações.</div>
+            </h1>
+            <p class="text-lg md:text-2xl text-slate-200 mb-12 max-w-3xl mx-auto leading-relaxed font-medium text-center">
+                Do planejamento de periodização ao app exclusivo para o aluno registrar evolução. O ecossistema SoftGestão Personal focado em treinadores que buscam liberdade e autoridade no digital.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6 text-center">
+                <a href="#contato" class="bg-orange-600 hover:bg-orange-700 text-white font-black py-5 px-12 rounded-2xl text-xl transition shadow-2xl hover:scale-105 active:scale-95 shadow-orange-500/40 text-center">
+                    Garantir Demonstração Grátis
+                </a>
+                <a href="#solucoes" class="bg-white/10 backdrop-blur-md border-2 border-white/40 hover:bg-white hover:text-blue-900 text-white font-bold py-5 px-12 rounded-2xl text-xl transition text-center">
+                    Conhecer Recursos PT
+                </a>
+            </div>
+            <p class="text-slate-400 mt-6 text-sm font-semibold italic text-center">Ideal para Personal Trainers presenciais e Consultorias Online (Online Coaching).</p>
+        </div>
+    </section>
 
-        const Card = ({ children, className = "", onClick }) => 
-            <div onClick={onClick} className={`bg-white rounded-3xl shadow-sm border border-slate-100 ${className}`}>{children}</div>;
-
-        const formatCurrency = (value) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0);
-
-        // Biblioteca de Exercícios Estática Expandida (40 Exercícios)
-        const EXERCISE_LIBRARY = [
-            // PEITO
-            { id: 1, name: "Supino Reto", muscle: "Peitoral", type: "Força" },
-            { id: 2, name: "Supino Inclinado", muscle: "Peitoral Superior", type: "Força" },
-            { id: 3, name: "Peck Deck (Voador)", muscle: "Peitoral", type: "Isolado" },
-            { id: 4, name: "Crucifixo com Halteres", muscle: "Peitoral", type: "Isolado" },
-            { id: 5, name: "Crossover Polia Alta", muscle: "Peitoral Inferior", type: "Cabo" },
-            // COSTAS
-            { id: 6, name: "Puxada Frontal", muscle: "Dorsais", type: "Força" },
-            { id: 7, name: "Remada Curvada", muscle: "Costas", type: "Livre" },
-            { id: 8, name: "Remada Baixa", muscle: "Costas", type: "Máquina" },
-            { id: 9, name: "Barra Fixa", muscle: "Dorsais", type: "Calistenia" },
-            { id: 10, name: "Levantamento Terra", muscle: "Posterior/Costas", type: "Composto" },
-            { id: 11, name: "Pullover", muscle: "Dorsal/Serrátil", type: "Isolado" },
-            // PERNAS
-            { id: 12, name: "Agachamento Livre", muscle: "Quadríceps", type: "Força" },
-            { id: 13, name: "Leg Press 45", muscle: "Pernas", type: "Máquina" },
-            { id: 14, name: "Cadeira Extensora", muscle: "Quadríceps", type: "Máquina" },
-            { id: 15, name: "Cadeira Flexora", muscle: "Posterior", type: "Máquina" },
-            { id: 16, name: "Mesa Flexora", muscle: "Posterior", type: "Máquina" },
-            { id: 17, name: "Stiff", muscle: "Posterior/Glúteo", type: "Livre" },
-            { id: 18, name: "Cadeira Adutora", muscle: "Adutores", type: "Máquina" },
-            { id: 19, name: "Cadeira Abdutora", muscle: "Glúteo Médio", type: "Máquina" },
-            { id: 20, name: "Elevação Pélvica", muscle: "Glúteos", type: "Força" },
-            { id: 21, name: "Avanço/Passada", muscle: "Pernas", type: "Livre" },
-            // OMBROS
-            { id: 22, name: "Desenvolvimento Halteres", muscle: "Ombros", type: "Força" },
-            { id: 23, name: "Elevação Lateral", muscle: "Ombro Lateral", type: "Isolado" },
-            { id: 24, name: "Elevação Frontal", muscle: "Ombro Anterior", type: "Isolado" },
-            { id: 25, name: "Crucifixo Inverso", muscle: "Ombro Posterior", type: "Isolado" },
-            // BRAÇOS
-            { id: 26, name: "Rosca Direta", muscle: "Bíceps", type: "Barra" },
-            { id: 27, name: "Rosca Alternada", muscle: "Bíceps", type: "Halteres" },
-            { id: 28, name: "Rosca Martelo", muscle: "Braquial", type: "Halteres" },
-            { id: 29, name: "Rosca Scott", muscle: "Bíceps", type: "Banco" },
-            { id: 30, name: "Tríceps Pulley", muscle: "Tríceps", type: "Cabo" },
-            { id: 31, name: "Tríceps Testa", muscle: "Tríceps", type: "Barra" },
-            { id: 32, name: "Tríceps Corda", muscle: "Tríceps", type: "Cabo" },
-            { id: 33, name: "Mergulho Paralelas", muscle: "Tríceps/Peito", type: "Corporal" },
-            // CORE / CARDIO
-            { id: 34, name: "Prancha Abdominal", muscle: "Core", type: "Estático" },
-            { id: 35, name: "Abdominal Supra", muscle: "Abdômen", type: "Solo" },
-            { id: 36, name: "Abdominal Infra", muscle: "Abdômen", type: "Solo" },
-            { id: 37, name: "Corrida Esteira", muscle: "Cardio", type: "Aeróbico" },
-            { id: 38, name: "Bike Ergométrica", muscle: "Cardio", type: "Aeróbico" },
-            { id: 39, name: "Elíptico", muscle: "Cardio", type: "Aeróbico" },
-            { id: 40, name: "Burpees", muscle: "Full Body", type: "Funcional" }
-        ];
-
-        function App() {
-            const [user, setUser] = useState(null);
-            const [isOnline, setIsOnline] = useState(navigator.onLine);
-            const APP_ID_STABLE = "obras-telma-7dd64"; 
-            const [cloudKey, setCloudKey] = useState(null);
-            const [isLoggedIn, setIsLoggedIn] = useState(false);
-            const [isRecovering, setIsRecovering] = useState(false);
-            const [loginData, setLoginData] = useState({ login: '', password: '', save: false });
-            const [recoveryData, setRecoveryData] = useState({ login: '', email: '' });
-            const [newCredentials, setNewCredentials] = useState({ login: '', password: '', recoveryEmail: '' });
-            const [showMaintenanceAlert, setShowMaintenanceAlert] = useState(false);
-            const [exerciseSearch, setExerciseSearch] = useState('');
-            const [reportSearch, setReportSearch] = useState('');
-            
-            // Dados do Sistema
-            const [userData, setUserData] = useState({ name: 'Coach Master', company: 'Studio Fitness', email: '', pixKey: '' });
-            const [students, setStudents] = useState([]); 
-            const [workouts, setWorkouts] = useState([]); 
-            const [assessments, setAssessments] = useState([]); 
-            const [financial, setFinancial] = useState([]); 
-            
-            const [loading, setLoading] = useState(true);
-            const [activeTab, setActiveTab] = useState('dashboard');
-            const [isModalOpen, setIsModalOpen] = useState(false);
-            const [modalType, setModalType] = useState('');
-            const [editingItem, setEditingItem] = useState(null);
-            const [toast, setToast] = useState({ show: false, message: '', type: 'info' });
-
-            // Formulários
-            const [studentForm, setStudentForm] = useState({ name: '', phone: '', goal: 'Hipertrofia', status: 'Ativo' });
-            const [workoutForm, setWorkoutForm] = useState({ studentId: '', title: 'Treino A', exercises: [] });
-            const [assessmentForm, setAssessmentForm] = useState({ studentId: '', date: '', weight: '', height: '', fat: '', muscle: '', waist: '' });
-            const [financeForm, setFinanceForm] = useState({ type: 'Receita', description: '', value: '', date: '', studentId: '' });
-
-            const showToast = (msg, type = 'info') => { setToast({ show: true, message: msg, type }); setTimeout(() => setToast({ show: false, message: '', type: 'info' }), 3000); };
-
-            const getIsolatedDoc = (name, id) => {
-                 const targetUid = cloudKey || user?.uid;
-                 return window.fbDoc(window.db, 'artifacts', APP_ID_STABLE, 'users', targetUid, name, id);
-            }
-
-            const getIsolatedCollection = (name) => {
-                const targetUid = cloudKey || user?.uid;
-                return window.fbCollection(window.db, 'artifacts', APP_ID_STABLE, 'users', targetUid, name);
-            }
-
-            // Manutenção do Sistema
-            const hardAppReset = async () => {
-                if (confirm("Deseja realizar a manutenção? Isso limpará o cache local e forçará a sincronização com a nuvem.")) {
-                    try {
-                        localStorage.clear();
-                        if ('caches' in window) {
-                            const cacheNames = await caches.keys();
-                            await Promise.all(cacheNames.map(name => caches.delete(name)));
-                        }
-                        location.reload(true);
-                    } catch (e) { showToast("Erro ao limpar dados.", "error"); }
-                }
-            };
-
-            useEffect(() => {
-                const handleGlobalError = () => setShowMaintenanceAlert(true);
-                window.addEventListener('error', handleGlobalError);
-                window.addEventListener('unhandledrejection', handleGlobalError);
-
-                const lastCheck = localStorage.getItem('lastMaintenanceCheckFitness');
-                const now = Date.now();
-                if (!lastCheck || (now - parseInt(lastCheck) > 1296000000)) {
-                    setShowMaintenanceAlert(true);
-                    localStorage.setItem('lastMaintenanceCheckFitness', now.toString());
-                }
-
-                return () => {
-                    window.removeEventListener('error', handleGlobalError);
-                    window.removeEventListener('unhandledrejection', handleGlobalError);
-                };
-            }, []);
-
-            // Auth logic
-            useEffect(() => {
-                const initAuth = async () => {
-                    try {
-                        await window.signInAnonymously(window.auth);
-                    } catch (e) { console.error(e); }
-                };
-                initAuth();
-                const unsubscribe = window.onAuthStateChanged(window.auth, (currentUser) => { setUser(currentUser); });
-                const saved = localStorage.getItem('personalmaster_auth');
-                if (saved) setLoginData(JSON.parse(saved));
-                return () => unsubscribe();
-            }, []);
-
-            // Login check on mount/user
-            useEffect(() => {
-                if (user && loginData.login && loginData.password && !isLoggedIn) {
-                    handleLoginVerify(true);
-                }
-            }, [user]);
-
-            // Data Sync
-            useEffect(() => {
-                if (!user || !isLoggedIn) return;
-                setLoading(true);
-                
-                const configDocRef = getIsolatedDoc('system_config', 'app_settings');
-                const unsubConfig = window.fbOnSnapshot(configDocRef, (docSnap) => {
-                    if (docSnap.exists()) {
-                        const raw = docSnap.data();
-                        const data = raw.payload ? Security.decrypt(raw.payload) : raw;
-                        if (data.userData) setUserData(prev => ({...prev, ...data.userData}));
-                    }
-                });
-
-                const collections = [
-                    { name: 'students', setter: setStudents },
-                    { name: 'workouts', setter: setWorkouts },
-                    { name: 'assessments', setter: setAssessments },
-                    { name: 'financial', setter: setFinancial }
-                ];
-                const unsubs = collections.map(col => {
-                    return window.fbOnSnapshot(getIsolatedCollection(col.name), (snap) => {
-                        const data = snap.docs.map(d => {
-                            const raw = d.data();
-                            return { id: d.id, ...(raw.payload ? Security.decrypt(raw.payload) : raw) };
-                        });
-                        col.setter(data);
-                        if (col.name === 'students') setLoading(false);
-                    });
-                });
-                return () => { unsubs.forEach(u => u()); unsubConfig(); };
-            }, [user, cloudKey, isLoggedIn]);
-
-            const handleLoginVerify = async (isAuto = false) => {
-                if (!user) return;
-                const { login, password } = loginData;
-                try {
-                    const cloudPath = window.fbDoc(window.db, 'artifacts', APP_ID_STABLE, 'users', login, 'config_seguranca', 'status');
-                    const docSnap = await window.fbGetDoc(cloudPath);
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        if (Security.decrypt(data.pass) === password) {
-                            setCloudKey(login);
-                            setIsLoggedIn(true);
-                            if (loginData.save) localStorage.setItem('personalmaster_auth', JSON.stringify({ login, password }));
-                            if (!isAuto) showToast(`Bem-vindo, ${login}!`, 'success');
-                        } else {
-                            if (!isAuto) showToast('Senha incorreta.', 'error');
-                            else localStorage.removeItem('personalmaster_auth');
-                        }
-                    } else {
-                        const localPath = window.fbDoc(window.db, 'artifacts', APP_ID_STABLE, 'users', user.uid, 'config_seguranca', 'status');
-                        const localSnap = await window.fbGetDoc(localPath);
-                        if (localSnap.exists()) {
-                             const lData = localSnap.data();
-                             if (Security.decrypt(lData.login) === login && Security.decrypt(lData.pass) === password) {
-                                 setCloudKey(login);
-                                 setIsLoggedIn(true);
-                                 if (!isAuto) showToast('Bem-vindo!', 'success');
-                                 return;
-                             }
-                        }
-                        if (!isAuto) showToast('Usuário não encontrado.', 'error');
-                        else localStorage.removeItem('personalmaster_auth');
-                    }
-                } catch (e) { showToast('Erro de conexão.', 'error'); }
-            };
-
-            const handleRecovery = async () => {
-                const { login, email } = recoveryData;
-                const targetDoc = window.fbDoc(window.db, 'artifacts', APP_ID_STABLE, 'users', login, 'config_seguranca', 'status');
-                try {
-                    const docSnap = await window.fbGetDoc(targetDoc);
-                    if (docSnap.exists()) {
-                        const data = docSnap.data();
-                        if (Security.decrypt(data.recovery) === email) {
-                             alert(`Senha encontrada: ${Security.decrypt(data.pass)}`);
-                             setIsRecovering(false);
-                        } else showToast('E-mail não confere.', 'error');
-                    } else showToast('Login inexistente.', 'error');
-                } catch (e) { showToast('Erro ao verificar.', 'error'); }
-            };
-
-            const handleSaveCredentials = async (e) => {
-                e.preventDefault();
-                if (!user) return;
-                try {
-                    const idFolder = newCredentials.login;
-                    const credsDocRef = window.fbDoc(window.db, 'artifacts', APP_ID_STABLE, 'users', idFolder, 'config_seguranca', 'status');
-                    const credentialData = {
-                        login: Security.encrypt(newCredentials.login),
-                        pass: Security.encrypt(newCredentials.password),
-                        recovery: Security.encrypt(newCredentials.recoveryEmail),
-                        status: 'registered',
-                        date: new Date().toISOString()
-                    };
-                    await window.fbSetDoc(credsDocRef, credentialData);
-                    const localDocRef = window.fbDoc(window.db, 'artifacts', APP_ID_STABLE, 'users', user.uid, 'config_seguranca', 'status');
-                    await window.fbSetDoc(localDocRef, credentialData);
-                    setCloudKey(newCredentials.login);
-                    showToast('Credenciais salvas e Nuvem ativa!', 'success');
-                } catch (err) { showToast('Erro ao salvar credenciais.', 'error'); }
-            };
-
-            const handleSaveConfig = async (e) => {
-                e.preventDefault();
-                if (!user) return;
-                try {
-                    const configDocRef = getIsolatedDoc('system_config', 'app_settings');
-                    await window.fbSetDoc(configDocRef, { payload: Security.encrypt({ userData }) });
-                    showToast('Configurações salvas!', 'success');
-                } catch (err) { showToast('Erro ao salvar.', 'error'); }
-            };
-
-            const saveItem = async (e) => {
-                e.preventDefault();
-                let col = "";
-                let data = {};
-                if (modalType === 'student') { col = "students"; data = studentForm; }
-                if (modalType === 'workout') { col = "workouts"; data = workoutForm; }
-                if (modalType === 'assessment') { col = "assessments"; data = assessmentForm; }
-                if (modalType === 'finance') { col = "financial"; data = financeForm; }
-                const id = editingItem ? editingItem.id : String(Date.now());
-                await window.fbSetDoc(getIsolatedDoc(col, id), { payload: Security.encrypt(data) });
-                setIsModalOpen(false);
-                showToast('Salvo com sucesso!', 'success');
-            };
-
-            const deleteItem = async (id, col) => {
-                if (confirm("Excluir permanentemente?")) {
-                    await window.fbDeleteDoc(getIsolatedDoc(col, id));
-                    showToast('Removido');
-                }
-            };
-
-            const stats = useMemo(() => {
-                const totalRevenue = financial.filter(f => f.type === 'Receita').reduce((a, b) => a + Number(b.value), 0);
-                return {
-                    totalStudents: students.length,
-                    activeStudents: students.filter(s => s.status === 'Ativo').length,
-                    revenue: totalRevenue,
-                    pendingAssessments: students.length - assessments.length
-                };
-            }, [students, financial, assessments]);
-
-            const addExerciseToWorkout = (ex) => {
-                const newEx = { ...ex, series: 3, reps: 12, weight: '' };
-                setWorkoutForm({ ...workoutForm, exercises: [...workoutForm.exercises, newEx] });
-                showToast(`${ex.name} adicionado ao treino`, 'success');
-            };
-
-            const filteredLibrary = useMemo(() => {
-                return EXERCISE_LIBRARY.filter(ex => 
-                    ex.name.toLowerCase().includes(exerciseSearch.toLowerCase()) || 
-                    ex.muscle.toLowerCase().includes(exerciseSearch.toLowerCase())
-                );
-            }, [exerciseSearch]);
-
-            const filteredReportStudents = useMemo(() => {
-                return students.filter(s => s.name.toLowerCase().includes(reportSearch.toLowerCase()));
-            }, [students, reportSearch]);
-
-            if (!isLoggedIn) {
-                return (
-                    <div className="h-screen flex items-center justify-center bg-pattern-fitness p-6">
-                        <Toast {...toast} onClose={() => setToast({...toast, show: false})} />
-                        {!isRecovering ? (
-                            <Card className="w-full max-w-md p-10 border-t-8 border-t-orange-600 animate-fade-in shadow-2xl">
-                                <div className="flex justify-center mb-10"><BrandLogo className="scale-150 text-slate-900" /></div>
-                                <h2 className="text-2xl font-black text-center mb-8 text-slate-800 uppercase tracking-tighter">Login Coach</h2>
-                                <form onSubmit={(e) => { e.preventDefault(); handleLoginVerify(); }} className="space-y-6">
-                                    <input className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold" placeholder="Usuário" value={loginData.login} onChange={e => setLoginData({...loginData, login: e.target.value})} />
-                                    <input className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold" type="password" placeholder="Senha" value={loginData.password} onChange={e => setLoginData({...loginData, password: e.target.value})} />
-                                    <div className="flex justify-between items-center text-xs">
-                                        <div className="flex items-center gap-2 cursor-pointer" onClick={() => setLoginData({...loginData, save: !loginData.save})}>
-                                            <div className={`w-5 h-5 rounded border flex items-center justify-center ${loginData.save ? 'bg-orange-600 border-orange-600' : 'bg-white border-slate-300'}`}>{loginData.save && <Icon name="check" size={12} weight="bold" className="text-white" />}</div>
-                                            <span className="font-bold text-slate-500">Manter conectado</span>
-                                        </div>
-                                        <button type="button" onClick={() => setIsRecovering(true)} className="text-orange-600 font-black uppercase">Esqueci a Senha</button>
-                                    </div>
-                                    <button type="submit" className="w-full bg-slate-900 text-white font-black py-5 rounded-2xl shadow-lg hover:bg-black transition-all uppercase tracking-widest text-xs border-b-4 border-amber-500">Entrar no Sistema</button>
-                                </form>
-                                <div className="mt-8 pt-6 border-t border-slate-100 text-center">
-                                    <button onClick={() => { setCloudKey(null); setIsLoggedIn(true); }} className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Entrar em Modo Local / Novo Coach</button>
-                                </div>
-                            </Card>
-                        ) : (
-                            <Card className="w-full max-w-md p-10 border-t-8 border-t-amber-500 animate-fade-in shadow-2xl">
-                                <h2 className="text-2xl font-black text-center mb-2 text-slate-800 uppercase tracking-tighter">Recuperar</h2>
-                                <p className="text-center text-xs font-bold text-slate-400 mb-8">Digite os dados para ver sua senha.</p>
-                                <form onSubmit={(e) => { e.preventDefault(); handleRecovery(); }} className="space-y-6">
-                                    <input required className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold" placeholder="Seu Login" value={recoveryData.login} onChange={e => setRecoveryData({...recoveryData, login: e.target.value})} />
-                                    <input required type="email" className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold" placeholder="E-mail de Recuperação" value={recoveryData.email} onChange={e => setRecoveryData({...recoveryData, email: e.target.value})} />
-                                    <button type="submit" className="w-full bg-amber-500 text-white font-black py-5 rounded-2xl shadow-lg uppercase tracking-widest text-xs">Verificar Dados</button>
-                                </form>
-                                <button onClick={() => setIsRecovering(false)} className="w-full mt-6 text-xs font-black text-slate-400 uppercase">Voltar ao Login</button>
-                            </Card>
-                        )}
-                    </div>
-                );
-            }
-
-            return (
-                <div className="flex h-screen bg-pattern-fitness">
-                    <Toast {...toast} onClose={() => setToast({...toast, show: false})} />
-                    
-                    {showMaintenanceAlert && (
-                        <div className="fixed bottom-4 right-4 z-[200] bg-red-600 text-white p-6 rounded-3xl shadow-2xl border-4 border-white animate-bounce md:animate-none hover:scale-105 transition-transform max-w-sm">
-                            <div className="flex justify-between items-start mb-2">
-                                <h3 className="font-black text-lg uppercase flex items-center gap-2"><Icon name="wrench" /> Manutenção Necessária</h3>
-                                <button onClick={() => setShowMaintenanceAlert(false)} className="text-white text-xl font-bold">×</button>
-                            </div>
-                            <p className="text-xs font-bold mb-4 opacity-90 leading-relaxed">Olá! Para garantir que o sistema continue rápido e sem erros, é hora de realizar uma limpeza preventiva ou foi detectado um erro técnico.</p>
-                            <button onClick={hardAppReset} className="w-full bg-white text-red-600 font-black py-3 rounded-xl shadow hover:bg-slate-100 uppercase tracking-widest text-[10px]">Realizar Manutenção Agora</button>
-                        </div>
-                    )}
-
-                    <aside className="w-20 md:w-64 bg-slate-950 text-white flex flex-col transition-all shadow-2xl">
-                        <div className="p-6 mb-8 hidden md:block border-b border-white/10"><BrandLogo /></div>
-                        <nav className="flex-1 px-4 space-y-2 py-4">
-                            {[
-                                { id: 'dashboard', label: 'Painel', icon: 'chart-pie-slice' },
-                                { id: 'students', label: 'Alunos', icon: 'users' },
-                                { id: 'workouts', label: 'Treinos', icon: 'barbell' },
-                                { id: 'library', label: 'Biblioteca', icon: 'book-open' },
-                                { id: 'assessments', label: 'Avaliações', icon: 'clipboard-text' },
-                                { id: 'reports', label: 'Relatórios', icon: 'file-text' },
-                                { id: 'finance', label: 'Financeiro', icon: 'currency-circle-dollar' },
-                                { id: 'config', label: 'Ajustes', icon: 'gear' }
-                            ].map(item => (
-                                <button key={item.id} onClick={() => setActiveTab(item.id)} className={`w-full flex items-center gap-4 p-4 rounded-2xl transition-all ${activeTab === item.id ? 'bg-orange-600 text-white shadow-xl shadow-orange-900/40 translate-x-1' : 'hover:bg-white/5 text-slate-400'}`}>
-                                    <Icon name={item.icon} size={24} weight={activeTab === item.id ? 'fill' : 'bold'} />
-                                    <span className="hidden md:inline font-bold text-sm">{item.label}</span>
-                                </button>
-                            ))}
-                        </nav>
-                        <div className="px-4 py-6 border-t border-white/10 bg-slate-950">
-                             <button onClick={() => { setIsLoggedIn(false); setCloudKey(null); localStorage.removeItem('personalmaster_auth'); }} className="w-full flex items-center gap-4 p-4 rounded-2xl transition-all hover:bg-white/5 text-orange-600 font-black text-sm uppercase group">
-                                <Icon name="sign-out" size={24} weight="bold" className="group-hover:text-orange-500" /> 
-                                <span className="hidden md:inline group-hover:text-orange-500">Sair / Trocar</span>
-                             </button>
-                        </div>
-                    </aside>
-
-                    <main className="flex-1 overflow-y-auto p-4 md:p-10">
-                        <header className="flex justify-between items-center mb-10">
-                            <h2 className="text-3xl font-black text-slate-800 uppercase tracking-tighter flex items-center gap-3">
-                                <Icon name="lightning" className="text-orange-600" weight="fill" />
-                                {activeTab === 'dashboard' && 'Dashboard'}
-                                {activeTab === 'students' && 'Meus Alunos'}
-                                {activeTab === 'workouts' && 'Planilhas de Treino'}
-                                {activeTab === 'library' && 'Biblioteca de Exercícios'}
-                                {activeTab === 'assessments' && 'Avaliação Física Digital'}
-                                {activeTab === 'reports' && 'Relatórios Completos'}
-                                {activeTab === 'finance' && 'Controle de Mensalidades'}
-                                {activeTab === 'config' && 'Configurações do Coach'}
-                            </h2>
-                            <div className="flex gap-4 items-center">
-                                <div className="hidden md:block text-right">
-                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Coach Conectado</p>
-                                    <p className="font-bold text-slate-800">{userData.name}</p>
-                                </div>
-                                <div className="w-12 h-12 bg-slate-900 text-amber-500 rounded-2xl flex items-center justify-center font-black text-xl shadow-lg border-b-2 border-orange-600">{userData.name[0]}</div>
-                            </div>
-                        </header>
-
-                        {loading && activeTab !== 'config' ? (
-                            <div className="flex items-center justify-center h-64"><Icon name="circle-notch" className="animate-spin text-orange-600" size={48} /></div>
-                        ) : (
-                            <div className="animate-fade-in">
-                                {activeTab === 'dashboard' && (
-                                    <div className="space-y-8">
-                                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                                            <Card className="p-8 bg-gradient-to-br from-orange-600 to-amber-500 text-white border-none shadow-2xl relative overflow-hidden">
-                                                <Icon name="users-four" size={80} className="absolute -right-4 -bottom-4 opacity-20" weight="fill" />
-                                                <p className="text-xs font-bold uppercase opacity-80 mb-2 relative z-10">Alunos Ativos</p>
-                                                <h3 className="text-5xl font-black relative z-10">{stats.activeStudents}</h3>
-                                            </Card>
-                                            <Card className="p-8 border-l-8 border-l-slate-900 shadow-md"><p className="text-xs font-black text-slate-400 uppercase mb-2">Receita Total</p><h3 className="text-3xl font-black text-slate-800">{formatCurrency(stats.revenue)}</h3></Card>
-                                            <Card className="p-8 border-l-8 border-l-amber-500 shadow-md"><p className="text-xs font-black text-slate-400 uppercase mb-2">Avaliações Pendentes</p><h3 className="text-3xl font-black text-orange-600">{stats.pendingAssessments}</h3></Card>
-                                            <Card className="p-8 shadow-md"><p className="text-xs font-black text-slate-400 uppercase mb-2">Total de Alunos</p><h3 className="text-3xl font-black text-slate-800">{stats.totalStudents}</h3></Card>
-                                        </div>
-                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                            <Card className="p-8 h-96 shadow-lg">
-                                                <h4 className="font-black text-slate-800 uppercase mb-6 flex items-center gap-2"><Icon name="chart-line-up" className="text-orange-600" /> Evolução de Faturamento</h4>
-                                                <ChartComponent type="line" data={{ labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'], datasets: [{ label: 'Receita', data: [1200, 1900, 1700, 2400, stats.revenue], borderColor: '#ea580c', backgroundColor: 'rgba(234, 88, 12, 0.1)', fill: true, tension: 0.4 }] }} />
-                                            </Card>
-                                            <Card className="p-8 overflow-y-auto h-96 shadow-lg">
-                                                <h4 className="font-black text-slate-800 uppercase mb-6 flex items-center gap-2"><Icon name="clock-counter-clockwise" className="text-amber-500" /> Alunos Recentes</h4>
-                                                <div className="space-y-4">
-                                                    {students.slice(0, 5).map(s => (
-                                                        <div key={s.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-white hover:shadow-md transition-all">
-                                                            <div className="flex items-center gap-3">
-                                                                <div className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center font-bold text-amber-500 shadow-sm">{s.name[0]}</div>
-                                                                <div><p className="font-bold text-slate-800">{s.name}</p><p className="text-[10px] uppercase font-black text-slate-400">{s.goal}</p></div>
-                                                            </div>
-                                                            <span className="text-[10px] font-black bg-orange-100 text-orange-700 px-3 py-1 rounded-full uppercase">{s.status}</span>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </Card>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {activeTab === 'students' && (
-                                    <div className="space-y-6">
-                                        <div className="flex justify-between items-center"><h3 className="text-xl font-black uppercase text-slate-800">Gerenciar Alunos</h3><button onClick={() => {setModalType('student'); setStudentForm({name:'', phone:'', goal:'Hipertrofia', status:'Ativo'}); setEditingItem(null); setIsModalOpen(true);}} className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase shadow-lg hover:scale-105 transition-transform border-b-4 border-orange-600">Novo Aluno</button></div>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                            {students.map(s => (
-                                                <Card key={s.id} className="p-6 card-hover flex flex-col justify-between shadow-md border-t-4 border-t-orange-600">
-                                                    <div className="flex justify-between items-start mb-6">
-                                                        <div className="w-14 h-14 bg-slate-900 rounded-2xl flex items-center justify-center text-2xl text-amber-500 font-black shadow-inner">{s.name[0]}</div>
-                                                        <div className="flex gap-2">
-                                                            <button onClick={() => {setEditingItem(s); setStudentForm(s); setModalType('student'); setIsModalOpen(true);}} className="p-2 text-slate-400 hover:text-orange-600"><Icon name="pencil" /></button>
-                                                            <button onClick={() => deleteItem(s.id, 'students')} className="p-2 text-slate-400 hover:text-red-500"><Icon name="trash" /></button>
-                                                        </div>
-                                                    </div>
-                                                    <div><h4 className="font-black text-xl text-slate-800 mb-1">{s.name}</h4><p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{s.goal}</p></div>
-                                                    <div className="mt-8 pt-6 border-t flex items-center justify-between">
-                                                        <a href={`https://wa.me/${s.phone.replace(/\D/g,'')}`} target="_blank" className="text-green-500 hover:scale-110 transition-transform"><Icon name="whatsapp-logo" size={28} weight="fill" /></a>
-                                                        <span className="text-[10px] font-black bg-slate-100 text-slate-600 px-3 py-1 rounded-lg uppercase">{s.status}</span>
-                                                    </div>
-                                                </Card>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {activeTab === 'workouts' && (
-                                    <div className="space-y-6">
-                                        <div className="flex justify-between items-center"><h3 className="text-xl font-black uppercase text-slate-800">Planilhas Ativas</h3><button onClick={() => {setModalType('workout'); setWorkoutForm({studentId:'', title:'Treino A', exercises:[]}); setIsModalOpen(true);}} className="bg-orange-600 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase shadow-lg border-b-4 border-black">Montar Novo Treino</button></div>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                            {workouts.map(w => {
-                                                const student = students.find(s => s.id === w.studentId);
-                                                return (
-                                                    <Card key={w.id} className="p-6 border-l-8 border-l-slate-900 shadow-md">
-                                                        <h4 className="font-black text-lg text-slate-800">{w.title}</h4>
-                                                        <p className="text-xs font-bold text-slate-400 uppercase mb-4 tracking-tight">Aluno: <span className="text-orange-600">{student?.name || 'Não atribuído'}</span></p>
-                                                        <div className="space-y-1 mb-6">
-                                                            {w.exercises.slice(0, 3).map((ex, i) => <p key={i} className="text-sm font-bold text-slate-600 truncate">• {ex.name}</p>)}
-                                                            {w.exercises.length > 3 && <p className="text-xs text-slate-400">+ {w.exercises.length - 3} exercícios</p>}
-                                                        </div>
-                                                        <div className="flex gap-2">
-                                                            <button onClick={() => {setModalType('workout_view'); setEditingItem(w); setIsModalOpen(true);}} className="flex-1 py-3 bg-slate-900 text-amber-500 text-[10px] font-black uppercase rounded-xl tracking-widest hover:bg-black transition-colors">Ver Treino</button>
-                                                            <button onClick={() => deleteItem(w.id, 'workouts')} className="p-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-100"><Icon name="trash" /></button>
-                                                        </div>
-                                                    </Card>
-                                                )
-                                            })}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {activeTab === 'library' && (
-                                    <div className="space-y-6">
-                                        <div className="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 mb-8 border-t-8 border-t-orange-600">
-                                            <h3 className="text-xl font-black uppercase text-slate-800 mb-4 flex items-center gap-3"><Icon name="barbell" className="text-orange-600" /> Biblioteca Personal Master</h3>
-                                            <p className="text-sm text-slate-500 font-bold mb-8 italic">Selecione entre {EXERCISE_LIBRARY.length} exercícios profissionais para suas planilhas.</p>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                                {EXERCISE_LIBRARY.map(ex => (
-                                                    <div key={ex.id} className="p-4 border-2 border-slate-50 rounded-2xl flex justify-between items-center hover:border-orange-200 transition-colors bg-slate-50/50">
-                                                        <div><p className="font-black text-slate-800 text-sm uppercase">{ex.name}</p><p className="text-[9px] font-black text-slate-400 uppercase tracking-wider">{ex.muscle} • {ex.type}</p></div>
-                                                        <button onClick={() => { showToast(`Adicione este exercício na aba "Treinos"`); }} className="text-orange-600 hover:scale-110 transition-transform"><Icon name="info" weight="fill" size={20} /></button>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {activeTab === 'assessments' && (
-                                    <div className="space-y-6">
-                                        <div className="flex justify-between items-center"><h3 className="text-xl font-black uppercase text-slate-800">Avaliações Físicas</h3><button onClick={() => {setModalType('assessment'); setAssessmentForm({studentId:'', date: new Date().toISOString().split('T')[0], weight:'', height:'', fat:'', muscle:'', waist:''}); setIsModalOpen(true);}} className="bg-amber-500 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase shadow-lg border-b-4 border-orange-700">Nova Avaliação</button></div>
-                                        <div className="grid grid-cols-1 gap-4">
-                                            {assessments.map(as => {
-                                                const student = students.find(s => s.id === as.studentId);
-                                                return (
-                                                    <Card key={as.id} className="p-6 flex items-center justify-between shadow-md border-l-8 border-l-orange-600">
-                                                        <div className="flex items-center gap-6">
-                                                            <div className="text-center bg-slate-900 p-3 rounded-2xl min-w-[80px] text-amber-500 shadow-lg"><p className="text-[10px] font-black uppercase opacity-60">Data</p><p className="font-black text-lg leading-none">{as.date.split('-').reverse().slice(0,2).join('/')}</p></div>
-                                                            <div><h4 className="font-black text-lg text-slate-800 uppercase tracking-tight">{student?.name || 'Aluno Excluído'}</h4><p className="text-xs font-bold text-slate-400 uppercase">Peso: {as.weight}kg • BF: {as.fat}% • MM: {as.muscle}%</p></div>
-                                                        </div>
-                                                        <div className="flex gap-2">
-                                                            <button onClick={() => {setEditingItem(as); setModalType('evolution_chart'); setIsModalOpen(true);}} className="px-6 py-3 bg-slate-900 text-amber-500 font-black text-[10px] uppercase rounded-xl border-b-2 border-orange-600">Gráfico de Evolução</button>
-                                                            <button onClick={() => deleteItem(as.id, 'assessments')} className="p-3 text-red-400 hover:text-red-600"><Icon name="trash" /></button>
-                                                        </div>
-                                                    </Card>
-                                                )
-                                            })}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {activeTab === 'reports' && (
-                                    <div className="space-y-8 animate-fade-in">
-                                        <div className="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 border-t-8 border-t-orange-600">
-                                            <h3 className="text-xl font-black uppercase text-slate-800 mb-4">Relatórios Consolidados</h3>
-                                            <p className="text-sm text-slate-500 font-bold mb-8">Selecione um aluno para gerar um relatório completo para impressão ou PDF.</p>
-                                            <div className="relative mb-8">
-                                                <input className="w-full p-4 pl-12 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none shadow-sm" placeholder="Buscar aluno pelo nome..." value={reportSearch} onChange={e => setReportSearch(e.target.value)} />
-                                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><Icon name="magnifying-glass" weight="bold" /></div>
-                                            </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                {filteredReportStudents.map(s => (
-                                                    <div key={s.id} className="p-5 border-2 border-slate-50 rounded-3xl flex justify-between items-center hover:border-orange-200 transition-all bg-slate-50/30 group">
-                                                        <div>
-                                                            <p className="font-black text-slate-800 uppercase text-sm group-hover:text-orange-600 transition-colors">{s.name}</p>
-                                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{s.goal} • {s.status}</p>
-                                                        </div>
-                                                        <button onClick={() => { setEditingItem(s); setModalType('student_report'); setIsModalOpen(true); }} className="px-5 py-3 bg-slate-900 text-amber-500 font-black text-[10px] uppercase rounded-xl border-b-2 border-orange-600 hover:bg-black transition-all">Gerar Relatório</button>
-                                                    </div>
-                                                ))}
-                                                {filteredReportStudents.length === 0 && <p className="col-span-2 text-center py-8 text-slate-400 font-bold uppercase text-xs italic">Nenhum aluno encontrado para o relatório.</p>}
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-
-                                {activeTab === 'finance' && (
-                                    <div className="space-y-6">
-                                        <div className="flex justify-between items-center"><h3 className="text-xl font-black uppercase text-slate-800">Mensalidades</h3><button onClick={() => {setModalType('finance'); setFinanceForm({type:'Receita', description:'', value:'', date: new Date().toISOString().split('T')[0], studentId:''}); setIsModalOpen(true);}} className="bg-orange-600 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase shadow-xl border-b-4 border-black">Registrar Pagamento</button></div>
-                                        <Card className="overflow-hidden p-0 border-none shadow-2xl">
-                                            <table className="w-full text-left font-bold text-sm">
-                                                <thead className="bg-slate-900 uppercase text-[10px] text-amber-500 border-b border-white/10">
-                                                    <tr><th className="p-6">Data</th><th className="p-6">Descrição</th><th className="p-6">Aluno</th><th className="p-6 text-right">Valor</th><th className="p-6 text-center">Ações</th></tr>
-                                                </thead>
-                                                <tbody className="divide-y">
-                                                    {financial.map(f => (
-                                                        <tr key={f.id} className="hover:bg-slate-50 transition-colors">
-                                                            <td className="p-6">{f.date.split('-').reverse().join('/')}</td>
-                                                            <td className="p-6 uppercase">{f.description}</td>
-                                                            <td className="p-6 text-orange-600 uppercase text-xs font-black">{students.find(s=>s.id===f.studentId)?.name || 'Geral'}</td>
-                                                            <td className={`p-6 text-right font-black ${f.type === 'Receita' ? 'text-green-600' : 'text-red-500'}`}>{formatCurrency(f.value)}</td>
-                                                            <td className="p-6 text-center"><button onClick={() => deleteItem(f.id, 'financial')} className="text-red-300 hover:text-red-500"><Icon name="trash" /></button></td>
-                                                        </tr>
-                                                    ))}
-                                                </tbody>
-                                            </table>
-                                        </Card>
-                                    </div>
-                                )}
-
-                                {activeTab === 'config' && (
-                                    <div className="space-y-8 max-w-4xl mx-auto">
-                                        <Card className="p-8 border-t-8 border-t-slate-900 shadow-xl">
-                                            <h4 className="font-black text-slate-800 uppercase mb-6 flex items-center gap-3"><Icon name="shield-check" className="text-orange-600" /> Cadastro de Credenciais (Nuvem)</h4>
-                                            <form onSubmit={handleSaveCredentials} className="space-y-6">
-                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Definir Login</label><input required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none transition-colors" value={newCredentials.login} onChange={e => setNewCredentials({...newCredentials, login: e.target.value})} placeholder="Seu usuário único" /></div>
-                                                    <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Definir Senha</label><input required type="password" className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none transition-colors" value={newCredentials.password} onChange={e => setNewCredentials({...newCredentials, password: e.target.value})} placeholder="Senha segura" /></div>
-                                                </div>
-                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">E-mail de Recuperação</label><input required type="email" className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none transition-colors" value={newCredentials.recoveryEmail} onChange={e => setNewCredentials({...newCredentials, recoveryEmail: e.target.value})} placeholder="seu@email.com" /></div>
-                                                <button type="submit" className="w-full py-4 bg-slate-900 text-white font-black rounded-2xl uppercase tracking-widest text-[10px] shadow-lg border-b-4 border-amber-500">Ativar Nuvem Segura e Cofre</button>
-                                            </form>
-                                        </Card>
-                                        <Card className="p-8 border-t-8 border-t-orange-600 shadow-xl">
-                                            <h4 className="font-black text-slate-800 uppercase mb-6 flex items-center gap-3"><Icon name="user-gear" className="text-orange-600" /> Perfil do Coach</h4>
-                                            <form onSubmit={handleSaveConfig} className="space-y-6">
-                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Nome Completo</label><input required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold" value={userData.name} onChange={e => setUserData({...userData, name: e.target.value})} /></div>
-                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Nome da Marca/Academia</label><input required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold" value={userData.company} onChange={e => setUserData({...userData, company: e.target.value})} /></div>
-                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Chave PIX (Para Cobranças)</label><input className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold bg-amber-50" value={userData.pixKey} onChange={e => setUserData({...userData, pixKey: e.target.value})} placeholder="CPF, E-mail ou Celular" /></div>
-                                                <button type="submit" className="w-full py-4 bg-orange-600 text-white font-black rounded-2xl uppercase tracking-widest text-[10px] shadow-lg">Salvar Perfil Profissional</button>
-                                            </form>
-                                        </Card>
-                                        <div className="bg-gradient-to-br from-slate-900 to-black rounded-3xl shadow-2xl p-8 border-t-4 border-amber-500">
-                                            <div className="flex items-center gap-3 mb-8">
-                                                <span className="text-4xl">🛡️</span>
-                                                <h3 className="text-xl font-black text-amber-500 uppercase tracking-tight">Entenda como seus dados estão seguros</h3>
-                                            </div>
-                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                                <div className="bg-white/5 p-5 rounded-2xl border border-white/10">
-                                                    <h4 className="text-amber-500 font-black mb-2 flex items-center gap-2 text-xs uppercase tracking-widest">🗝️ Cofre Digital</h4>
-                                                    <p className="text-slate-300 text-[11px] leading-relaxed font-bold">Cada treinador tem uma "pasta secreta" no sistema. O que você salva aqui fica trancado e só abre com a sua chave de acesso pessoal.</p>
-                                                </div>
-                                                <div className="bg-white/5 p-5 rounded-2xl border border-white/10">
-                                                    <h4 className="text-amber-500 font-black mb-2 flex items-center gap-2 text-xs uppercase tracking-widest">🌪️ Dados Embaralhados</h4>
-                                                    <p className="text-slate-300 text-[11px] leading-relaxed font-bold">Suas fichas e avaliações são transformadas em códigos ilegíveis antes de serem salvas. Mesmo se alguém olhar o banco, verá apenas letras sem sentido.</p>
-                                                </div>
-                                                <div className="bg-white/5 p-5 rounded-2xl border border-white/10">
-                                                    <h4 className="text-amber-500 font-black mb-2 flex items-center gap-2 text-xs uppercase tracking-widest">🚫 Privacidade Total</h4>
-                                                    <p className="text-slate-300 text-[11px] leading-relaxed font-bold">O sistema garante que seu trabalho intelectual e financeiro seja privado. A tecnologia impede o acesso de terceiros ou funcionários não autorizados.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="pt-8 mt-8 border-t border-slate-100 text-center">
-                                            <p className="text-[10px] text-slate-400 font-extrabold uppercase mb-4 tracking-tighter">Manutenção de Sistema (Forçar Sincronização)</p>
-                                            <button type="button" onClick={hardAppReset} className="w-full bg-slate-900 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest hover:bg-black shadow-lg transition-all flex items-center justify-center gap-2 border-b-4 border-amber-500"><Icon name="arrows-counter-clockwise" weight="bold"/> Limpar Cache Local e Forçar Nuvem</button>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-                    </main>
-
-                    {/* Modal Central */}
-                    {isModalOpen && (
-                        <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[110] flex items-center justify-center p-4 overflow-y-auto">
-                            <Card className={`w-full ${modalType === 'student_report' ? 'max-w-4xl' : 'max-w-2xl'} bg-white overflow-hidden border-t-8 border-orange-600 relative rounded-[2.5rem]`}>
-                                <div className="p-6 border-b flex justify-between items-center sticky top-0 bg-white z-10 no-print">
-                                    <h3 className="font-black text-xl uppercase tracking-tighter text-slate-800">
-                                        {modalType === 'student' && 'Ficha do Aluno'}
-                                        {modalType === 'workout' && 'Montagem de Treino'}
-                                        {modalType === 'workout_view' && 'Visualizar Treino'}
-                                        {modalType === 'assessment' && 'Nova Avaliação'}
-                                        {modalType === 'evolution_chart' && 'Evolução Gráfica'}
-                                        {modalType === 'finance' && 'Dados do Lançamento'}
-                                        {modalType === 'student_report' && 'Relatório Completo do Aluno'}
-                                    </h3>
-                                    <button onClick={() => setIsModalOpen(false)} className="p-2 text-slate-400 hover:text-red-500 transition-colors"><Icon name="x" size={24}/></button>
-                                </div>
-                                <div className="p-8 max-h-[75vh] overflow-y-auto">
-                                    {modalType === 'student' && (
-                                        <form onSubmit={saveItem} className="space-y-6">
-                                            <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Nome Completo</label><input required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none" value={studentForm.name} onChange={e => setStudentForm({...studentForm, name: e.target.value})} /></div>
-                                            <div className="grid grid-cols-2 gap-4">
-                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">WhatsApp</label><input required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none" value={studentForm.phone} onChange={e => setStudentForm({...studentForm, phone: e.target.value})} /></div>
-                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Objetivo Principal</label><select className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none bg-white" value={studentForm.goal} onChange={e => setStudentForm({...studentForm, goal: e.target.value})}><option>Hipertrofia</option><option>Emagrecimento</option><option>Condicionamento</option><option>Reabilitação</option></select></div>
-                                            </div>
-                                            <button type="submit" className="w-full py-5 bg-orange-600 text-white font-black rounded-2xl uppercase tracking-widest text-xs shadow-lg hover:bg-orange-700">Salvar na Nuvem</button>
-                                        </form>
-                                    )}
-                                    {modalType === 'workout' && (
-                                        <div className="space-y-8">
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Selecionar Aluno</label><select required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none bg-white" value={workoutForm.studentId} onChange={e => setWorkoutForm({...workoutForm, studentId: e.target.value})}><option value="">Selecione...</option>{students.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
-                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Título do Treino</label><input className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none" value={workoutForm.title} placeholder="Ex: Treino A - Peito" onChange={e => setWorkoutForm({...workoutForm, title: e.target.value})} /></div>
-                                            </div>
-                                            <div className="bg-slate-50 p-6 rounded-3xl border border-slate-200">
-                                                <h4 className="text-[10px] font-black text-slate-500 uppercase mb-4 tracking-widest flex items-center justify-between">Encontrar Exercícios na Biblioteca <Icon name="magnifying-glass" /></h4>
-                                                <input className="w-full p-3 mb-4 border-2 border-slate-200 rounded-xl font-bold focus:border-orange-600 outline-none text-sm shadow-inner" placeholder="Busque por nome ou grupo muscular (ex: peito)..." value={exerciseSearch} onChange={e => setExerciseSearch(e.target.value)} />
-                                                <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-2 scrollbar-thin">
-                                                    {filteredLibrary.map(ex => (
-                                                        <button key={ex.id} onClick={() => addExerciseToWorkout(ex)} className="p-3 bg-white border border-slate-200 rounded-xl font-black text-[10px] uppercase text-left hover:bg-orange-50 hover:border-orange-400 transition-all text-slate-700 shadow-sm flex flex-col">
-                                                            <span className="truncate">{ex.name}</span>
-                                                            <span className="text-[8px] text-orange-600 opacity-70">{ex.muscle}</span>
-                                                        </button>
-                                                    ))}
-                                                    {filteredLibrary.length === 0 && <p className="col-span-2 text-center text-[10px] font-bold text-slate-400 py-4 italic uppercase">Nenhum exercício encontrado</p>}
-                                                </div>
-                                            </div>
-                                            <div className="space-y-4">
-                                                <h4 className="text-xs font-black text-slate-400 uppercase flex items-center gap-2"><Icon name="list-checks" weight="bold" /> Exercícios na Planilha ({workoutForm.exercises.length})</h4>
-                                                {workoutForm.exercises.map((ex, idx) => (
-                                                    <div key={idx} className="p-4 bg-white border-2 border-slate-50 rounded-2xl flex flex-wrap gap-4 items-center shadow-md animate-fade-in border-l-4 border-l-amber-500">
-                                                        <div className="flex-1 min-w-[150px]"><p className="font-black text-slate-800 uppercase text-xs">{ex.name}</p><p className="text-[9px] text-orange-600 uppercase font-black tracking-tight">{ex.muscle}</p></div>
-                                                        <div className="flex gap-2">
-                                                            <div className="w-16"><p className="text-[8px] font-black text-slate-400 uppercase">Séries</p><input type="number" className="w-full p-2 border rounded-lg font-bold" value={ex.series} onChange={e => {const copy = [...workoutForm.exercises]; copy[idx].series = e.target.value; setWorkoutForm({...workoutForm, exercises: copy})}} /></div>
-                                                            <div className="w-16"><p className="text-[8px] font-black text-slate-400 uppercase">Reps</p><input type="number" className="w-full p-2 border rounded-lg font-bold" value={ex.reps} onChange={e => {const copy = [...workoutForm.exercises]; copy[idx].reps = e.target.value; setWorkoutForm({...workoutForm, exercises: copy})}} /></div>
-                                                            <div className="w-16"><p className="text-[8px] font-black text-slate-400 uppercase">Peso</p><input className="w-full p-2 border rounded-lg font-bold" value={ex.weight} placeholder="Kg" onChange={e => {const copy = [...workoutForm.exercises]; copy[idx].weight = e.target.value; setWorkoutForm({...workoutForm, exercises: copy})}} /></div>
-                                                        </div>
-                                                        <button onClick={() => {const copy = [...workoutForm.exercises]; copy.splice(idx,1); setWorkoutForm({...workoutForm, exercises: copy})}} className="text-red-400 p-2 hover:bg-red-50 rounded-lg"><Icon name="trash" /></button>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <button onClick={saveItem} className="w-full py-5 bg-slate-900 text-amber-500 font-black rounded-2xl uppercase tracking-widest text-xs shadow-lg border-b-4 border-orange-600">Finalizar Planilha na Nuvem</button>
-                                        </div>
-                                    )}
-                                    {modalType === 'student_report' && editingItem && (
-                                        <div className="space-y-10">
-                                            <div id="print-area-container" className="print-area">
-                                                <div className="report-page bg-white p-10 border-2 border-slate-100 rounded-[2.5rem] shadow-sm">
-                                                    <div className="flex justify-between items-start border-b-4 border-orange-600 pb-6 mb-8">
-                                                        <div>
-                                                            <h1 className="text-3xl font-black uppercase text-slate-900 leading-none">{userData.company}</h1>
-                                                            <p className="text-xs font-bold text-slate-400 uppercase mt-2 tracking-widest">Treinador: {userData.name}</p>
-                                                        </div>
-                                                        <div className="text-right">
-                                                            <p className="text-xs font-black text-orange-600 uppercase tracking-widest">Relatório de Desempenho</p>
-                                                            <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase">Emitido em: {new Date().toLocaleDateString()}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className="grid grid-cols-2 gap-8 mb-10">
-                                                        <div className="bg-slate-50 p-6 rounded-3xl">
-                                                            <h4 className="text-[10px] font-black text-orange-600 uppercase mb-3 tracking-widest">Perfil do Aluno</h4>
-                                                            <p className="text-xl font-black text-slate-800 uppercase">{editingItem.name}</p>
-                                                            <p className="text-sm font-bold text-slate-500 mt-1">Objetivo: <span className="text-slate-700">{editingItem.goal}</span></p>
-                                                            <p className="text-sm font-bold text-slate-500 mt-1">Status: <span className="text-slate-700">{editingItem.status}</span></p>
-                                                        </div>
-                                                        <div className="bg-slate-900 p-6 rounded-3xl text-white">
-                                                            <h4 className="text-[10px] font-black text-amber-500 uppercase mb-3 tracking-widest">Última Avaliação Física</h4>
-                                                            {assessments.filter(a => a.studentId === editingItem.id).sort((a,b) => new Date(b.date) - new Date(a.date))[0] ? (
-                                                                <div className="grid grid-cols-2 gap-4">
-                                                                    <div><p className="text-[10px] font-bold opacity-60 uppercase">Peso</p><p className="text-lg font-black text-amber-500">{assessments.filter(a => a.studentId === editingItem.id).sort((a,b) => new Date(b.date) - new Date(a.date))[0].weight} kg</p></div>
-                                                                    <div><p className="text-[10px] font-bold opacity-60 uppercase">Gordura</p><p className="text-lg font-black text-orange-500">{assessments.filter(a => a.studentId === editingItem.id).sort((a,b) => new Date(b.date) - new Date(a.date))[0].fat}%</p></div>
-                                                                </div>
-                                                            ) : (
-                                                                <p className="text-xs font-bold opacity-50 italic">Sem métricas registradas ainda.</p>
-                                                            )}
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <h4 className="text-[10px] font-black text-orange-600 uppercase mb-4 tracking-widest border-b border-slate-100 pb-2">Planilhas de Treinamento Atuais</h4>
-                                                        {workouts.filter(w => w.studentId === editingItem.id).length > 0 ? (
-                                                            <div className="space-y-6">
-                                                                {workouts.filter(w => w.studentId === editingItem.id).map(w => (
-                                                                    <div key={w.id} className="border-2 border-slate-50 rounded-3xl p-6 bg-slate-50/30">
-                                                                        <h5 className="font-black text-slate-800 uppercase text-sm mb-4 border-l-4 border-amber-500 pl-3">{w.title}</h5>
-                                                                        <table className="w-full text-left">
-                                                                            <thead>
-                                                                                <tr className="text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-200">
-                                                                                    <th className="pb-2">Exercício</th>
-                                                                                    <th className="pb-2 text-center">Séries</th>
-                                                                                    <th className="pb-2 text-center">Reps</th>
-                                                                                    <th className="pb-2 text-right">Peso (Kg)</th>
-                                                                                </tr>
-                                                                            </thead>
-                                                                            <tbody className="divide-y divide-slate-100">
-                                                                                {w.exercises.map((ex, i) => (
-                                                                                    <tr key={i} className="text-xs font-bold text-slate-700">
-                                                                                        <td className="py-3 uppercase">{ex.name} <span className="block text-[8px] text-slate-400">{ex.muscle}</span></td>
-                                                                                        <td className="py-3 text-center text-slate-900">{ex.series}</td>
-                                                                                        <td className="py-3 text-center text-slate-900">{ex.reps}</td>
-                                                                                        <td className="py-3 text-right text-orange-600 font-black">{ex.weight || '--'}</td>
-                                                                                    </tr>
-                                                                                ))}
-                                                                            </tbody>
-                                                                        </table>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        ) : (
-                                                            <div className="p-8 bg-slate-50 rounded-3xl text-center border-2 border-dashed border-slate-200">
-                                                                <p className="text-xs font-bold text-slate-400 uppercase italic">Nenhuma planilha de treino ativa no momento.</p>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    <div className="mt-12 pt-8 border-t-2 border-slate-100 flex justify-between items-end">
-                                                        <div className="w-64 border-t-2 border-slate-900 pt-2 text-center">
-                                                            <p className="text-[10px] font-black uppercase text-slate-900 tracking-widest">{userData.name}</p>
-                                                            <p className="text-[8px] font-bold text-slate-400 uppercase">Personal Coach Responsável</p>
-                                                        </div>
-                                                        <div className="text-right">
-                                                            <p className="text-[8px] font-bold text-slate-400 uppercase">Sistema Personal Master v4.0</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="flex gap-4 no-print">
-                                                <button onClick={() => window.print()} className="flex-1 py-5 bg-slate-900 text-amber-500 font-black rounded-3xl uppercase tracking-widest text-xs shadow-lg border-b-4 border-orange-600 transition-transform active:scale-95 flex items-center justify-center gap-3">
-                                                    <Icon name="printer" size={24} weight="fill" /> Imprimir Relatório Master
-                                                </button>
-                                                <button onClick={() => setIsModalOpen(false)} className="px-8 py-5 bg-slate-100 text-slate-400 font-black rounded-3xl uppercase tracking-widest text-xs">Fechar</button>
-                                            </div>
-                                        </div>
-                                    )}
-                                    {modalType === 'assessment' && (
-                                        <form onSubmit={saveItem} className="space-y-6">
-                                            <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Selecionar Aluno</label><select required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold bg-white focus:border-orange-600 outline-none" value={assessmentForm.studentId} onChange={e => setAssessmentForm({...assessmentForm, studentId: e.target.value})}><option value="">Selecione...</option>{students.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
-                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Peso (Kg)</label><input type="number" required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold" value={assessmentForm.weight} onChange={e => setAssessmentForm({...assessmentForm, weight: e.target.value})} /></div>
-                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Gordura (%)</label><input type="number" required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold" value={assessmentForm.fat} onChange={e => setAssessmentForm({...assessmentForm, fat: e.target.value})} /></div>
-                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Massa Magra (%)</label><input type="number" required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold" value={assessmentForm.muscle} onChange={e => setAssessmentForm({...assessmentForm, muscle: e.target.value})} /></div>
-                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Cintura (cm)</label><input type="number" required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold" value={assessmentForm.waist} onChange={e => setAssessmentForm({...assessmentForm, waist: e.target.value})} /></div>
-                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Data</label><input type="date" required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold" value={assessmentForm.date} onChange={e => setAssessmentForm({...assessmentForm, date: e.target.value})} /></div>
-                                            </div>
-                                            <button type="submit" className="w-full py-5 bg-orange-600 text-white font-black rounded-2xl uppercase tracking-widest text-xs shadow-lg">Gerar Evolução na Hora</button>
-                                        </form>
-                                    )}
-                                    {modalType === 'evolution_chart' && editingItem && (
-                                        <div className="space-y-8">
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                <div className="bg-slate-900 p-6 rounded-3xl text-center shadow-lg"><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Peso Atual</p><h5 className="text-3xl font-black text-amber-500">{editingItem.weight}Kg</h5></div>
-                                                <div className="bg-slate-900 p-6 rounded-3xl text-center shadow-lg"><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Gordura Corporal</p><h5 className="text-3xl font-black text-orange-500">{editingItem.fat}%</h5></div>
-                                            </div>
-                                            <div className="h-80 w-full bg-slate-50 p-6 rounded-3xl shadow-inner">
-                                                <ChartComponent type="bar" data={{ labels: ['Histórico 1', 'Histórico 2', 'Atual'], datasets: [{ label: 'Peso', data: [Number(editingItem.weight)+2, Number(editingItem.weight)+1, Number(editingItem.weight)], backgroundColor: '#ea580c', borderRadius: 10 }, { label: 'Gordura', data: [Number(editingItem.fat)+4, Number(editingItem.fat)+2, Number(editingItem.fat)], backgroundColor: '#f59e0b', borderRadius: 10 }] }} />
-                                            </div>
-                                            <button onClick={() => window.print()} className="w-full py-4 bg-slate-900 text-white font-black rounded-2xl uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-lg border-b-4 border-amber-500 transition-transform active:scale-95"><Icon name="printer" /> Exportar Evolução PDF</button>
-                                        </div>
-                                    )}
-                                    {modalType === 'workout_view' && editingItem && (
-                                        <div id="print-area-container" className="space-y-6">
-                                            <div className="text-center mb-8"><h4 className="font-black text-2xl uppercase text-slate-800 tracking-tighter">{editingItem.title}</h4><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Personal Coach: <span className="text-orange-600">{userData.name}</span></p></div>
-                                            <div className="space-y-3">
-                                                {editingItem.exercises.map((ex, i) => (
-                                                    <div key={i} className="p-5 border-2 border-slate-50 rounded-2xl flex justify-between items-center bg-white shadow-sm">
-                                                        <div><p className="font-black text-slate-800 uppercase text-xs">{ex.name}</p><p className="text-[9px] font-black text-orange-600 uppercase tracking-tight">{ex.muscle}</p></div>
-                                                        <div className="text-right"><p className="font-black text-slate-900 text-sm leading-none">{ex.series} x {ex.reps}</p><p className="text-[9px] font-black text-slate-400 uppercase mt-1">Carga: {ex.weight || '--'} Kg</p></div>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                            <div className="mt-10 no-print flex gap-2">
-                                                 <button onClick={() => {
-                                                     const student = students.find(s=>s.id===editingItem.studentId);
-                                                     const text = `*Seu Treino Personalizado: ${editingItem.title}*%0A${editingItem.exercises.map(ex => `%0A• ${ex.name}: ${ex.series}x${ex.reps} (${ex.weight||'0'}kg)`).join('')}`;
-                                                     window.open(`https://wa.me/${student?.phone.replace(/\D/g,'')}?text=${text}`, '_blank');
-                                                 }} className="flex-1 py-4 bg-green-600 text-white font-black rounded-2xl uppercase text-[10px] tracking-widest flex items-center justify-center gap-2 shadow-lg"><Icon name="whatsapp-logo" size={20} weight="fill" /> Enviar Treino</button>
-                                                 <button onClick={() => window.print()} className="flex-1 py-4 bg-slate-100 text-slate-600 font-black rounded-2xl uppercase text-[10px] tracking-widest hover:bg-slate-200 transition-colors shadow-sm"><Icon name="printer" /> Imprimir</button>
-                                            </div>
-                                        </div>
-                                    )}
-                                    {modalType === 'finance' && (
-                                        <form onSubmit={saveItem} className="space-y-6">
-                                            <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Aluno</label><select required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold bg-white focus:border-orange-600 outline-none" value={financeForm.studentId} onChange={e => setFinanceForm({...financeForm, studentId: e.target.value})}><option value="">Selecione...</option>{students.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
-                                            <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Descrição</label><input required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none" value={financeForm.description} placeholder="Ex: Mensalidade Maio" onChange={e => setFinanceForm({...financeForm, description: e.target.value})} /></div>
-                                            <div className="grid grid-cols-2 gap-4">
-                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Valor (R$)</label><input type="number" required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none" value={financeForm.value} onChange={e => setFinanceForm({...financeForm, value: e.target.value})} /></div>
-                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Data</label><input type="date" required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none" value={financeForm.date} onChange={e => setFinanceForm({...financeForm, date: e.target.value})} /></div>
-                                            </div>
-                                            <button type="submit" className="w-full py-5 bg-orange-600 text-white font-black rounded-2xl uppercase tracking-widest text-xs shadow-lg shadow-orange-600/20">Registrar Recebimento</button>
-                                        </form>
-                                    )}
-                                </div>
-                            </Card>
-                        </div>
-                    )}
+    <!-- Números e Confiança -->
+    <div class="bg-white py-16 border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-12 text-center mb-16">
+                <div class="space-y-2">
+                    <p class="text-5xl font-black text-blue-600 tracking-tighter">+5k</p>
+                    <p class="text-slate-500 font-bold uppercase text-xs tracking-widest">Personals Ativos</p>
                 </div>
-            );
+                <div class="space-y-2">
+                    <p class="text-5xl font-black text-blue-600 tracking-tighter">100%</p>
+                    <p class="text-slate-500 font-bold uppercase text-xs tracking-widest">Nuvem Mobile</p>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-5xl font-black text-blue-600 tracking-tighter">+1M</p>
+                    <p class="text-slate-500 font-bold uppercase text-xs tracking-widest">Treinos Prescritos</p>
+                </div>
+                <div class="space-y-2">
+                    <p class="text-5xl font-black text-blue-600 tracking-tighter">0.3s</p>
+                    <p class="text-slate-500 font-bold uppercase text-xs tracking-widest">Sincronização Aluno</p>
+                </div>
+            </div>
+
+            <div class="pt-8 border-t border-slate-50">
+                <p class="text-center text-slate-400 text-xs font-black uppercase tracking-[0.3em] mb-8">Padrão Elite em Tecnologia Fitness</p>
+                <div class="flex flex-wrap justify-center items-center gap-12 opacity-40 grayscale hover:grayscale-0 transition-all duration-500 text-center">
+                    <i class="fa-solid fa-dumbbell fa-3x"></i>
+                    <i class="fa-solid fa-heart-pulse fa-3x"></i>
+                    <i class="fa-solid fa-stopwatch fa-3x"></i>
+                    <i class="fa-solid fa-mobile-screen fa-3x"></i>
+                    <i class="fa-solid fa-chart-line fa-3x"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção de Soluções com Filtros -->
+    <section id="solucoes" class="py-28 bg-slate-50 text-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-6xl font-black text-slate-900 mb-6 tracking-tight text-center">Módulos que Evoluem sua Consultoria</h2>
+                <div class="w-24 h-2 bg-blue-600 mx-auto rounded-full mb-8"></div>
+                
+                <!-- Filtros -->
+                <div class="flex flex-wrap justify-center gap-4 mt-12 mb-16 text-center">
+                    <button onclick="filterSolucoes('todos')" class="filter-btn active px-6 py-2 rounded-full border-2 border-slate-200 font-bold transition hover:border-blue-600">Todos</button>
+                    <button onclick="filterSolucoes('prescricao')" class="filter-btn px-6 py-2 rounded-full border-2 border-slate-200 font-bold transition hover:border-blue-600">Treinos & Bio</button>
+                    <button onclick="filterSolucoes('financeiro')" class="filter-btn px-6 py-2 rounded-full border-2 border-slate-200 font-bold transition hover:border-blue-600">Vendas & Recorrência</button>
+                    <button onclick="filterSolucoes('digital')" class="filter-btn px-6 py-2 rounded-full border-2 border-slate-200 font-bold transition hover:border-blue-600">App & Marca Própria</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="solucoes-grid">
+                <!-- Prescrição de Treinos -->
+                <div class="solucao-card bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover relative group text-left" data-cat="prescricao">
+                    <div class="absolute top-0 right-0 bg-blue-600 text-white text-[10px] font-black px-4 py-1 rounded-bl-2xl uppercase tracking-widest">Mais Ágil</div>
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300 shadow-inner">
+                        <i class="fa-solid fa-list-check fa-2x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">Prescrição 10x</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">Monte treinos complexos em segundos com banco de dados de exercícios completo para seus alunos.</p>
+                    <a href="#contato" class="text-blue-600 font-black text-sm uppercase flex items-center gap-2 hover:gap-4 transition-all text-center">Ver Módulo <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <!-- Avaliação & Bio -->
+                <div class="solucao-card bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover group text-left" data-cat="prescricao">
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-weight-scale fa-2x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">Bioimpedância Digital</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">Controle de medidas, fotos de evolução e gráficos de composição corporal integrados.</p>
+                    <a href="#contato" class="text-blue-600 font-black text-sm uppercase flex items-center gap-2 hover:gap-4 transition-all text-center">Ver Bio <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <!-- Recorrência -->
+                <div class="solucao-card bg-orange-600 p-8 rounded-3xl shadow-xl border border-orange-400 card-hover group text-left" data-cat="financeiro">
+                    <div class="text-white mb-6 bg-orange-500 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-white group-hover:text-orange-600 transition-all duration-300">
+                        <i class="fa-solid fa-credit-card fa-2x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Venda Recorrente</h3>
+                    <p class="text-orange-100 text-sm leading-relaxed mb-6">Cobre suas consultorias mensalmente via cartão ou Pix sem comprometer o limite do aluno.</p>
+                    <a href="#contato" class="text-white font-black text-sm uppercase flex items-center gap-2 hover:gap-4 transition-all text-center">Escale Vendas <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <!-- Gestão de Alunos -->
+                <div class="solucao-card bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover group text-left" data-cat="digital">
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-users-gear fa-2x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-slate-900">CRM de Alunos</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">Saiba quem está treinando e quem sumiu. Envie mensagens automáticas de motivação.</p>
+                    <a href="#contato" class="text-blue-600 font-black text-sm uppercase flex items-center gap-2 hover:gap-4 transition-all text-center">Reter Alunos <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <!-- App Próprio -->
+                <div class="solucao-card bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover group text-left" data-cat="digital">
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-mobile-screen fa-2x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-blue-900">Sua Marca nas Lojas</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">Tenha um app com seu nome e logo na Apple e Google Play para seus alunos baixarem.</p>
+                    <a href="#contato" class="text-blue-600 font-black text-sm uppercase flex items-center gap-2 hover:gap-4 transition-all text-center text-center">Ver App <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <!-- Gestão Nutricional -->
+                <div class="solucao-card bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover group text-left" data-cat="prescricao">
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-apple-whole fa-2x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-blue-900">Suporte Nutricional</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">Integre planos alimentares ou diários de macros para oferecer uma consultoria 360º.</p>
+                    <a href="#contato" class="text-blue-600 font-black text-sm uppercase flex items-center gap-2 hover:gap-4 transition-all text-center text-center">Gerir Dieta <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <!-- Financeiro & Dash -->
+                <div class="solucao-card bg-white p-8 rounded-3xl shadow-sm border border-slate-200/60 card-hover group text-left" data-cat="financeiro">
+                    <div class="text-blue-600 mb-6 bg-blue-50 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                        <i class="fa-solid fa-chart-pie fa-2x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-blue-900">Dashboard de Lucro</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">Métricas de LTV, faturamento por plano e projeção de ganhos para os próximos meses.</p>
+                    <a href="#contato" class="text-blue-600 font-black text-sm uppercase flex items-center gap-2 hover:gap-4 transition-all text-center text-center">Ver Métricas <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+
+                <!-- Periodização AI -->
+                <div class="solucao-card bg-slate-900 p-8 rounded-3xl shadow-xl border border-slate-700 card-hover group text-left" data-cat="prescricao">
+                    <div class="text-white mb-6 bg-slate-800 w-16 h-16 flex items-center justify-center rounded-2xl group-hover:bg-white group-hover:text-slate-900 transition-all duration-300">
+                        <i class="fa-solid fa-brain fa-2x"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3 text-white">Periodização Assistida</h3>
+                    <p class="text-slate-400 text-sm leading-relaxed mb-6">Nossa AI sugere aumentos de carga baseadas no histórico de registro de cada aluno.</p>
+                    <a href="#contato" class="text-white font-black text-sm uppercase flex items-center gap-2 hover:gap-4 transition-all text-center text-center">Ver Insights <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Diferencial Sob Medida -->
+    <section id="personalizado" class="py-28 bg-slate-900 text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-5 pointer-events-none text-center">
+            <svg width="100%" height="100%" fill="none" viewBox="0 0 400 400" xmlns="http://www.sum.org/2000/svg">
+                <circle cx="200" cy="200" r="100" stroke="white" stroke-width="2"/>
+                <circle cx="200" cy="200" r="150" stroke="white" stroke-width="2"/>
+            </svg>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div class="mb-24">
+                <span class="bg-blue-600 text-white text-xs font-black px-5 py-2 rounded-full uppercase tracking-widest border border-blue-500 shadow-lg text-center">Especialistas em Fitness Tech</span>
+                <h2 class="text-4xl md:text-6xl font-black mt-8 mb-6 leading-tight tracking-tighter text-center">O Sistema que Vende sua <br>Consultoria enquanto você Treina.</h2>
+                <p class="text-slate-400 text-xl max-w-2xl mx-auto leading-relaxed text-center">Não entregamos apenas um app de treinos. Entregamos a máquina de vendas que coloca sua consultoria em um patamar profissional de escala.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left text-center md:text-left">
+                <div class="bg-white/5 backdrop-blur-md p-10 rounded-[2.5rem] border border-white/10 hover:bg-white/10 transition group text-center md:text-left">
+                    <div class="bg-white text-blue-900 w-16 h-16 rounded-2xl flex items-center justify-center mb-8 text-3xl font-black shadow-xl group-hover:scale-110 transition duration-300 mx-auto md:mx-0 text-center">1</div>
+                    <h3 class="text-2xl font-bold mb-4">Experiência Profissional</h3>
+                    <p class="text-slate-400 leading-relaxed font-medium">Seu aluno terá o melhor app do mercado para registrar cargas, sets e ver sua evolução real no gráfico.</p>
+                </div>
+                <div class="bg-white/5 backdrop-blur-md p-10 rounded-[2.5rem] border border-white/10 hover:bg-white/10 transition group text-center md:text-left text-center md:text-left">
+                    <div class="bg-white text-blue-900 w-16 h-16 rounded-2xl flex items-center justify-center mb-8 text-3xl font-black shadow-xl group-hover:scale-110 transition duration-300 mx-auto md:mx-0 text-center">2</div>
+                    <h3 class="text-2xl font-bold mb-4">Zero Burocracia</h3>
+                    <p class="text-slate-400 leading-relaxed font-medium">Pagamentos, renovações e entrega de treinos automáticos. Foque apenas no feedback técnico.</p>
+                </div>
+                <div class="bg-orange-600 p-10 rounded-[2.5rem] border border-orange-400 shadow-[0_20px_50px_rgba(249,115,22,0.4)] transition group relative text-center md:text-left">
+                    <div class="bg-white text-orange-600 w-16 h-16 rounded-2xl flex items-center justify-center mb-8 text-3xl font-black shadow-xl group-hover:scale-110 transition duration-300 mx-auto md:mx-0 text-center">3</div>
+                    <h3 class="text-2xl font-bold mb-4 text-white">Setup FastTrack</h3>
+                    <p class="text-white leading-relaxed font-bold">Importamos seus alunos de planilhas ou outros apps em até 24 horas.</p>
+                </div>
+            </div>
+            
+            <div class="mt-20 text-center">
+                <a href="#contato" class="inline-block bg-white text-blue-950 font-black py-6 px-16 rounded-3xl hover:bg-slate-100 transition shadow-2xl text-xl transform hover:-translate-y-1 active:scale-95 shadow-white/10 text-center text-center">
+                    ESCALAR MINHA CONSULTORIA AGORA
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Calculadora de ROI Fitness -->
+    <section class="py-28 bg-white text-center">
+        <div class="max-w-4xl mx-auto px-4">
+            <h2 class="text-4xl font-black text-slate-900 mb-6 tracking-tight text-center">Quanto dinheiro você perde prescrevendo treinos manual?</h2>
+            <p class="text-slate-500 mb-12 text-lg text-center">Descubra o valor financeiro do tempo que você recupera ao automatizar sua consultoria com a SoftGestão Personal.</p>
+            
+            <div class="bg-slate-50 p-10 rounded-[2.5rem] border-2 border-dashed border-slate-200">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 text-left">
+                    <div>
+                        <label class="block text-xs font-black uppercase text-slate-400 mb-3 tracking-widest text-left">Número de Alunos Atuais</label>
+                        <input type="number" id="roi-students" value="30" class="w-full px-6 py-4 rounded-xl border-2 border-slate-100 outline-none focus:border-blue-700 font-bold">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-black uppercase text-slate-400 mb-3 tracking-widest text-left">Valor da sua Hora Técnica (R$)</label>
+                        <input type="number" id="roi-hour-val" value="100" class="w-full px-6 py-4 rounded-xl border-2 border-slate-100 outline-none focus:border-blue-700 font-bold">
+                    </div>
+                </div>
+                <button onclick="calculateROI()" class="bg-blue-600 text-white font-black py-4 px-10 rounded-xl hover:bg-blue-700 transition mb-10 uppercase tracking-tighter text-center">Calcular Valor do meu Tempo</button>
+                
+                <div id="roi-result" class="hidden text-center">
+                    <p class="text-slate-500 font-bold uppercase text-xs tracking-[0.2em] mb-2 text-center">Valor da Produtividade Recuperada / Ano:</p>
+                    <p class="text-5xl font-black text-emerald-600 mb-8 text-center" id="roi-value">R$ 0,00</p>
+                    <a href="#contato" class="bg-orange-500 text-white font-black py-4 px-8 rounded-xl hover:bg-orange-600 transition shadow-lg text-center uppercase text-center">Quero focar na escala agora</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Simulador Visual Fitness -->
+    <section id="beneficios" class="py-28 bg-slate-50 overflow-hidden text-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col items-center gap-16">
+                <!-- Simulador Visual Dashboard preview -->
+                <div class="w-full max-w-4xl relative mx-auto">
+                    <div class="absolute -inset-10 bg-blue-800/10 rounded-full blur-[100px]"></div>
+                    <div class="relative rounded-[2.5rem] shadow-[0_60px_100px_-20px_rgba(0,0,0,0.25)] overflow-hidden border border-slate-200 bg-white text-center">
+                        <div class="bg-slate-100 px-8 py-5 flex items-center gap-5 border-b border-slate-200 text-center">
+                           <div class="flex gap-2">
+                               <div class="w-3.5 h-3.5 rounded-full bg-red-400"></div>
+                               <div class="w-3.5 h-3.5 rounded-full bg-yellow-400"></div>
+                               <div class="w-3.5 h-3.5 rounded-full bg-green-400"></div>
+                           </div>
+                           <div class="flex-1 bg-white rounded-xl border border-slate-200 py-2 px-5 text-[11px] text-slate-400 font-mono tracking-tight flex justify-between items-center text-left">
+                               <span>softgestaopersonal.com.br/meu-app-exclusivo</span>
+                               <i class="fa-solid fa-lock text-orange-800 opacity-60"></i>
+                           </div>
+                        </div>
+                        <div class="min-h-[350px] md:min-h-[450px] bg-white relative text-center">
+                            <img src="https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop" alt="Ambiente de academia profissional e equipamentos modernos" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-slate-900/10 text-center"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="w-full max-w-4xl mx-auto text-center">
+                    <h2 class="text-4xl md:text-5xl font-black text-slate-900 mb-8 leading-tight tracking-tight text-center text-center text-center">Tecnologia que <br><span class="text-blue-600">Sua Consultoria Confia</span></h2>
+                    <p class="text-xl text-slate-600 mb-16 leading-relaxed font-medium text-center text-center text-center">Unimos facilidade técnica para você prescrever com uma experiência de alta performance para o aluno treinar.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left text-center md:text-left text-center md:text-left">
+                        <div class="flex flex-col items-center md:items-start gap-6 group text-center md:text-left text-center md:text-left">
+                            <div class="bg-blue-600 text-white p-5 rounded-[1.25rem] shadow-xl shadow-blue-200 group-hover:rotate-6 transition duration-300 text-center">
+                                <i class="fa-solid fa-dumbbell text-2xl"></i>
+                            </div>
+                            <div class="text-center md:text-left">
+                                <h4 class="text-xl font-bold text-slate-900 mb-2">Prescrição Ágil</h4>
+                                <p class="text-slate-500 leading-relaxed text-sm md:text-base">Mantenha a qualidade técnica com ferramentas de clonagem e ajustes rápidos de periodização.</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center md:items-start gap-6 group text-center md:text-left text-center md:text-left">
+                            <div class="bg-blue-600 text-white p-5 rounded-[1.25rem] shadow-xl shadow-blue-200 group-hover:rotate-6 transition duration-300 text-center">
+                                <i class="fa-solid fa-chart-simple text-2xl"></i>
+                            </div>
+                            <div class="text-center md:text-left">
+                                <h4 class="text-xl font-bold text-slate-900 mb-2">Evolução de Cargas</h4>
+                                <p class="text-slate-500 leading-relaxed text-sm md:text-base">Acompanhe a progressão de força de cada aluno através de gráficos automatizados pelo sistema.</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col items-center md:items-start gap-6 group text-center md:text-left text-center md:text-left">
+                            <div class="bg-slate-900 text-white p-5 rounded-[1.25rem] shadow-xl shadow-slate-300 group-hover:rotate-6 transition duration-300 text-center">
+                                <i class="fa-solid fa-wallet text-2xl"></i>
+                            </div>
+                            <div class="text-center md:text-left">
+                                <h4 class="text-xl font-bold text-slate-900 mb-2">Checkout Integrado</h4>
+                                <p class="text-slate-500 leading-relaxed text-sm md:text-base">Receba o valor das suas consultorias direto na conta com baixa automática e renovação de planos.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Depoimentos Fitness -->
+    <section class="py-28 bg-white border-y border-slate-200/60 text-center">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 text-center">
+                <h2 class="text-4xl font-black text-slate-900 mb-4 tracking-tighter text-center text-center">Treinadores que Escalaram o Negócio</h2>
+                <p class="text-slate-500 text-xl font-medium tracking-tight text-center text-center text-center">Veja quem já revolucionou a consultoria com o SoftGestão Personal.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 text-center text-center text-center text-center">
+                <!-- Depoimento 1 -->
+                <div class="bg-slate-50 p-10 rounded-[2.5rem] shadow-sm border border-slate-200/60 flex flex-col hover:shadow-xl transition-shadow text-left">
+                    <div class="flex text-yellow-400 mb-6 text-xl"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="text-slate-600 italic mb-10 flex-1 leading-relaxed">"O app próprio mudou meu patamar. Os alunos me veem como uma marca séria agora, e as renovações automáticas garantem meu mês."</p>
+                    <div class="flex items-center gap-5 border-t border-slate-200 pt-8 text-left">
+                        <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-800 font-black text-xl text-center text-center">PA</div>
+                        <div><p class="font-black text-slate-900">Pedro A.</p><p class="text-slate-500 text-xs font-black uppercase tracking-widest">Personal de Atletas</p></div>
+                    </div>
+                </div>
+                <!-- Depoimento 2 (Destaque) -->
+                <div class="bg-white p-10 rounded-[2.5rem] shadow-xl border-2 border-blue-600 flex flex-col lg:scale-105 z-10 relative text-left">
+                    <div class="absolute -top-4 left-1/2 -translate-x-1/2 bg-blue-600 text-white text-[10px] font-black px-6 py-1 rounded-full uppercase tracking-[0.2em] text-center text-center">Destaque</div>
+                    <div class="flex text-yellow-400 mb-6 text-xl"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="text-slate-700 italic mb-10 flex-1 leading-relaxed font-medium">"Saí de 15 alunos presenciais para 120 alunos na consultoria online usando a automação de treinos e o funil de vendas. Liberdade real!"</p>
+                    <div class="flex items-center gap-5 border-t border-slate-200 pt-8 text-left">
+                        <div class="w-14 h-14 bg-blue-600 rounded-full flex items-center justify-center text-white font-black text-xl shadow-lg text-center text-center">RV</div>
+                        <div><p class="font-black text-slate-900 text-lg">Roberta V.</p><p class="text-slate-500 text-xs font-black uppercase tracking-widest">Coach Online</p></div>
+                    </div>
+                </div>
+                <!-- Depoimento 3 -->
+                <div class="bg-slate-50 p-10 rounded-[2.5rem] shadow-sm border border-slate-200/60 flex flex-col hover:shadow-xl transition-shadow text-left">
+                    <div class="flex text-yellow-400 mb-6 text-xl"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="text-slate-600 italic mb-10 flex-1 leading-relaxed">"O controle de periodização assistida por AI é fantástico. O sistema me avisa quando o aluno estagna e sugere o ajuste na carga."</p>
+                    <div class="flex items-center gap-5 border-t border-slate-200 pt-8 text-left">
+                        <div class="w-14 h-14 bg-slate-900 rounded-full flex items-center justify-center text-white font-black text-xl text-center text-center text-center text-center">GS</div>
+                        <div><p class="font-black text-slate-900">Gabriel S.</p><p class="text-slate-500 text-xs font-black uppercase tracking-widest">Especialista em Força</p></div>
+                    </div>
+                </div>
+                <!-- Depoimento 4 -->
+                <div class="bg-slate-50 p-10 rounded-[2.5rem] shadow-sm border border-slate-200/60 flex flex-col hover:shadow-xl transition-shadow text-left">
+                    <div class="flex text-yellow-400 mb-6 text-xl"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="text-slate-600 italic mb-10 flex-1 leading-relaxed">"Perdia muito tempo enviando boletos e cobrando atrasados. Hoje o financeiro roda sozinho e o aluno paga via Pix mensal."</p>
+                    <div class="flex items-center gap-5 border-t border-slate-200 pt-8 text-left">
+                        <div class="w-14 h-14 bg-emerald-100 rounded-full flex items-center justify-center text-emerald-800 font-black text-xl text-center text-center text-center text-center">FC</div>
+                        <div><p class="font-black text-slate-900">Fábio C.</p><p class="text-slate-500 text-xs font-black uppercase tracking-widest">Personal de Studio</p></div>
+                    </div>
+                </div>
+                <!-- Depoimento 5 -->
+                <div class="bg-slate-50 p-10 rounded-[2.5rem] shadow-sm border border-slate-200/60 flex flex-col hover:shadow-xl transition-shadow text-left">
+                    <div class="flex text-yellow-400 mb-6 text-xl"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="text-slate-600 italic mb-10 flex-1 leading-relaxed">"O histórico de fotos de evolução é o que mais engaja meus alunos. Eles recebem o comparativo de antes e depois e se motivam."</p>
+                    <div class="flex items-center gap-5 border-t border-slate-200 pt-8 text-left">
+                        <div class="w-14 h-14 bg-orange-100 rounded-full flex items-center justify-center text-orange-800 font-black text-xl text-center text-center text-center text-center">LP</div>
+                        <div><p class="font-black text-slate-900">Lucas P.</p><p class="text-slate-500 text-xs font-black uppercase tracking-widest">Emagrecimento Feminino</p></div>
+                    </div>
+                </div>
+                <!-- Depoimento 6 -->
+                <div class="bg-slate-50 p-10 rounded-[2.5rem] shadow-sm border border-slate-200/60 flex flex-col hover:shadow-xl transition-shadow text-left">
+                    <div class="flex text-yellow-400 mb-6 text-xl"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="text-slate-600 italic mb-10 flex-1 leading-relaxed">"Migrei de outra plataforma famosa e a velocidade de resposta do suporte do CondoMaster é infinitamente melhor. Sinto-me valorizado."</p>
+                    <div class="flex items-center gap-5 border-t border-slate-200 pt-8 text-left">
+                        <div class="w-14 h-14 bg-pink-100 rounded-full flex items-center justify-center text-pink-600 font-black text-xl text-center text-center text-center text-center">BS</div>
+                        <div><p class="font-black text-slate-900">Beatriz S.</p><p class="text-slate-500 text-xs font-black uppercase tracking-widest">Consultora de Yoga</p></div>
+                    </div>
+                </div>
+                <!-- Depoimento 7 -->
+                <div class="bg-slate-50 p-10 rounded-[2.5rem] shadow-sm border border-slate-200/60 flex flex-col hover:shadow-xl transition-shadow text-left">
+                    <div class="flex text-yellow-400 mb-6 text-xl"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="text-slate-600 italic mb-10 flex-1 leading-relaxed">"O site de vendas que ganhei é impecável. Coloco o link na bio do Instagram e as vendas caem direto no meu checkout."</p>
+                    <div class="flex items-center gap-5 border-t border-slate-200 pt-8 text-left">
+                        <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-black text-xl text-center text-center text-center text-center">FA</div>
+                        <div><p class="font-black text-slate-900">Fábio A.</p><p class="text-slate-500 text-xs font-black uppercase tracking-widest">Hipertrofia Online</p></div>
+                    </div>
+                </div>
+                <!-- Depoimento 8 -->
+                <div class="bg-slate-50 p-10 rounded-[2.5rem] shadow-sm border border-slate-200/60 flex flex-col hover:shadow-xl transition-shadow text-left">
+                    <div class="flex text-yellow-400 mb-6 text-xl"><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i></div>
+                    <p class="text-slate-600 italic mb-10 flex-1 leading-relaxed">"Gerenciar minha agenda de alunos presenciais junto com a consultoria online ficou simples. O sistema centraliza tudo."</p>
+                    <div class="flex items-center gap-5 border-t border-slate-200 pt-8 text-left">
+                        <div class="w-14 h-14 bg-slate-900 rounded-full flex items-center justify-center text-white font-black text-xl text-center text-center text-center text-center text-center text-center">LM</div>
+                        <div><p class="font-black text-slate-900">Lucas M.</p><p class="text-slate-500 text-xs font-black uppercase tracking-widest">Personal Master</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tira-Dúvidas Personal -->
+    <section class="py-28 bg-white text-center">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-20 text-center text-center text-center">
+                <h2 class="text-4xl font-black text-slate-900 mb-4 tracking-tighter text-center text-center text-center">Tira-Dúvidas do Treinador</h2>
+                <p class="text-slate-500 text-lg font-medium text-center text-center text-center">Respostas rápidas para sua transição para o digital.</p>
+            </div>
+            <div class="space-y-6 text-left text-left text-left text-left">
+                <div class="faq-item border border-slate-200 rounded-3xl p-8 hover:bg-slate-50 transition cursor-pointer group" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-center"><h4 class="text-lg font-black text-slate-900 group-hover:text-blue-600 transition">Como recebo os pagamentos das minhas consultorias?</h4><div class="faq-icon transition-transform duration-300 text-blue-600"><i class="fa-solid fa-chevron-down"></i></div></div>
+                    <div class="faq-answer text-slate-600 mt-4 text-sm md:text-base">Os pagamentos são processados via checkout integrado (Cartão ou Pix). O sistema identifica a transação e repassa automaticamente para sua conta cadastrada, garantindo fluxo de caixa sem conferência manual.</div>
+                </div>
+                <div class="faq-item border border-slate-200 rounded-3xl p-8 hover:bg-slate-50 transition cursor-pointer group" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-center"><h4 class="text-lg font-black text-slate-900 group-hover:text-blue-600 transition">Consigo limitar o número de alunos por plano?</h4><div class="faq-icon transition-transform duration-300 text-blue-600"><i class="fa-solid fa-chevron-down"></i></div></div>
+                    <div class="faq-answer text-slate-600 mt-4 text-sm md:text-base text-left text-left">Sim! Você tem total controle sobre suas vagas. É possível configurar limites de alunos para cada tipo de plano ou consultoria, evitando sobrecarga e garantindo a qualidade do seu atendimento.</div>
+                </div>
+                <div class="faq-item border border-slate-200 rounded-3xl p-8 hover:bg-slate-50 transition cursor-pointer group" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-center"><h4 class="text-lg font-black text-slate-900 group-hover:text-blue-600 transition">O sistema emite alertas de vencimento para mim?</h4><div class="faq-icon transition-transform duration-300 text-blue-600"><i class="fa-solid fa-chevron-down"></i></div></div>
+                    <div class="faq-answer text-slate-600 mt-4 text-sm md:text-base text-left text-left">Com certeza. O SoftGestão Personal monitora todos os planos e envia notificações push e relatórios diários mostrando quem está próximo do vencimento e quem renovou automaticamente.</div>
+                </div>
+                <div class="faq-item border border-slate-200 rounded-3xl p-8 hover:bg-slate-50 transition cursor-pointer group" onclick="toggleFaq(this)">
+                    <div class="flex justify-between items-center"><h4 class="text-lg font-black text-slate-900 group-hover:text-blue-600 transition">Posso personalizar o app com minha logomarca?</h4><div class="faq-icon transition-transform duration-300 text-blue-600"><i class="fa-solid fa-chevron-down"></i></div></div>
+                    <div class="faq-answer text-slate-600 mt-4 text-sm md:text-base text-left text-left text-left text-left">Sim. No plano Premium, entregamos o aplicativo com sua identidade visual, cores e logo nas lojas (App Store e Play Store), gerando autoridade e exclusividade para sua marca.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contato com Qualificação Fitness -->
+    <section id="contato" class="py-28 bg-slate-900 text-center text-center">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="bg-white rounded-[3rem] shadow-[0_40px_100px_-20px_rgba(0,0,0,0.5)] overflow-hidden relative border border-white/10 text-center">
+                <div class="bg-blue-600 p-16 text-white relative text-center text-center text-center text-center">
+                    <div class="absolute -top-10 -left-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+                    <h2 class="text-4xl md:text-5xl font-black mb-6 tracking-tight leading-tight text-center text-center text-center text-center">O Seu Novo Império Fitness Começa Agora</h2>
+                    <p class="text-blue-100 text-xl opacity-90 font-medium text-center text-center text-center text-center">Ganhe o seu <strong>Site de Vendas de Consultoria</strong> garantindo sua demonstração hoje.</p>
+                </div>
+                <div class="p-16 text-center text-center text-center text-center">
+                    <form onsubmit="handleSubmit(event)" class="space-y-8 text-left text-left text-left text-left text-left">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left text-left text-left text-left text-left text-left text-left text-left text-left text-left text-left">
+                            <div class="space-y-2 text-left text-left text-left text-left text-left text-left text-left">
+                                <label class="text-xs font-black uppercase text-slate-400 ml-2 tracking-[0.2em] text-left">Seu Nome</label>
+                                <input type="text" placeholder="Ex: Roberto Mendes" required class="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:border-blue-800 font-bold">
+                            </div>
+                            <div class="space-y-2 text-left text-left text-left text-left text-left text-left text-left text-left">
+                                <label class="text-xs font-black uppercase text-slate-400 ml-2 tracking-[0.2em] text-left text-left text-left text-left">WhatsApp para Demonstração</label>
+                                <input type="tel" placeholder="(11) 99999-9999" required class="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:border-blue-800 font-bold">
+                            </div>
+                        </div>
+                        <div class="space-y-2 text-left text-left text-left text-left text-left text-left text-left">
+                            <label class="text-xs font-black uppercase text-slate-400 ml-2 tracking-[0.2em] text-left text-left text-left text-left text-left">Nome da sua Marca / Consultoria</label>
+                            <input type="text" placeholder="Ex: Mendes High Performance" required class="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:border-blue-800 font-bold">
+                        </div>
+                        
+                        <!-- Qualificação de Lead Fitness -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left text-left text-left text-left text-left text-left text-left text-left text-left text-left text-left text-left text-left">
+                            <div class="space-y-2 text-left text-left text-left text-left text-left text-left text-left">
+                                <label class="text-xs font-black uppercase text-slate-400 ml-2 tracking-[0.2em] text-left text-left text-left">Número de Alunos?</label>
+                                <select class="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:border-blue-800 font-bold text-slate-700 appearance-none text-left text-left text-left text-left">
+                                    <option>Estou começando agora</option>
+                                    <option>Até 20 alunos</option>
+                                    <option>21 a 50 alunos</option>
+                                    <option>Acima de 50 alunos</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2 text-left text-left text-left text-left text-left text-left text-left">
+                                <label class="text-xs font-black uppercase text-slate-400 ml-2 tracking-[0.2em] text-left text-left text-left text-left">Foco do Negócio?</label>
+                                <select class="w-full px-6 py-5 bg-slate-50 border-2 border-slate-100 rounded-[1.5rem] outline-none focus:border-blue-800 font-bold text-slate-700 appearance-none text-left text-left text-left text-left text-left">
+                                    <option>Personal Trainer Presencial</option>
+                                    <option>Consultoria Online (O.C.)</option>
+                                    <option>Misto (Híbrido)</option>
+                                    <option>Studio / Micro-Gym</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center gap-3 bg-blue-50 p-4 rounded-xl border border-blue-100 text-left text-left text-left">
+                            <input type="checkbox" checked class="w-5 h-5 text-blue-800 rounded">
+                            <span class="text-sm font-bold text-blue-900 text-left">Sim! Quero garantir o Site Grátis e o Guia de Retenção de Alunos 2.0.</span>
+                        </div>
+                        
+                        <div id="feedback-container"></div>
+                        
+                        <div class="space-y-4 text-center text-center text-center text-center">
+                            <button type="submit" class="w-full bg-orange-600 text-white font-black py-6 rounded-[1.5rem] hover:bg-orange-700 transition shadow-[0_15px_40px_rgba(249,115,22,0.4)] text-xl active:scale-95 duration-200 text-center text-center text-center text-center text-center">SOLICITAR DEMONSTRAÇÃO + SITE GRÁTIS</button>
+                            
+                            <!-- Garantia -->
+                            <div class="flex items-center justify-center gap-2 text-orange-800 font-black text-xs md:text-sm uppercase tracking-tight text-center text-center text-center text-center text-center text-center text-center text-center">
+                                <i class="fa-solid fa-certificate text-lg"></i>
+                                <span>Garantia de Entrega: Se não entregarmos seu sistema funcionando em 7 dias úteis, devolvemos seu investimento.</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 text-white pt-32 pb-32 md:pb-16 text-center text-center text-center text-center text-center text-center text-center text-center text-center">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex items-center justify-center mb-10 group italic text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center"><i class="fa-solid fa-bolt text-blue-700 mr-3 text-4xl group-hover:scale-110 transition-transform text-center text-center text-center text-center text-center text-center"></i><span class="font-black text-4xl uppercase text-center text-center text-center text-center text-center text-center text-center text-center">SoftGestão Personal</span></div>
+            <div class="flex justify-center space-x-12 mb-16 text-center text-center text-center text-center text-center text-center">
+                <a href="mailto:comercial.softgestao@gmail.com" class="text-slate-500 hover:text-blue-500 transition-all transform hover:scale-125 text-center text-center text-center text-center text-center text-center text-center text-center text-center"><i class="fa-solid fa-envelope fa-2x text-center"></i></a>
+                <a href="https://wa.me/5511932186193" target="_blank" class="text-slate-500 hover:text-blue-500 transition-all transform hover:scale-125 text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center"><i class="fa-brands fa-whatsapp fa-2x text-center"></i></a>
+                <a href="https://www.instagram.com/soft.gestao.desenvolvimento" target="_blank" class="text-slate-500 hover:text-pink-600 transition-all transform hover:scale-125 text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center"><i class="fa-brands fa-instagram fa-2x text-center"></i></a>
+            </div>
+            <p class="font-bold text-slate-600 text-center text-center text-center text-center text-center text-center text-center text-center text-center">© 2025 SoftGestão Personal - Tecnologia para Performance Humana. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Barra Fixa Mobile -->
+    <div class="md:hidden fixed bottom-0 left-0 w-full bg-white/95 backdrop-blur-lg border-t border-slate-100 z-[100] px-4 py-3 flex gap-4 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
+        <a href="https://wa.me/5511932186193" class="flex-1 bg-emerald-500 text-white font-black py-4 rounded-2xl flex items-center justify-center gap-2 text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center"><i class="fa-brands fa-whatsapp fa-xl text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center"></i> WHATSAPP</a>
+        <a href="#contato" class="flex-1 bg-blue-900 text-white font-black py-4 rounded-2xl text-center text-center text-center text-center text-center text-center text-center text-center">PROPOSTA GRÁTIS</a>
+    </div>
+
+    <!-- Botão WhatsApp Desktop -->
+    <a href="https://wa.me/5511932186193" target="_blank" class="hidden md:flex fixed bottom-10 right-10 bg-emerald-500 text-white p-6 rounded-[2rem] shadow-2xl hover:bg-emerald-600 transition-all z-50 items-center justify-center w-20 h-20 whatsapp-btn group text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center">
+        <i class="fa-brands fa-whatsapp fa-3x group-hover:scale-110 transition-transform text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center"></i>
+        <span class="absolute right-full mr-4 bg-white text-slate-900 px-4 py-2 rounded-xl text-xs font-black shadow-xl whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity">Fale com Consultor PT</span>
+    </a>
+
+    <!-- Pop-up de Intenção de Saída -->
+    <div id="exit-popup" class="fixed inset-0 z-[100] items-center justify-center p-4 bg-slate-900/80 backdrop-blur-sm text-center text-center text-center text-center text-center text-center text-center text-center text-center">
+        <div class="bg-white max-w-lg w-full rounded-[3rem] p-12 text-center relative text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center">
+            <button onclick="closeExitPopup()" class="absolute top-6 right-6 text-slate-300 hover:text-slate-900 text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center"><i class="fa-solid fa-xmark fa-2x text-center"></i></button>
+            <div class="bg-blue-100 text-blue-900 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-8 text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center"><i class="fa-solid fa-rocket text-3xl text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center"></i></div>
+            <h3 class="text-3xl font-black text-slate-900 mb-4 text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center">Aguarde! O seu faturamento pode decolar.</h3>
+            <p class="text-slate-500 mb-10 font-medium text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center">Garantindo sua demonstração agora, mantemos o <strong>Site Gratuito</strong> mesmo se as vagas do mês esgotarem.</p>
+            <a href="#contato" onclick="closeExitPopup()" class="block w-full bg-blue-900 text-white font-black py-5 rounded-2xl hover:bg-black transition shadow-xl text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center text-center">GARANTIR MEU SITE PERSONAL</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleMenu() { document.getElementById('mobile-menu').classList.toggle('hidden'); }
+        function toggleFaq(el) { el.classList.toggle('active'); }
+
+        // Cronômetro
+        function updateTimer() {
+            const now = new Date();
+            const end = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
+            const diff = end - now;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const mins = Math.floor((diff / (1000 * 60)) % 60);
+            const secs = Math.floor((diff / 1000) % 60);
+            document.getElementById('promo-timer').innerText = `Expira em: ${days}d ${hours}h ${mins}m ${secs}s`;
+        }
+        setInterval(updateTimer, 1000);
+
+        // Filtro de Soluções
+        function filterSolucoes(cat) {
+            const cards = document.querySelectorAll('.solucao-card');
+            const btns = document.querySelectorAll('.filter-btn');
+            btns.forEach(b => b.classList.remove('active'));
+            if(event) event.target.classList.add('active');
+            
+            cards.forEach(c => {
+                if(cat === 'todos' || c.getAttribute('data-cat') === cat) {
+                    c.style.display = 'block';
+                } else {
+                    c.style.display = 'none';
+                }
+            });
         }
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        // Prova Social
+        const leads = [
+            { name: "Mendes High Performance - SP", time: "acabou de garantir o site grátis" },
+            { name: "Coach Rodrigo F. - RJ", time: "ativou a recorrência automática" },
+            { name: "Fit Team Consultoria - PR", time: "solicitou migração de alunos" }
+        ];
+        let leadIndex = 0;
+        function showSocialProof() {
+            const sp = document.getElementById('social-proof');
+            const spText = document.getElementById('sp-text');
+            const spTime = document.getElementById('sp-time');
+            if(!sp || !spText || !spTime) return;
+            
+            spText.innerText = leads[leadIndex].name;
+            spTime.innerText = leads[leadIndex].time;
+            sp.classList.remove('hidden');
+            setTimeout(() => { sp.style.opacity = '1'; sp.style.transform = 'translateY(0)'; }, 100);
+            setTimeout(() => {
+                sp.style.opacity = '0'; sp.style.transform = 'translateY(10px)';
+                leadIndex = (leadIndex + 1) % leads.length;
+            }, 5000);
+        }
+        setInterval(showSocialProof, 15000);
+
+        // Calculadora de ROI Fitness
+        function calculateROI() {
+            const students = document.getElementById('roi-students').value;
+            const hourVal = document.getElementById('roi-hour-val').value;
+            // Cálculo: Alunos * 2 horas economizadas/semana em prescrição * valor hora * 52 semanas
+            const value = (students * 2 * hourVal) * 52;
+            document.getElementById('roi-value').innerText = value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            document.getElementById('roi-result').classList.remove('hidden');
+        }
+
+        // Intenção de Saída
+        let popupShown = false;
+        document.addEventListener("mouseout", e => { if (!popupShown && e.clientY < 0) { document.getElementById('exit-popup').style.display = 'flex'; popupShown = true; } });
+        function closeExitPopup() { document.getElementById('exit-popup').style.display = 'none'; }
+
+        function handleSubmit(event) {
+            event.preventDefault();
+            const btn = event.target.querySelector('button');
+            const feedback = document.getElementById('feedback-container');
+            const originalText = btn.innerText;
+            btn.innerHTML = '<i class=\"fa-solid fa-circle-notch fa-spin mr-3 text-center text-center text-center text-center text-center\"></i> PREPARANDO PERFORMANCE...';
+            btn.disabled = true;
+            setTimeout(() => {
+                feedback.innerHTML = `<div class=\"bg-blue-600 text-white p-6 rounded-2xl mb-6 shadow-2xl flex items-center gap-4 animate-bounce text-center text-center text-center text-center text-center text-center text-center text-center\"><i class=\"fa-solid fa-circle-check text-2xl text-center text-center text-center text-center text-center text-center text-center text-center\"></i><span class=\"font-black text-center text-center text-center text-center text-center\">RECEBEMOS! Seu Onboarding está garantido. Um especialista em escala para personals falará com você agora.</span></div>`;
+                event.target.reset();
+                btn.innerText = 'DEMO AGENDADA COM SUCESSO';
+                btn.classList.replace('bg-orange-600', 'bg-blue-600');
+                setTimeout(() => { feedback.innerHTML = ''; btn.innerText = originalText; btn.disabled = false; btn.classList.replace('bg-blue-600', 'bg-orange-600'); }, 6000);
+            }, 2000);
+        }
     </script>
 </body>
 </html>
