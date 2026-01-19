@@ -1,0 +1,1067 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PERSONAL MASTER - Gestão Fitness</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#ea580c">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Personal Master">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/2936/2936886.png">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel para compilar JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- PWA: Manifest Implementation -->
+    <script>
+        {
+            const manifestData = {
+                "name": "PERSONAL MASTER - Gestão Fitness",
+                "short_name": "PersonalMaster",
+                "start_url": ".",
+                "display": "standalone",
+                "background_color": "#f8fafc",
+                "theme_color": "#ea580c",
+                "description": "Sistema completo para personal trainers e consultoria fitness.",
+                "icons": [
+                    {
+                        "src": "https://cdn-icons-png.flaticon.com/512/2936/2936886.png",
+                        "sizes": "512x512",
+                        "type": "image/png",
+                        "purpose": "any maskable"
+                    }
+                ]
+            };
+            const stringManifest = JSON.stringify(manifestData);
+            const blob = new Blob([stringManifest], {type: 'application/json'});
+            const manifestURL = URL.createObjectURL(blob);
+            const link = document.createElement('link');
+            link.rel = 'manifest';
+            link.href = manifestURL;
+            document.head.appendChild(link);
+        }
+    </script>
+
+    <!-- PWA: Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => { console.log('SW registrado'); })
+                    .catch(err => { console.log('Modo Online ativo.'); });
+            });
+        }
+    </script>
+
+    <!-- Firebase Implementation -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, doc, onSnapshot, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "AIzaSyAIwocJSueMJgzCAEchcChAoOxtiYs93ao",
+            authDomain: "obras-telma-7dd64.firebaseapp.com",
+            projectId: "obras-telma-7dd64",
+            storageBucket: "obras-telma-7dd64.firebasestorage.app",
+            messagingSenderId: "388512826170",
+            appId: "1:388512826170:web:e71762e00146b66ce64603"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        window.db = db;
+        window.auth = auth;
+        window.signInAnonymously = signInAnonymously;
+        window.signInWithCustomToken = signInWithCustomToken;
+        window.onAuthStateChanged = onAuthStateChanged;
+        
+        window.fbCollection = collection;
+        window.fbAddDoc = addDoc;
+        window.fbUpdateDoc = updateDoc;
+        window.fbDeleteDoc = deleteDoc;
+        window.fbDoc = doc;
+        window.fbGetDoc = getDoc;
+        window.fbSetDoc = setDoc;
+        window.fbOnSnapshot = onSnapshot;
+    </script>
+
+    <style>
+        body { font-family: 'Nunito', sans-serif; background-color: #f8fafc; user-select: none; }
+        .bg-pattern-fitness { background-color: #f8fafc; background-image: radial-gradient(#e2e8f0 1px, transparent 1px); background-size: 24px 24px; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ea580c; } 
+        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+        .card-hover { transition: all 0.2s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.1); }
+        
+        .print-area { font-family: 'Arial', sans-serif; color: #000; }
+        .assessment-card { border: 1px solid #e2e8f0; border-radius: 16px; padding: 20px; background: #fff; }
+
+        @media print { 
+            body * { visibility: hidden; } 
+            #print-area-container, #print-area-container * { visibility: visible; } 
+            #print-area-container { position: absolute; left: 0; top: 0; width: 100%; padding: 2cm; background: white; } 
+            .no-print { display: none !important; } 
+            .report-page { border: none !important; box-shadow: none !important; }
+        }
+    </style>
+</head>
+<body class="bg-pattern-fitness text-slate-700">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo, useRef } = React;
+
+        const Security = {
+            encrypt: (data) => {
+                if (typeof data !== 'object') return data;
+                try {
+                    const str = JSON.stringify(data);
+                    return btoa(unescape(encodeURIComponent(str)));
+                } catch (e) { return data; }
+            },
+            decrypt: (encryptedData) => {
+                try {
+                    if (typeof encryptedData !== 'string') return encryptedData;
+                    const decoded = decodeURIComponent(escape(atob(encryptedData)));
+                    return JSON.parse(decoded);
+                } catch (e) { return encryptedData; }
+            }
+        };
+
+        const Toast = ({ message, type, show, onClose }) => {
+            if (!show) return null;
+            const bgClass = type === 'error' ? 'bg-red-500' : (type === 'success' ? 'bg-orange-600' : 'bg-slate-800');
+            return (
+                <div className={`fixed top-4 right-4 ${bgClass} text-white px-6 py-4 rounded-2xl shadow-xl z-[150] flex items-center gap-3 animate-fade-in border-2 border-white/20`}>
+                    <i className={type === 'error' ? "ph ph-warning-circle text-2xl" : "ph ph-check-circle text-2xl"}></i>
+                    <span className="font-bold">{message}</span>
+                    <button onClick={onClose} className="ml-4"><i className="ph ph-x text-lg"></i></button>
+                </div>
+            );
+        };
+
+        const ChartComponent = ({ type, data, options }) => {
+            const chartRef = useRef(null);
+            const canvasRef = useRef(null);
+            useEffect(() => {
+                if (canvasRef.current) {
+                    if (chartRef.current) chartRef.current.destroy();
+                    chartRef.current = new Chart(canvasRef.current, { type, data, options: { responsive: true, maintainAspectRatio: false, ...options } });
+                }
+                return () => { if (chartRef.current) chartRef.current.destroy(); };
+            }, [data, type, options]);
+            return <div className="relative h-full w-full"><canvas ref={canvasRef}></canvas></div>;
+        };
+
+        const BrandLogo = ({ className = "" }) => (
+            <div className={`flex items-center gap-3 ${className}`}>
+                <div className="w-10 h-10 bg-orange-600 rounded-xl flex items-center justify-center text-white shadow-lg rotate-3">
+                    <i className="ph-fill ph-lightning text-2xl"></i>
+                </div>
+                <div>
+                    <h1 className="text-xl font-black tracking-tight text-white leading-none uppercase">PERSONAL<span className="text-amber-500"> MASTER</span></h1>
+                    <p className="text-[9px] text-white/60 font-bold uppercase tracking-widest mt-0.5">Performance & Saúde</p>
+                </div>
+            </div>
+        );
+
+        const Icon = ({ name, size = 20, className = "", weight = "regular" }) => 
+            <i className={`ph ph-${name} ${className}`} style={{ fontSize: size }}></i>;
+
+        const Card = ({ children, className = "", onClick }) => 
+            <div onClick={onClick} className={`bg-white rounded-3xl shadow-sm border border-slate-100 ${className}`}>{children}</div>;
+
+        const formatCurrency = (value) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value || 0);
+
+        // Biblioteca de Exercícios Estática Expandida (40 Exercícios)
+        const EXERCISE_LIBRARY = [
+            // PEITO
+            { id: 1, name: "Supino Reto", muscle: "Peitoral", type: "Força" },
+            { id: 2, name: "Supino Inclinado", muscle: "Peitoral Superior", type: "Força" },
+            { id: 3, name: "Peck Deck (Voador)", muscle: "Peitoral", type: "Isolado" },
+            { id: 4, name: "Crucifixo com Halteres", muscle: "Peitoral", type: "Isolado" },
+            { id: 5, name: "Crossover Polia Alta", muscle: "Peitoral Inferior", type: "Cabo" },
+            // COSTAS
+            { id: 6, name: "Puxada Frontal", muscle: "Dorsais", type: "Força" },
+            { id: 7, name: "Remada Curvada", muscle: "Costas", type: "Livre" },
+            { id: 8, name: "Remada Baixa", muscle: "Costas", type: "Máquina" },
+            { id: 9, name: "Barra Fixa", muscle: "Dorsais", type: "Calistenia" },
+            { id: 10, name: "Levantamento Terra", muscle: "Posterior/Costas", type: "Composto" },
+            { id: 11, name: "Pullover", muscle: "Dorsal/Serrátil", type: "Isolado" },
+            // PERNAS
+            { id: 12, name: "Agachamento Livre", muscle: "Quadríceps", type: "Força" },
+            { id: 13, name: "Leg Press 45", muscle: "Pernas", type: "Máquina" },
+            { id: 14, name: "Cadeira Extensora", muscle: "Quadríceps", type: "Máquina" },
+            { id: 15, name: "Cadeira Flexora", muscle: "Posterior", type: "Máquina" },
+            { id: 16, name: "Mesa Flexora", muscle: "Posterior", type: "Máquina" },
+            { id: 17, name: "Stiff", muscle: "Posterior/Glúteo", type: "Livre" },
+            { id: 18, name: "Cadeira Adutora", muscle: "Adutores", type: "Máquina" },
+            { id: 19, name: "Cadeira Abdutora", muscle: "Glúteo Médio", type: "Máquina" },
+            { id: 20, name: "Elevação Pélvica", muscle: "Glúteos", type: "Força" },
+            { id: 21, name: "Avanço/Passada", muscle: "Pernas", type: "Livre" },
+            // OMBROS
+            { id: 22, name: "Desenvolvimento Halteres", muscle: "Ombros", type: "Força" },
+            { id: 23, name: "Elevação Lateral", muscle: "Ombro Lateral", type: "Isolado" },
+            { id: 24, name: "Elevação Frontal", muscle: "Ombro Anterior", type: "Isolado" },
+            { id: 25, name: "Crucifixo Inverso", muscle: "Ombro Posterior", type: "Isolado" },
+            // BRAÇOS
+            { id: 26, name: "Rosca Direta", muscle: "Bíceps", type: "Barra" },
+            { id: 27, name: "Rosca Alternada", muscle: "Bíceps", type: "Halteres" },
+            { id: 28, name: "Rosca Martelo", muscle: "Braquial", type: "Halteres" },
+            { id: 29, name: "Rosca Scott", muscle: "Bíceps", type: "Banco" },
+            { id: 30, name: "Tríceps Pulley", muscle: "Tríceps", type: "Cabo" },
+            { id: 31, name: "Tríceps Testa", muscle: "Tríceps", type: "Barra" },
+            { id: 32, name: "Tríceps Corda", muscle: "Tríceps", type: "Cabo" },
+            { id: 33, name: "Mergulho Paralelas", muscle: "Tríceps/Peito", type: "Corporal" },
+            // CORE / CARDIO
+            { id: 34, name: "Prancha Abdominal", muscle: "Core", type: "Estático" },
+            { id: 35, name: "Abdominal Supra", muscle: "Abdômen", type: "Solo" },
+            { id: 36, name: "Abdominal Infra", muscle: "Abdômen", type: "Solo" },
+            { id: 37, name: "Corrida Esteira", muscle: "Cardio", type: "Aeróbico" },
+            { id: 38, name: "Bike Ergométrica", muscle: "Cardio", type: "Aeróbico" },
+            { id: 39, name: "Elíptico", muscle: "Cardio", type: "Aeróbico" },
+            { id: 40, name: "Burpees", muscle: "Full Body", type: "Funcional" }
+        ];
+
+        function App() {
+            const [user, setUser] = useState(null);
+            const [isOnline, setIsOnline] = useState(navigator.onLine);
+            const APP_ID_STABLE = "obras-telma-7dd64"; 
+            const [cloudKey, setCloudKey] = useState(null);
+            const [isLoggedIn, setIsLoggedIn] = useState(false);
+            const [isRecovering, setIsRecovering] = useState(false);
+            const [loginData, setLoginData] = useState({ login: '', password: '', save: false });
+            const [recoveryData, setRecoveryData] = useState({ login: '', email: '' });
+            const [newCredentials, setNewCredentials] = useState({ login: '', password: '', recoveryEmail: '' });
+            const [showMaintenanceAlert, setShowMaintenanceAlert] = useState(false);
+            const [exerciseSearch, setExerciseSearch] = useState('');
+            const [reportSearch, setReportSearch] = useState('');
+            
+            // Dados do Sistema
+            const [userData, setUserData] = useState({ name: 'Coach Master', company: 'Studio Fitness', email: '', pixKey: '' });
+            const [students, setStudents] = useState([]); 
+            const [workouts, setWorkouts] = useState([]); 
+            const [assessments, setAssessments] = useState([]); 
+            const [financial, setFinancial] = useState([]); 
+            
+            const [loading, setLoading] = useState(true);
+            const [activeTab, setActiveTab] = useState('dashboard');
+            const [isModalOpen, setIsModalOpen] = useState(false);
+            const [modalType, setModalType] = useState('');
+            const [editingItem, setEditingItem] = useState(null);
+            const [toast, setToast] = useState({ show: false, message: '', type: 'info' });
+
+            // Formulários
+            const [studentForm, setStudentForm] = useState({ name: '', phone: '', goal: 'Hipertrofia', status: 'Ativo' });
+            const [workoutForm, setWorkoutForm] = useState({ studentId: '', title: 'Treino A', exercises: [] });
+            const [assessmentForm, setAssessmentForm] = useState({ studentId: '', date: '', weight: '', height: '', fat: '', muscle: '', waist: '' });
+            const [financeForm, setFinanceForm] = useState({ type: 'Receita', description: '', value: '', date: '', studentId: '' });
+
+            const showToast = (msg, type = 'info') => { setToast({ show: true, message: msg, type }); setTimeout(() => setToast({ show: false, message: '', type: 'info' }), 3000); };
+
+            const getIsolatedDoc = (name, id) => {
+                 const targetUid = cloudKey || user?.uid;
+                 return window.fbDoc(window.db, 'artifacts', APP_ID_STABLE, 'users', targetUid, name, id);
+            }
+
+            const getIsolatedCollection = (name) => {
+                const targetUid = cloudKey || user?.uid;
+                return window.fbCollection(window.db, 'artifacts', APP_ID_STABLE, 'users', targetUid, name);
+            }
+
+            // Manutenção do Sistema
+            const hardAppReset = async () => {
+                if (confirm("Deseja realizar a manutenção? Isso limpará o cache local e forçará a sincronização com a nuvem.")) {
+                    try {
+                        localStorage.clear();
+                        if ('caches' in window) {
+                            const cacheNames = await caches.keys();
+                            await Promise.all(cacheNames.map(name => caches.delete(name)));
+                        }
+                        location.reload(true);
+                    } catch (e) { showToast("Erro ao limpar dados.", "error"); }
+                }
+            };
+
+            useEffect(() => {
+                const handleGlobalError = () => setShowMaintenanceAlert(true);
+                window.addEventListener('error', handleGlobalError);
+                window.addEventListener('unhandledrejection', handleGlobalError);
+
+                const lastCheck = localStorage.getItem('lastMaintenanceCheckFitness');
+                const now = Date.now();
+                if (!lastCheck || (now - parseInt(lastCheck) > 1296000000)) {
+                    setShowMaintenanceAlert(true);
+                    localStorage.setItem('lastMaintenanceCheckFitness', now.toString());
+                }
+
+                return () => {
+                    window.removeEventListener('error', handleGlobalError);
+                    window.removeEventListener('unhandledrejection', handleGlobalError);
+                };
+            }, []);
+
+            // Auth logic
+            useEffect(() => {
+                const initAuth = async () => {
+                    try {
+                        await window.signInAnonymously(window.auth);
+                    } catch (e) { console.error(e); }
+                };
+                initAuth();
+                const unsubscribe = window.onAuthStateChanged(window.auth, (currentUser) => { setUser(currentUser); });
+                const saved = localStorage.getItem('personalmaster_auth');
+                if (saved) setLoginData(JSON.parse(saved));
+                return () => unsubscribe();
+            }, []);
+
+            // Login check on mount/user
+            useEffect(() => {
+                if (user && loginData.login && loginData.password && !isLoggedIn) {
+                    handleLoginVerify(true);
+                }
+            }, [user]);
+
+            // Data Sync
+            useEffect(() => {
+                if (!user || !isLoggedIn) return;
+                setLoading(true);
+                
+                const configDocRef = getIsolatedDoc('system_config', 'app_settings');
+                const unsubConfig = window.fbOnSnapshot(configDocRef, (docSnap) => {
+                    if (docSnap.exists()) {
+                        const raw = docSnap.data();
+                        const data = raw.payload ? Security.decrypt(raw.payload) : raw;
+                        if (data.userData) setUserData(prev => ({...prev, ...data.userData}));
+                    }
+                });
+
+                const collections = [
+                    { name: 'students', setter: setStudents },
+                    { name: 'workouts', setter: setWorkouts },
+                    { name: 'assessments', setter: setAssessments },
+                    { name: 'financial', setter: setFinancial }
+                ];
+                const unsubs = collections.map(col => {
+                    return window.fbOnSnapshot(getIsolatedCollection(col.name), (snap) => {
+                        const data = snap.docs.map(d => {
+                            const raw = d.data();
+                            return { id: d.id, ...(raw.payload ? Security.decrypt(raw.payload) : raw) };
+                        });
+                        col.setter(data);
+                        if (col.name === 'students') setLoading(false);
+                    });
+                });
+                return () => { unsubs.forEach(u => u()); unsubConfig(); };
+            }, [user, cloudKey, isLoggedIn]);
+
+            const handleLoginVerify = async (isAuto = false) => {
+                if (!user) return;
+                const { login, password } = loginData;
+                try {
+                    const cloudPath = window.fbDoc(window.db, 'artifacts', APP_ID_STABLE, 'users', login, 'config_seguranca', 'status');
+                    const docSnap = await window.fbGetDoc(cloudPath);
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        if (Security.decrypt(data.pass) === password) {
+                            setCloudKey(login);
+                            setIsLoggedIn(true);
+                            if (loginData.save) localStorage.setItem('personalmaster_auth', JSON.stringify({ login, password }));
+                            if (!isAuto) showToast(`Bem-vindo, ${login}!`, 'success');
+                        } else {
+                            if (!isAuto) showToast('Senha incorreta.', 'error');
+                            else localStorage.removeItem('personalmaster_auth');
+                        }
+                    } else {
+                        const localPath = window.fbDoc(window.db, 'artifacts', APP_ID_STABLE, 'users', user.uid, 'config_seguranca', 'status');
+                        const localSnap = await window.fbGetDoc(localPath);
+                        if (localSnap.exists()) {
+                             const lData = localSnap.data();
+                             if (Security.decrypt(lData.login) === login && Security.decrypt(lData.pass) === password) {
+                                 setCloudKey(login);
+                                 setIsLoggedIn(true);
+                                 if (!isAuto) showToast('Bem-vindo!', 'success');
+                                 return;
+                             }
+                        }
+                        if (!isAuto) showToast('Usuário não encontrado.', 'error');
+                        else localStorage.removeItem('personalmaster_auth');
+                    }
+                } catch (e) { showToast('Erro de conexão.', 'error'); }
+            };
+
+            const handleRecovery = async () => {
+                const { login, email } = recoveryData;
+                const targetDoc = window.fbDoc(window.db, 'artifacts', APP_ID_STABLE, 'users', login, 'config_seguranca', 'status');
+                try {
+                    const docSnap = await window.fbGetDoc(targetDoc);
+                    if (docSnap.exists()) {
+                        const data = docSnap.data();
+                        if (Security.decrypt(data.recovery) === email) {
+                             alert(`Senha encontrada: ${Security.decrypt(data.pass)}`);
+                             setIsRecovering(false);
+                        } else showToast('E-mail não confere.', 'error');
+                    } else showToast('Login inexistente.', 'error');
+                } catch (e) { showToast('Erro ao verificar.', 'error'); }
+            };
+
+            const handleSaveCredentials = async (e) => {
+                e.preventDefault();
+                if (!user) return;
+                try {
+                    const idFolder = newCredentials.login;
+                    const credsDocRef = window.fbDoc(window.db, 'artifacts', APP_ID_STABLE, 'users', idFolder, 'config_seguranca', 'status');
+                    const credentialData = {
+                        login: Security.encrypt(newCredentials.login),
+                        pass: Security.encrypt(newCredentials.password),
+                        recovery: Security.encrypt(newCredentials.recoveryEmail),
+                        status: 'registered',
+                        date: new Date().toISOString()
+                    };
+                    await window.fbSetDoc(credsDocRef, credentialData);
+                    const localDocRef = window.fbDoc(window.db, 'artifacts', APP_ID_STABLE, 'users', user.uid, 'config_seguranca', 'status');
+                    await window.fbSetDoc(localDocRef, credentialData);
+                    setCloudKey(newCredentials.login);
+                    showToast('Credenciais salvas e Nuvem ativa!', 'success');
+                } catch (err) { showToast('Erro ao salvar credenciais.', 'error'); }
+            };
+
+            const handleSaveConfig = async (e) => {
+                e.preventDefault();
+                if (!user) return;
+                try {
+                    const configDocRef = getIsolatedDoc('system_config', 'app_settings');
+                    await window.fbSetDoc(configDocRef, { payload: Security.encrypt({ userData }) });
+                    showToast('Configurações salvas!', 'success');
+                } catch (err) { showToast('Erro ao salvar.', 'error'); }
+            };
+
+            const saveItem = async (e) => {
+                e.preventDefault();
+                let col = "";
+                let data = {};
+                if (modalType === 'student') { col = "students"; data = studentForm; }
+                if (modalType === 'workout') { col = "workouts"; data = workoutForm; }
+                if (modalType === 'assessment') { col = "assessments"; data = assessmentForm; }
+                if (modalType === 'finance') { col = "financial"; data = financeForm; }
+                const id = editingItem ? editingItem.id : String(Date.now());
+                await window.fbSetDoc(getIsolatedDoc(col, id), { payload: Security.encrypt(data) });
+                setIsModalOpen(false);
+                showToast('Salvo com sucesso!', 'success');
+            };
+
+            const deleteItem = async (id, col) => {
+                if (confirm("Excluir permanentemente?")) {
+                    await window.fbDeleteDoc(getIsolatedDoc(col, id));
+                    showToast('Removido');
+                }
+            };
+
+            const stats = useMemo(() => {
+                const totalRevenue = financial.filter(f => f.type === 'Receita').reduce((a, b) => a + Number(b.value), 0);
+                return {
+                    totalStudents: students.length,
+                    activeStudents: students.filter(s => s.status === 'Ativo').length,
+                    revenue: totalRevenue,
+                    pendingAssessments: students.length - assessments.length
+                };
+            }, [students, financial, assessments]);
+
+            const addExerciseToWorkout = (ex) => {
+                const newEx = { ...ex, series: 3, reps: 12, weight: '' };
+                setWorkoutForm({ ...workoutForm, exercises: [...workoutForm.exercises, newEx] });
+                showToast(`${ex.name} adicionado ao treino`, 'success');
+            };
+
+            const filteredLibrary = useMemo(() => {
+                return EXERCISE_LIBRARY.filter(ex => 
+                    ex.name.toLowerCase().includes(exerciseSearch.toLowerCase()) || 
+                    ex.muscle.toLowerCase().includes(exerciseSearch.toLowerCase())
+                );
+            }, [exerciseSearch]);
+
+            const filteredReportStudents = useMemo(() => {
+                return students.filter(s => s.name.toLowerCase().includes(reportSearch.toLowerCase()));
+            }, [students, reportSearch]);
+
+            if (!isLoggedIn) {
+                return (
+                    <div className="h-screen flex items-center justify-center bg-pattern-fitness p-6">
+                        <Toast {...toast} onClose={() => setToast({...toast, show: false})} />
+                        {!isRecovering ? (
+                            <Card className="w-full max-w-md p-10 border-t-8 border-t-orange-600 animate-fade-in shadow-2xl">
+                                <div className="flex justify-center mb-10"><BrandLogo className="scale-150 text-slate-900" /></div>
+                                <h2 className="text-2xl font-black text-center mb-8 text-slate-800 uppercase tracking-tighter">Login Coach</h2>
+                                <form onSubmit={(e) => { e.preventDefault(); handleLoginVerify(); }} className="space-y-6">
+                                    <input className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold" placeholder="Usuário" value={loginData.login} onChange={e => setLoginData({...loginData, login: e.target.value})} />
+                                    <input className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold" type="password" placeholder="Senha" value={loginData.password} onChange={e => setLoginData({...loginData, password: e.target.value})} />
+                                    <div className="flex justify-between items-center text-xs">
+                                        <div className="flex items-center gap-2 cursor-pointer" onClick={() => setLoginData({...loginData, save: !loginData.save})}>
+                                            <div className={`w-5 h-5 rounded border flex items-center justify-center ${loginData.save ? 'bg-orange-600 border-orange-600' : 'bg-white border-slate-300'}`}>{loginData.save && <Icon name="check" size={12} weight="bold" className="text-white" />}</div>
+                                            <span className="font-bold text-slate-500">Manter conectado</span>
+                                        </div>
+                                        <button type="button" onClick={() => setIsRecovering(true)} className="text-orange-600 font-black uppercase">Esqueci a Senha</button>
+                                    </div>
+                                    <button type="submit" className="w-full bg-slate-900 text-white font-black py-5 rounded-2xl shadow-lg hover:bg-black transition-all uppercase tracking-widest text-xs border-b-4 border-amber-500">Entrar no Sistema</button>
+                                </form>
+                                <div className="mt-8 pt-6 border-t border-slate-100 text-center">
+                                    <button onClick={() => { setCloudKey(null); setIsLoggedIn(true); }} className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Entrar em Modo Local / Novo Coach</button>
+                                </div>
+                            </Card>
+                        ) : (
+                            <Card className="w-full max-w-md p-10 border-t-8 border-t-amber-500 animate-fade-in shadow-2xl">
+                                <h2 className="text-2xl font-black text-center mb-2 text-slate-800 uppercase tracking-tighter">Recuperar</h2>
+                                <p className="text-center text-xs font-bold text-slate-400 mb-8">Digite os dados para ver sua senha.</p>
+                                <form onSubmit={(e) => { e.preventDefault(); handleRecovery(); }} className="space-y-6">
+                                    <input required className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold" placeholder="Seu Login" value={recoveryData.login} onChange={e => setRecoveryData({...recoveryData, login: e.target.value})} />
+                                    <input required type="email" className="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold" placeholder="E-mail de Recuperação" value={recoveryData.email} onChange={e => setRecoveryData({...recoveryData, email: e.target.value})} />
+                                    <button type="submit" className="w-full bg-amber-500 text-white font-black py-5 rounded-2xl shadow-lg uppercase tracking-widest text-xs">Verificar Dados</button>
+                                </form>
+                                <button onClick={() => setIsRecovering(false)} className="w-full mt-6 text-xs font-black text-slate-400 uppercase">Voltar ao Login</button>
+                            </Card>
+                        )}
+                    </div>
+                );
+            }
+
+            return (
+                <div className="flex h-screen bg-pattern-fitness">
+                    <Toast {...toast} onClose={() => setToast({...toast, show: false})} />
+                    
+                    {showMaintenanceAlert && (
+                        <div className="fixed bottom-4 right-4 z-[200] bg-red-600 text-white p-6 rounded-3xl shadow-2xl border-4 border-white animate-bounce md:animate-none hover:scale-105 transition-transform max-w-sm">
+                            <div className="flex justify-between items-start mb-2">
+                                <h3 className="font-black text-lg uppercase flex items-center gap-2"><Icon name="wrench" /> Manutenção Necessária</h3>
+                                <button onClick={() => setShowMaintenanceAlert(false)} className="text-white text-xl font-bold">×</button>
+                            </div>
+                            <p className="text-xs font-bold mb-4 opacity-90 leading-relaxed">Olá! Para garantir que o sistema continue rápido e sem erros, é hora de realizar uma limpeza preventiva ou foi detectado um erro técnico.</p>
+                            <button onClick={hardAppReset} className="w-full bg-white text-red-600 font-black py-3 rounded-xl shadow hover:bg-slate-100 uppercase tracking-widest text-[10px]">Realizar Manutenção Agora</button>
+                        </div>
+                    )}
+
+                    <aside className="w-20 md:w-64 bg-slate-950 text-white flex flex-col transition-all shadow-2xl">
+                        <div className="p-6 mb-8 hidden md:block border-b border-white/10"><BrandLogo /></div>
+                        <nav className="flex-1 px-4 space-y-2 py-4">
+                            {[
+                                { id: 'dashboard', label: 'Painel', icon: 'chart-pie-slice' },
+                                { id: 'students', label: 'Alunos', icon: 'users' },
+                                { id: 'workouts', label: 'Treinos', icon: 'barbell' },
+                                { id: 'library', label: 'Biblioteca', icon: 'book-open' },
+                                { id: 'assessments', label: 'Avaliações', icon: 'clipboard-text' },
+                                { id: 'reports', label: 'Relatórios', icon: 'file-text' },
+                                { id: 'finance', label: 'Financeiro', icon: 'currency-circle-dollar' },
+                                { id: 'config', label: 'Ajustes', icon: 'gear' }
+                            ].map(item => (
+                                <button key={item.id} onClick={() => setActiveTab(item.id)} className={`w-full flex items-center gap-4 p-4 rounded-2xl transition-all ${activeTab === item.id ? 'bg-orange-600 text-white shadow-xl shadow-orange-900/40 translate-x-1' : 'hover:bg-white/5 text-slate-400'}`}>
+                                    <Icon name={item.icon} size={24} weight={activeTab === item.id ? 'fill' : 'bold'} />
+                                    <span className="hidden md:inline font-bold text-sm">{item.label}</span>
+                                </button>
+                            ))}
+                        </nav>
+                        <div className="px-4 py-6 border-t border-white/10 bg-slate-950">
+                             <button onClick={() => { setIsLoggedIn(false); setCloudKey(null); localStorage.removeItem('personalmaster_auth'); }} className="w-full flex items-center gap-4 p-4 rounded-2xl transition-all hover:bg-white/5 text-orange-600 font-black text-sm uppercase group">
+                                <Icon name="sign-out" size={24} weight="bold" className="group-hover:text-orange-500" /> 
+                                <span className="hidden md:inline group-hover:text-orange-500">Sair / Trocar</span>
+                             </button>
+                        </div>
+                    </aside>
+
+                    <main className="flex-1 overflow-y-auto p-4 md:p-10">
+                        <header className="flex justify-between items-center mb-10">
+                            <h2 className="text-3xl font-black text-slate-800 uppercase tracking-tighter flex items-center gap-3">
+                                <Icon name="lightning" className="text-orange-600" weight="fill" />
+                                {activeTab === 'dashboard' && 'Dashboard'}
+                                {activeTab === 'students' && 'Meus Alunos'}
+                                {activeTab === 'workouts' && 'Planilhas de Treino'}
+                                {activeTab === 'library' && 'Biblioteca de Exercícios'}
+                                {activeTab === 'assessments' && 'Avaliação Física Digital'}
+                                {activeTab === 'reports' && 'Relatórios Completos'}
+                                {activeTab === 'finance' && 'Controle de Mensalidades'}
+                                {activeTab === 'config' && 'Configurações do Coach'}
+                            </h2>
+                            <div className="flex gap-4 items-center">
+                                <div className="hidden md:block text-right">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Coach Conectado</p>
+                                    <p className="font-bold text-slate-800">{userData.name}</p>
+                                </div>
+                                <div className="w-12 h-12 bg-slate-900 text-amber-500 rounded-2xl flex items-center justify-center font-black text-xl shadow-lg border-b-2 border-orange-600">{userData.name[0]}</div>
+                            </div>
+                        </header>
+
+                        {loading && activeTab !== 'config' ? (
+                            <div className="flex items-center justify-center h-64"><Icon name="circle-notch" className="animate-spin text-orange-600" size={48} /></div>
+                        ) : (
+                            <div className="animate-fade-in">
+                                {activeTab === 'dashboard' && (
+                                    <div className="space-y-8">
+                                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                                            <Card className="p-8 bg-gradient-to-br from-orange-600 to-amber-500 text-white border-none shadow-2xl relative overflow-hidden">
+                                                <Icon name="users-four" size={80} className="absolute -right-4 -bottom-4 opacity-20" weight="fill" />
+                                                <p className="text-xs font-bold uppercase opacity-80 mb-2 relative z-10">Alunos Ativos</p>
+                                                <h3 className="text-5xl font-black relative z-10">{stats.activeStudents}</h3>
+                                            </Card>
+                                            <Card className="p-8 border-l-8 border-l-slate-900 shadow-md"><p className="text-xs font-black text-slate-400 uppercase mb-2">Receita Total</p><h3 className="text-3xl font-black text-slate-800">{formatCurrency(stats.revenue)}</h3></Card>
+                                            <Card className="p-8 border-l-8 border-l-amber-500 shadow-md"><p className="text-xs font-black text-slate-400 uppercase mb-2">Avaliações Pendentes</p><h3 className="text-3xl font-black text-orange-600">{stats.pendingAssessments}</h3></Card>
+                                            <Card className="p-8 shadow-md"><p className="text-xs font-black text-slate-400 uppercase mb-2">Total de Alunos</p><h3 className="text-3xl font-black text-slate-800">{stats.totalStudents}</h3></Card>
+                                        </div>
+                                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                            <Card className="p-8 h-96 shadow-lg">
+                                                <h4 className="font-black text-slate-800 uppercase mb-6 flex items-center gap-2"><Icon name="chart-line-up" className="text-orange-600" /> Evolução de Faturamento</h4>
+                                                <ChartComponent type="line" data={{ labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'], datasets: [{ label: 'Receita', data: [1200, 1900, 1700, 2400, stats.revenue], borderColor: '#ea580c', backgroundColor: 'rgba(234, 88, 12, 0.1)', fill: true, tension: 0.4 }] }} />
+                                            </Card>
+                                            <Card className="p-8 overflow-y-auto h-96 shadow-lg">
+                                                <h4 className="font-black text-slate-800 uppercase mb-6 flex items-center gap-2"><Icon name="clock-counter-clockwise" className="text-amber-500" /> Alunos Recentes</h4>
+                                                <div className="space-y-4">
+                                                    {students.slice(0, 5).map(s => (
+                                                        <div key={s.id} className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100 hover:bg-white hover:shadow-md transition-all">
+                                                            <div className="flex items-center gap-3">
+                                                                <div className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center font-bold text-amber-500 shadow-sm">{s.name[0]}</div>
+                                                                <div><p className="font-bold text-slate-800">{s.name}</p><p className="text-[10px] uppercase font-black text-slate-400">{s.goal}</p></div>
+                                                            </div>
+                                                            <span className="text-[10px] font-black bg-orange-100 text-orange-700 px-3 py-1 rounded-full uppercase">{s.status}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </Card>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {activeTab === 'students' && (
+                                    <div className="space-y-6">
+                                        <div className="flex justify-between items-center"><h3 className="text-xl font-black uppercase text-slate-800">Gerenciar Alunos</h3><button onClick={() => {setModalType('student'); setStudentForm({name:'', phone:'', goal:'Hipertrofia', status:'Ativo'}); setEditingItem(null); setIsModalOpen(true);}} className="bg-slate-900 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase shadow-lg hover:scale-105 transition-transform border-b-4 border-orange-600">Novo Aluno</button></div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            {students.map(s => (
+                                                <Card key={s.id} className="p-6 card-hover flex flex-col justify-between shadow-md border-t-4 border-t-orange-600">
+                                                    <div className="flex justify-between items-start mb-6">
+                                                        <div className="w-14 h-14 bg-slate-900 rounded-2xl flex items-center justify-center text-2xl text-amber-500 font-black shadow-inner">{s.name[0]}</div>
+                                                        <div className="flex gap-2">
+                                                            <button onClick={() => {setEditingItem(s); setStudentForm(s); setModalType('student'); setIsModalOpen(true);}} className="p-2 text-slate-400 hover:text-orange-600"><Icon name="pencil" /></button>
+                                                            <button onClick={() => deleteItem(s.id, 'students')} className="p-2 text-slate-400 hover:text-red-500"><Icon name="trash" /></button>
+                                                        </div>
+                                                    </div>
+                                                    <div><h4 className="font-black text-xl text-slate-800 mb-1">{s.name}</h4><p className="text-xs font-bold text-slate-400 uppercase tracking-widest">{s.goal}</p></div>
+                                                    <div className="mt-8 pt-6 border-t flex items-center justify-between">
+                                                        <a href={`https://wa.me/${s.phone.replace(/\D/g,'')}`} target="_blank" className="text-green-500 hover:scale-110 transition-transform"><Icon name="whatsapp-logo" size={28} weight="fill" /></a>
+                                                        <span className="text-[10px] font-black bg-slate-100 text-slate-600 px-3 py-1 rounded-lg uppercase">{s.status}</span>
+                                                    </div>
+                                                </Card>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {activeTab === 'workouts' && (
+                                    <div className="space-y-6">
+                                        <div className="flex justify-between items-center"><h3 className="text-xl font-black uppercase text-slate-800">Planilhas Ativas</h3><button onClick={() => {setModalType('workout'); setWorkoutForm({studentId:'', title:'Treino A', exercises:[]}); setIsModalOpen(true);}} className="bg-orange-600 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase shadow-lg border-b-4 border-black">Montar Novo Treino</button></div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                            {workouts.map(w => {
+                                                const student = students.find(s => s.id === w.studentId);
+                                                return (
+                                                    <Card key={w.id} className="p-6 border-l-8 border-l-slate-900 shadow-md">
+                                                        <h4 className="font-black text-lg text-slate-800">{w.title}</h4>
+                                                        <p className="text-xs font-bold text-slate-400 uppercase mb-4 tracking-tight">Aluno: <span className="text-orange-600">{student?.name || 'Não atribuído'}</span></p>
+                                                        <div className="space-y-1 mb-6">
+                                                            {w.exercises.slice(0, 3).map((ex, i) => <p key={i} className="text-sm font-bold text-slate-600 truncate">• {ex.name}</p>)}
+                                                            {w.exercises.length > 3 && <p className="text-xs text-slate-400">+ {w.exercises.length - 3} exercícios</p>}
+                                                        </div>
+                                                        <div className="flex gap-2">
+                                                            <button onClick={() => {setModalType('workout_view'); setEditingItem(w); setIsModalOpen(true);}} className="flex-1 py-3 bg-slate-900 text-amber-500 text-[10px] font-black uppercase rounded-xl tracking-widest hover:bg-black transition-colors">Ver Treino</button>
+                                                            <button onClick={() => deleteItem(w.id, 'workouts')} className="p-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-100"><Icon name="trash" /></button>
+                                                        </div>
+                                                    </Card>
+                                                )
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {activeTab === 'library' && (
+                                    <div className="space-y-6">
+                                        <div className="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 mb-8 border-t-8 border-t-orange-600">
+                                            <h3 className="text-xl font-black uppercase text-slate-800 mb-4 flex items-center gap-3"><Icon name="barbell" className="text-orange-600" /> Biblioteca Personal Master</h3>
+                                            <p className="text-sm text-slate-500 font-bold mb-8 italic">Selecione entre {EXERCISE_LIBRARY.length} exercícios profissionais para suas planilhas.</p>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                {EXERCISE_LIBRARY.map(ex => (
+                                                    <div key={ex.id} className="p-4 border-2 border-slate-50 rounded-2xl flex justify-between items-center hover:border-orange-200 transition-colors bg-slate-50/50">
+                                                        <div><p className="font-black text-slate-800 text-sm uppercase">{ex.name}</p><p className="text-[9px] font-black text-slate-400 uppercase tracking-wider">{ex.muscle} • {ex.type}</p></div>
+                                                        <button onClick={() => { showToast(`Adicione este exercício na aba "Treinos"`); }} className="text-orange-600 hover:scale-110 transition-transform"><Icon name="info" weight="fill" size={20} /></button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {activeTab === 'assessments' && (
+                                    <div className="space-y-6">
+                                        <div className="flex justify-between items-center"><h3 className="text-xl font-black uppercase text-slate-800">Avaliações Físicas</h3><button onClick={() => {setModalType('assessment'); setAssessmentForm({studentId:'', date: new Date().toISOString().split('T')[0], weight:'', height:'', fat:'', muscle:'', waist:''}); setIsModalOpen(true);}} className="bg-amber-500 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase shadow-lg border-b-4 border-orange-700">Nova Avaliação</button></div>
+                                        <div className="grid grid-cols-1 gap-4">
+                                            {assessments.map(as => {
+                                                const student = students.find(s => s.id === as.studentId);
+                                                return (
+                                                    <Card key={as.id} className="p-6 flex items-center justify-between shadow-md border-l-8 border-l-orange-600">
+                                                        <div className="flex items-center gap-6">
+                                                            <div className="text-center bg-slate-900 p-3 rounded-2xl min-w-[80px] text-amber-500 shadow-lg"><p className="text-[10px] font-black uppercase opacity-60">Data</p><p className="font-black text-lg leading-none">{as.date.split('-').reverse().slice(0,2).join('/')}</p></div>
+                                                            <div><h4 className="font-black text-lg text-slate-800 uppercase tracking-tight">{student?.name || 'Aluno Excluído'}</h4><p className="text-xs font-bold text-slate-400 uppercase">Peso: {as.weight}kg • BF: {as.fat}% • MM: {as.muscle}%</p></div>
+                                                        </div>
+                                                        <div className="flex gap-2">
+                                                            <button onClick={() => {setEditingItem(as); setModalType('evolution_chart'); setIsModalOpen(true);}} className="px-6 py-3 bg-slate-900 text-amber-500 font-black text-[10px] uppercase rounded-xl border-b-2 border-orange-600">Gráfico de Evolução</button>
+                                                            <button onClick={() => deleteItem(as.id, 'assessments')} className="p-3 text-red-400 hover:text-red-600"><Icon name="trash" /></button>
+                                                        </div>
+                                                    </Card>
+                                                )
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {activeTab === 'reports' && (
+                                    <div className="space-y-8 animate-fade-in">
+                                        <div className="bg-white p-8 rounded-3xl shadow-lg border border-slate-100 border-t-8 border-t-orange-600">
+                                            <h3 className="text-xl font-black uppercase text-slate-800 mb-4">Relatórios Consolidados</h3>
+                                            <p className="text-sm text-slate-500 font-bold mb-8">Selecione um aluno para gerar um relatório completo para impressão ou PDF.</p>
+                                            <div className="relative mb-8">
+                                                <input className="w-full p-4 pl-12 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none shadow-sm" placeholder="Buscar aluno pelo nome..." value={reportSearch} onChange={e => setReportSearch(e.target.value)} />
+                                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><Icon name="magnifying-glass" weight="bold" /></div>
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                {filteredReportStudents.map(s => (
+                                                    <div key={s.id} className="p-5 border-2 border-slate-50 rounded-3xl flex justify-between items-center hover:border-orange-200 transition-all bg-slate-50/30 group">
+                                                        <div>
+                                                            <p className="font-black text-slate-800 uppercase text-sm group-hover:text-orange-600 transition-colors">{s.name}</p>
+                                                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">{s.goal} • {s.status}</p>
+                                                        </div>
+                                                        <button onClick={() => { setEditingItem(s); setModalType('student_report'); setIsModalOpen(true); }} className="px-5 py-3 bg-slate-900 text-amber-500 font-black text-[10px] uppercase rounded-xl border-b-2 border-orange-600 hover:bg-black transition-all">Gerar Relatório</button>
+                                                    </div>
+                                                ))}
+                                                {filteredReportStudents.length === 0 && <p className="col-span-2 text-center py-8 text-slate-400 font-bold uppercase text-xs italic">Nenhum aluno encontrado para o relatório.</p>}
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {activeTab === 'finance' && (
+                                    <div className="space-y-6">
+                                        <div className="flex justify-between items-center"><h3 className="text-xl font-black uppercase text-slate-800">Mensalidades</h3><button onClick={() => {setModalType('finance'); setFinanceForm({type:'Receita', description:'', value:'', date: new Date().toISOString().split('T')[0], studentId:''}); setIsModalOpen(true);}} className="bg-orange-600 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase shadow-xl border-b-4 border-black">Registrar Pagamento</button></div>
+                                        <Card className="overflow-hidden p-0 border-none shadow-2xl">
+                                            <table className="w-full text-left font-bold text-sm">
+                                                <thead className="bg-slate-900 uppercase text-[10px] text-amber-500 border-b border-white/10">
+                                                    <tr><th className="p-6">Data</th><th className="p-6">Descrição</th><th className="p-6">Aluno</th><th className="p-6 text-right">Valor</th><th className="p-6 text-center">Ações</th></tr>
+                                                </thead>
+                                                <tbody className="divide-y">
+                                                    {financial.map(f => (
+                                                        <tr key={f.id} className="hover:bg-slate-50 transition-colors">
+                                                            <td className="p-6">{f.date.split('-').reverse().join('/')}</td>
+                                                            <td className="p-6 uppercase">{f.description}</td>
+                                                            <td className="p-6 text-orange-600 uppercase text-xs font-black">{students.find(s=>s.id===f.studentId)?.name || 'Geral'}</td>
+                                                            <td className={`p-6 text-right font-black ${f.type === 'Receita' ? 'text-green-600' : 'text-red-500'}`}>{formatCurrency(f.value)}</td>
+                                                            <td className="p-6 text-center"><button onClick={() => deleteItem(f.id, 'financial')} className="text-red-300 hover:text-red-500"><Icon name="trash" /></button></td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </Card>
+                                    </div>
+                                )}
+
+                                {activeTab === 'config' && (
+                                    <div className="space-y-8 max-w-4xl mx-auto">
+                                        <Card className="p-8 border-t-8 border-t-slate-900 shadow-xl">
+                                            <h4 className="font-black text-slate-800 uppercase mb-6 flex items-center gap-3"><Icon name="shield-check" className="text-orange-600" /> Cadastro de Credenciais (Nuvem)</h4>
+                                            <form onSubmit={handleSaveCredentials} className="space-y-6">
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Definir Login</label><input required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none transition-colors" value={newCredentials.login} onChange={e => setNewCredentials({...newCredentials, login: e.target.value})} placeholder="Seu usuário único" /></div>
+                                                    <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Definir Senha</label><input required type="password" className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none transition-colors" value={newCredentials.password} onChange={e => setNewCredentials({...newCredentials, password: e.target.value})} placeholder="Senha segura" /></div>
+                                                </div>
+                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">E-mail de Recuperação</label><input required type="email" className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none transition-colors" value={newCredentials.recoveryEmail} onChange={e => setNewCredentials({...newCredentials, recoveryEmail: e.target.value})} placeholder="seu@email.com" /></div>
+                                                <button type="submit" className="w-full py-4 bg-slate-900 text-white font-black rounded-2xl uppercase tracking-widest text-[10px] shadow-lg border-b-4 border-amber-500">Ativar Nuvem Segura e Cofre</button>
+                                            </form>
+                                        </Card>
+                                        <Card className="p-8 border-t-8 border-t-orange-600 shadow-xl">
+                                            <h4 className="font-black text-slate-800 uppercase mb-6 flex items-center gap-3"><Icon name="user-gear" className="text-orange-600" /> Perfil do Coach</h4>
+                                            <form onSubmit={handleSaveConfig} className="space-y-6">
+                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Nome Completo</label><input required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold" value={userData.name} onChange={e => setUserData({...userData, name: e.target.value})} /></div>
+                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Nome da Marca/Academia</label><input required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold" value={userData.company} onChange={e => setUserData({...userData, company: e.target.value})} /></div>
+                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Chave PIX (Para Cobranças)</label><input className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold bg-amber-50" value={userData.pixKey} onChange={e => setUserData({...userData, pixKey: e.target.value})} placeholder="CPF, E-mail ou Celular" /></div>
+                                                <button type="submit" className="w-full py-4 bg-orange-600 text-white font-black rounded-2xl uppercase tracking-widest text-[10px] shadow-lg">Salvar Perfil Profissional</button>
+                                            </form>
+                                        </Card>
+                                        <div className="bg-gradient-to-br from-slate-900 to-black rounded-3xl shadow-2xl p-8 border-t-4 border-amber-500">
+                                            <div className="flex items-center gap-3 mb-8">
+                                                <span className="text-4xl">🛡️</span>
+                                                <h3 className="text-xl font-black text-amber-500 uppercase tracking-tight">Entenda como seus dados estão seguros</h3>
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                                <div className="bg-white/5 p-5 rounded-2xl border border-white/10">
+                                                    <h4 className="text-amber-500 font-black mb-2 flex items-center gap-2 text-xs uppercase tracking-widest">🗝️ Cofre Digital</h4>
+                                                    <p className="text-slate-300 text-[11px] leading-relaxed font-bold">Cada treinador tem uma "pasta secreta" no sistema. O que você salva aqui fica trancado e só abre com a sua chave de acesso pessoal.</p>
+                                                </div>
+                                                <div className="bg-white/5 p-5 rounded-2xl border border-white/10">
+                                                    <h4 className="text-amber-500 font-black mb-2 flex items-center gap-2 text-xs uppercase tracking-widest">🌪️ Dados Embaralhados</h4>
+                                                    <p className="text-slate-300 text-[11px] leading-relaxed font-bold">Suas fichas e avaliações são transformadas em códigos ilegíveis antes de serem salvas. Mesmo se alguém olhar o banco, verá apenas letras sem sentido.</p>
+                                                </div>
+                                                <div className="bg-white/5 p-5 rounded-2xl border border-white/10">
+                                                    <h4 className="text-amber-500 font-black mb-2 flex items-center gap-2 text-xs uppercase tracking-widest">🚫 Privacidade Total</h4>
+                                                    <p className="text-slate-300 text-[11px] leading-relaxed font-bold">O sistema garante que seu trabalho intelectual e financeiro seja privado. A tecnologia impede o acesso de terceiros ou funcionários não autorizados.</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="pt-8 mt-8 border-t border-slate-100 text-center">
+                                            <p className="text-[10px] text-slate-400 font-extrabold uppercase mb-4 tracking-tighter">Manutenção de Sistema (Forçar Sincronização)</p>
+                                            <button type="button" onClick={hardAppReset} className="w-full bg-slate-900 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest hover:bg-black shadow-lg transition-all flex items-center justify-center gap-2 border-b-4 border-amber-500"><Icon name="arrows-counter-clockwise" weight="bold"/> Limpar Cache Local e Forçar Nuvem</button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </main>
+
+                    {/* Modal Central */}
+                    {isModalOpen && (
+                        <div className="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[110] flex items-center justify-center p-4 overflow-y-auto">
+                            <Card className={`w-full ${modalType === 'student_report' ? 'max-w-4xl' : 'max-w-2xl'} bg-white overflow-hidden border-t-8 border-orange-600 relative rounded-[2.5rem]`}>
+                                <div className="p-6 border-b flex justify-between items-center sticky top-0 bg-white z-10 no-print">
+                                    <h3 className="font-black text-xl uppercase tracking-tighter text-slate-800">
+                                        {modalType === 'student' && 'Ficha do Aluno'}
+                                        {modalType === 'workout' && 'Montagem de Treino'}
+                                        {modalType === 'workout_view' && 'Visualizar Treino'}
+                                        {modalType === 'assessment' && 'Nova Avaliação'}
+                                        {modalType === 'evolution_chart' && 'Evolução Gráfica'}
+                                        {modalType === 'finance' && 'Dados do Lançamento'}
+                                        {modalType === 'student_report' && 'Relatório Completo do Aluno'}
+                                    </h3>
+                                    <button onClick={() => setIsModalOpen(false)} className="p-2 text-slate-400 hover:text-red-500 transition-colors"><Icon name="x" size={24}/></button>
+                                </div>
+                                <div className="p-8 max-h-[75vh] overflow-y-auto">
+                                    {modalType === 'student' && (
+                                        <form onSubmit={saveItem} className="space-y-6">
+                                            <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Nome Completo</label><input required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none" value={studentForm.name} onChange={e => setStudentForm({...studentForm, name: e.target.value})} /></div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">WhatsApp</label><input required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none" value={studentForm.phone} onChange={e => setStudentForm({...studentForm, phone: e.target.value})} /></div>
+                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Objetivo Principal</label><select className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none bg-white" value={studentForm.goal} onChange={e => setStudentForm({...studentForm, goal: e.target.value})}><option>Hipertrofia</option><option>Emagrecimento</option><option>Condicionamento</option><option>Reabilitação</option></select></div>
+                                            </div>
+                                            <button type="submit" className="w-full py-5 bg-orange-600 text-white font-black rounded-2xl uppercase tracking-widest text-xs shadow-lg hover:bg-orange-700">Salvar na Nuvem</button>
+                                        </form>
+                                    )}
+                                    {modalType === 'workout' && (
+                                        <div className="space-y-8">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Selecionar Aluno</label><select required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none bg-white" value={workoutForm.studentId} onChange={e => setWorkoutForm({...workoutForm, studentId: e.target.value})}><option value="">Selecione...</option>{students.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
+                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Título do Treino</label><input className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none" value={workoutForm.title} placeholder="Ex: Treino A - Peito" onChange={e => setWorkoutForm({...workoutForm, title: e.target.value})} /></div>
+                                            </div>
+                                            <div className="bg-slate-50 p-6 rounded-3xl border border-slate-200">
+                                                <h4 className="text-[10px] font-black text-slate-500 uppercase mb-4 tracking-widest flex items-center justify-between">Encontrar Exercícios na Biblioteca <Icon name="magnifying-glass" /></h4>
+                                                <input className="w-full p-3 mb-4 border-2 border-slate-200 rounded-xl font-bold focus:border-orange-600 outline-none text-sm shadow-inner" placeholder="Busque por nome ou grupo muscular (ex: peito)..." value={exerciseSearch} onChange={e => setExerciseSearch(e.target.value)} />
+                                                <div className="grid grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-2 scrollbar-thin">
+                                                    {filteredLibrary.map(ex => (
+                                                        <button key={ex.id} onClick={() => addExerciseToWorkout(ex)} className="p-3 bg-white border border-slate-200 rounded-xl font-black text-[10px] uppercase text-left hover:bg-orange-50 hover:border-orange-400 transition-all text-slate-700 shadow-sm flex flex-col">
+                                                            <span className="truncate">{ex.name}</span>
+                                                            <span className="text-[8px] text-orange-600 opacity-70">{ex.muscle}</span>
+                                                        </button>
+                                                    ))}
+                                                    {filteredLibrary.length === 0 && <p className="col-span-2 text-center text-[10px] font-bold text-slate-400 py-4 italic uppercase">Nenhum exercício encontrado</p>}
+                                                </div>
+                                            </div>
+                                            <div className="space-y-4">
+                                                <h4 className="text-xs font-black text-slate-400 uppercase flex items-center gap-2"><Icon name="list-checks" weight="bold" /> Exercícios na Planilha ({workoutForm.exercises.length})</h4>
+                                                {workoutForm.exercises.map((ex, idx) => (
+                                                    <div key={idx} className="p-4 bg-white border-2 border-slate-50 rounded-2xl flex flex-wrap gap-4 items-center shadow-md animate-fade-in border-l-4 border-l-amber-500">
+                                                        <div className="flex-1 min-w-[150px]"><p className="font-black text-slate-800 uppercase text-xs">{ex.name}</p><p className="text-[9px] text-orange-600 uppercase font-black tracking-tight">{ex.muscle}</p></div>
+                                                        <div className="flex gap-2">
+                                                            <div className="w-16"><p className="text-[8px] font-black text-slate-400 uppercase">Séries</p><input type="number" className="w-full p-2 border rounded-lg font-bold" value={ex.series} onChange={e => {const copy = [...workoutForm.exercises]; copy[idx].series = e.target.value; setWorkoutForm({...workoutForm, exercises: copy})}} /></div>
+                                                            <div className="w-16"><p className="text-[8px] font-black text-slate-400 uppercase">Reps</p><input type="number" className="w-full p-2 border rounded-lg font-bold" value={ex.reps} onChange={e => {const copy = [...workoutForm.exercises]; copy[idx].reps = e.target.value; setWorkoutForm({...workoutForm, exercises: copy})}} /></div>
+                                                            <div className="w-16"><p className="text-[8px] font-black text-slate-400 uppercase">Peso</p><input className="w-full p-2 border rounded-lg font-bold" value={ex.weight} placeholder="Kg" onChange={e => {const copy = [...workoutForm.exercises]; copy[idx].weight = e.target.value; setWorkoutForm({...workoutForm, exercises: copy})}} /></div>
+                                                        </div>
+                                                        <button onClick={() => {const copy = [...workoutForm.exercises]; copy.splice(idx,1); setWorkoutForm({...workoutForm, exercises: copy})}} className="text-red-400 p-2 hover:bg-red-50 rounded-lg"><Icon name="trash" /></button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <button onClick={saveItem} className="w-full py-5 bg-slate-900 text-amber-500 font-black rounded-2xl uppercase tracking-widest text-xs shadow-lg border-b-4 border-orange-600">Finalizar Planilha na Nuvem</button>
+                                        </div>
+                                    )}
+                                    {modalType === 'student_report' && editingItem && (
+                                        <div className="space-y-10">
+                                            <div id="print-area-container" className="print-area">
+                                                <div className="report-page bg-white p-10 border-2 border-slate-100 rounded-[2.5rem] shadow-sm">
+                                                    <div className="flex justify-between items-start border-b-4 border-orange-600 pb-6 mb-8">
+                                                        <div>
+                                                            <h1 className="text-3xl font-black uppercase text-slate-900 leading-none">{userData.company}</h1>
+                                                            <p className="text-xs font-bold text-slate-400 uppercase mt-2 tracking-widest">Treinador: {userData.name}</p>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <p className="text-xs font-black text-orange-600 uppercase tracking-widest">Relatório de Desempenho</p>
+                                                            <p className="text-[10px] font-bold text-slate-400 mt-1 uppercase">Emitido em: {new Date().toLocaleDateString()}</p>
+                                                        </div>
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-8 mb-10">
+                                                        <div className="bg-slate-50 p-6 rounded-3xl">
+                                                            <h4 className="text-[10px] font-black text-orange-600 uppercase mb-3 tracking-widest">Perfil do Aluno</h4>
+                                                            <p className="text-xl font-black text-slate-800 uppercase">{editingItem.name}</p>
+                                                            <p className="text-sm font-bold text-slate-500 mt-1">Objetivo: <span className="text-slate-700">{editingItem.goal}</span></p>
+                                                            <p className="text-sm font-bold text-slate-500 mt-1">Status: <span className="text-slate-700">{editingItem.status}</span></p>
+                                                        </div>
+                                                        <div className="bg-slate-900 p-6 rounded-3xl text-white">
+                                                            <h4 className="text-[10px] font-black text-amber-500 uppercase mb-3 tracking-widest">Última Avaliação Física</h4>
+                                                            {assessments.filter(a => a.studentId === editingItem.id).sort((a,b) => new Date(b.date) - new Date(a.date))[0] ? (
+                                                                <div className="grid grid-cols-2 gap-4">
+                                                                    <div><p className="text-[10px] font-bold opacity-60 uppercase">Peso</p><p className="text-lg font-black text-amber-500">{assessments.filter(a => a.studentId === editingItem.id).sort((a,b) => new Date(b.date) - new Date(a.date))[0].weight} kg</p></div>
+                                                                    <div><p className="text-[10px] font-bold opacity-60 uppercase">Gordura</p><p className="text-lg font-black text-orange-500">{assessments.filter(a => a.studentId === editingItem.id).sort((a,b) => new Date(b.date) - new Date(a.date))[0].fat}%</p></div>
+                                                                </div>
+                                                            ) : (
+                                                                <p className="text-xs font-bold opacity-50 italic">Sem métricas registradas ainda.</p>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <h4 className="text-[10px] font-black text-orange-600 uppercase mb-4 tracking-widest border-b border-slate-100 pb-2">Planilhas de Treinamento Atuais</h4>
+                                                        {workouts.filter(w => w.studentId === editingItem.id).length > 0 ? (
+                                                            <div className="space-y-6">
+                                                                {workouts.filter(w => w.studentId === editingItem.id).map(w => (
+                                                                    <div key={w.id} className="border-2 border-slate-50 rounded-3xl p-6 bg-slate-50/30">
+                                                                        <h5 className="font-black text-slate-800 uppercase text-sm mb-4 border-l-4 border-amber-500 pl-3">{w.title}</h5>
+                                                                        <table className="w-full text-left">
+                                                                            <thead>
+                                                                                <tr className="text-[9px] font-black text-slate-400 uppercase tracking-widest border-b border-slate-200">
+                                                                                    <th className="pb-2">Exercício</th>
+                                                                                    <th className="pb-2 text-center">Séries</th>
+                                                                                    <th className="pb-2 text-center">Reps</th>
+                                                                                    <th className="pb-2 text-right">Peso (Kg)</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody className="divide-y divide-slate-100">
+                                                                                {w.exercises.map((ex, i) => (
+                                                                                    <tr key={i} className="text-xs font-bold text-slate-700">
+                                                                                        <td className="py-3 uppercase">{ex.name} <span className="block text-[8px] text-slate-400">{ex.muscle}</span></td>
+                                                                                        <td className="py-3 text-center text-slate-900">{ex.series}</td>
+                                                                                        <td className="py-3 text-center text-slate-900">{ex.reps}</td>
+                                                                                        <td className="py-3 text-right text-orange-600 font-black">{ex.weight || '--'}</td>
+                                                                                    </tr>
+                                                                                ))}
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        ) : (
+                                                            <div className="p-8 bg-slate-50 rounded-3xl text-center border-2 border-dashed border-slate-200">
+                                                                <p className="text-xs font-bold text-slate-400 uppercase italic">Nenhuma planilha de treino ativa no momento.</p>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                    <div className="mt-12 pt-8 border-t-2 border-slate-100 flex justify-between items-end">
+                                                        <div className="w-64 border-t-2 border-slate-900 pt-2 text-center">
+                                                            <p className="text-[10px] font-black uppercase text-slate-900 tracking-widest">{userData.name}</p>
+                                                            <p className="text-[8px] font-bold text-slate-400 uppercase">Personal Coach Responsável</p>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <p className="text-[8px] font-bold text-slate-400 uppercase">Sistema Personal Master v4.0</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="flex gap-4 no-print">
+                                                <button onClick={() => window.print()} className="flex-1 py-5 bg-slate-900 text-amber-500 font-black rounded-3xl uppercase tracking-widest text-xs shadow-lg border-b-4 border-orange-600 transition-transform active:scale-95 flex items-center justify-center gap-3">
+                                                    <Icon name="printer" size={24} weight="fill" /> Imprimir Relatório Master
+                                                </button>
+                                                <button onClick={() => setIsModalOpen(false)} className="px-8 py-5 bg-slate-100 text-slate-400 font-black rounded-3xl uppercase tracking-widest text-xs">Fechar</button>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {modalType === 'assessment' && (
+                                        <form onSubmit={saveItem} className="space-y-6">
+                                            <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Selecionar Aluno</label><select required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold bg-white focus:border-orange-600 outline-none" value={assessmentForm.studentId} onChange={e => setAssessmentForm({...assessmentForm, studentId: e.target.value})}><option value="">Selecione...</option>{students.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
+                                            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Peso (Kg)</label><input type="number" required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold" value={assessmentForm.weight} onChange={e => setAssessmentForm({...assessmentForm, weight: e.target.value})} /></div>
+                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Gordura (%)</label><input type="number" required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold" value={assessmentForm.fat} onChange={e => setAssessmentForm({...assessmentForm, fat: e.target.value})} /></div>
+                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Massa Magra (%)</label><input type="number" required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold" value={assessmentForm.muscle} onChange={e => setAssessmentForm({...assessmentForm, muscle: e.target.value})} /></div>
+                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Cintura (cm)</label><input type="number" required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold" value={assessmentForm.waist} onChange={e => setAssessmentForm({...assessmentForm, waist: e.target.value})} /></div>
+                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Data</label><input type="date" required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold" value={assessmentForm.date} onChange={e => setAssessmentForm({...assessmentForm, date: e.target.value})} /></div>
+                                            </div>
+                                            <button type="submit" className="w-full py-5 bg-orange-600 text-white font-black rounded-2xl uppercase tracking-widest text-xs shadow-lg">Gerar Evolução na Hora</button>
+                                        </form>
+                                    )}
+                                    {modalType === 'evolution_chart' && editingItem && (
+                                        <div className="space-y-8">
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                <div className="bg-slate-900 p-6 rounded-3xl text-center shadow-lg"><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Peso Atual</p><h5 className="text-3xl font-black text-amber-500">{editingItem.weight}Kg</h5></div>
+                                                <div className="bg-slate-900 p-6 rounded-3xl text-center shadow-lg"><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Gordura Corporal</p><h5 className="text-3xl font-black text-orange-500">{editingItem.fat}%</h5></div>
+                                            </div>
+                                            <div className="h-80 w-full bg-slate-50 p-6 rounded-3xl shadow-inner">
+                                                <ChartComponent type="bar" data={{ labels: ['Histórico 1', 'Histórico 2', 'Atual'], datasets: [{ label: 'Peso', data: [Number(editingItem.weight)+2, Number(editingItem.weight)+1, Number(editingItem.weight)], backgroundColor: '#ea580c', borderRadius: 10 }, { label: 'Gordura', data: [Number(editingItem.fat)+4, Number(editingItem.fat)+2, Number(editingItem.fat)], backgroundColor: '#f59e0b', borderRadius: 10 }] }} />
+                                            </div>
+                                            <button onClick={() => window.print()} className="w-full py-4 bg-slate-900 text-white font-black rounded-2xl uppercase tracking-widest text-xs flex items-center justify-center gap-3 shadow-lg border-b-4 border-amber-500 transition-transform active:scale-95"><Icon name="printer" /> Exportar Evolução PDF</button>
+                                        </div>
+                                    )}
+                                    {modalType === 'workout_view' && editingItem && (
+                                        <div id="print-area-container" className="space-y-6">
+                                            <div className="text-center mb-8"><h4 className="font-black text-2xl uppercase text-slate-800 tracking-tighter">{editingItem.title}</h4><p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Personal Coach: <span className="text-orange-600">{userData.name}</span></p></div>
+                                            <div className="space-y-3">
+                                                {editingItem.exercises.map((ex, i) => (
+                                                    <div key={i} className="p-5 border-2 border-slate-50 rounded-2xl flex justify-between items-center bg-white shadow-sm">
+                                                        <div><p className="font-black text-slate-800 uppercase text-xs">{ex.name}</p><p className="text-[9px] font-black text-orange-600 uppercase tracking-tight">{ex.muscle}</p></div>
+                                                        <div className="text-right"><p className="font-black text-slate-900 text-sm leading-none">{ex.series} x {ex.reps}</p><p className="text-[9px] font-black text-slate-400 uppercase mt-1">Carga: {ex.weight || '--'} Kg</p></div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className="mt-10 no-print flex gap-2">
+                                                 <button onClick={() => {
+                                                     const student = students.find(s=>s.id===editingItem.studentId);
+                                                     const text = `*Seu Treino Personalizado: ${editingItem.title}*%0A${editingItem.exercises.map(ex => `%0A• ${ex.name}: ${ex.series}x${ex.reps} (${ex.weight||'0'}kg)`).join('')}`;
+                                                     window.open(`https://wa.me/${student?.phone.replace(/\D/g,'')}?text=${text}`, '_blank');
+                                                 }} className="flex-1 py-4 bg-green-600 text-white font-black rounded-2xl uppercase text-[10px] tracking-widest flex items-center justify-center gap-2 shadow-lg"><Icon name="whatsapp-logo" size={20} weight="fill" /> Enviar Treino</button>
+                                                 <button onClick={() => window.print()} className="flex-1 py-4 bg-slate-100 text-slate-600 font-black rounded-2xl uppercase text-[10px] tracking-widest hover:bg-slate-200 transition-colors shadow-sm"><Icon name="printer" /> Imprimir</button>
+                                            </div>
+                                        </div>
+                                    )}
+                                    {modalType === 'finance' && (
+                                        <form onSubmit={saveItem} className="space-y-6">
+                                            <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Aluno</label><select required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold bg-white focus:border-orange-600 outline-none" value={financeForm.studentId} onChange={e => setFinanceForm({...financeForm, studentId: e.target.value})}><option value="">Selecione...</option>{students.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
+                                            <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Descrição</label><input required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none" value={financeForm.description} placeholder="Ex: Mensalidade Maio" onChange={e => setFinanceForm({...financeForm, description: e.target.value})} /></div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Valor (R$)</label><input type="number" required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none" value={financeForm.value} onChange={e => setFinanceForm({...financeForm, value: e.target.value})} /></div>
+                                                <div><label className="text-[10px] font-black text-slate-400 uppercase block mb-1">Data</label><input type="date" required className="w-full p-4 border-2 border-slate-100 rounded-2xl font-bold focus:border-orange-600 outline-none" value={financeForm.date} onChange={e => setFinanceForm({...financeForm, date: e.target.value})} /></div>
+                                            </div>
+                                            <button type="submit" className="w-full py-5 bg-orange-600 text-white font-black rounded-2xl uppercase tracking-widest text-xs shadow-lg shadow-orange-600/20">Registrar Recebimento</button>
+                                        </form>
+                                    )}
+                                </div>
+                            </Card>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
